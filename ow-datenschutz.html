@@ -1,0 +1,54 @@
+<!DOCTYPE html><html lang="de"><head>
+    <meta name="robots" content="noindex, nofollow"><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no,viewport-fit=cover"><meta name="apple-mobile-web-app-capable" content="yes"><meta name="apple-mobile-web-app-status-bar-style" content="black-translucent"><meta name="apple-mobile-web-app-title" content="OrteWahr"><meta name="theme-color" content="#ECF5F3" id="wzThemeColor"><title>Datenschutz - OrteWahr</title><style>@view-transition{navigation:auto}:root{--bg:#ECF5F3;--text:#233B3D;--sub:#547274;--link:#12766C}html.theme-dark{--bg:#122B2E;--text:#E7F3F1;--sub:#9DBEBC;--link:#50DDCA}html{background:var(--bg);overscroll-behavior-y:none;touch-action:manipulation}body{font-family:-apple-system,system-ui;max-width:600px;margin:40px auto;padding:20px;color:var(--text);background:var(--bg);line-height:1.6}h1{font-size:22px}h2{font-size:16px;margin-top:24px}a{color:var(--link)}code{background:rgba(120,120,128,.15);padding:1px 5px;border-radius:6px;font-size:12.5px}li{margin:4px 0}</style></head><body>
+<a href="./ow-index.html">← Zurück zur App</a> · <a href="./index.html">WahrZentrale</a>
+<h1>Datenschutzerklärung</h1>
+<p><strong>Verantwortlicher im Sinne der DSGVO</strong><br>
+Jan Dierlich, Steenacker 33, 25499 Tangstedt, jandierlich@googlemail.com</p>
+
+<h2>1. Keine Cookies, kein Tracking</h2>
+<p>OrteWahr setzt keine Cookies und keine Tracking-Tools (kein Google Analytics, Matomo o. ä.). Es gibt kein eigenes Backend, das Zugriffe protokolliert (außer GitHub Pages selbst, siehe Punkt 4).</p>
+
+<h2>1a. Hell-/Dunkelmodus-Wahl</h2>
+<p>Die App startet immer im Hellmodus. Über den Hell-/Dunkelmodus-Schalter kannst du für die aktuelle Sitzung auf Dunkel umschalten; diese Wahl wird nicht gespeichert und nicht an uns oder Dritte übertragen – bei jedem neuen Öffnen der App beginnt sie wieder im Hellmodus.</p>
+
+<h2>2. Standort & lokale Speicherung</h2>
+<p>Die Standortfunktion nutzt die Browser-Schnittstelle <code>navigator.geolocation</code>. Der Standort wird ausschließlich lokal im Browser verarbeitet, um die Entfernung zu Orten zu berechnen. Er wird niemals an einen Server gesendet oder gespeichert.</p>
+<p>Folgende Daten werden lokal im Browser gespeichert (<code>localStorage</code>):</p>
+<ul>
+<li><code>ortewahr-favs</code> – Favoriten</li>
+<li><code>ortewahr-notes</code> – persönliche Notizen</li>
+<li><code>ortewahr-checks</code> – Ruhe-Checks</li>
+<li><code>ortewahr-photos</code> – eigene Fotos zu Orten (nur auf diesem Gerät, verkleinert)</li>
+<li><code>ortewahr-custom</code> – übernommene OSM-Orte</li>
+<li><code>ortewahr-activetypes</code> – zuletzt ausgewählte Ortstyp-Filter</li>
+<li><code>ortewahr-consent-nominatim</code>, <code>ortewahr-consent-overpass</code>, <code>ortewahr-consent-openmeteo</code> – ob der einmalige Bestätigungshinweis für den jeweiligen externen Dienst bereits akzeptiert wurde</li>
+</ul>
+<p>Alle Daten bleiben ausschließlich auf deinem Gerät und lassen sich im Browser unter „Website-Daten" jederzeit löschen.</p>
+
+<h2>3. Karten & Suche</h2>
+<p><strong>Karten:</strong> Die App nutzt Leaflet mit den offiziellen Kartenkacheln von OpenStreetMap. Beim Laden der Karte werden Kacheln von <code>tile.openstreetmap.org</code> geladen, dabei wird die IP-Adresse technisch bedingt an die OpenStreetMap Foundation übertragen. Es gelten die <a href="https://operations.osmfoundation.org/policies/tiles/" target="_blank" rel="noopener">Kachel-Nutzungsbedingungen von OpenStreetMap</a> sowie die <a href="https://wiki.osmfoundation.org/wiki/Privacy_Policy" target="_blank" rel="noopener">Datenschutzerklärung der OSM Foundation</a>.</p>
+<p><strong>Bibliothek:</strong> Die Kartendarstellung nutzt die JavaScript-Bibliothek Leaflet, ausgeliefert über <code>unpkg.com</code> (CDN). Dabei wird die IP-Adresse technisch bedingt an unpkg.com übertragen.</p>
+<p><strong>Ortssuche (optional):</strong> Nur wenn du aktiv auf „Suchen" klickst, wird der eingegebene Ort an Nominatim (<code>nominatim.openstreetmap.org</code>) gesendet. Beim allerersten Klick erscheint dazu einmalig ein Bestätigungshinweis; danach entfällt er. Es gelten die <a href="https://operations.osmfoundation.org/policies/nominatim/" target="_blank" rel="noopener">Nutzungsbedingungen von Nominatim</a>.</p>
+<p><strong>Live-Suche (optional):</strong> Nur wenn du aktiv auf „Live: Orte, Cafés & Eis hier finden" klickst, wird dein zuvor festgelegter Standort zusammen mit dem eingestellten km-Radius an einen von mehreren öffentlichen Overpass-Servern gesendet (der Reihe nach versucht: <code>overpass-api.de</code>, <code>overpass.kumi.systems</code>, <code>overpass.osm.ch</code>, <code>overpass.private.coffee</code>). Auch hier erscheint der Bestätigungshinweis nur beim allerersten Klick. Es gelten die <a href="https://wiki.openstreetmap.org/wiki/Overpass_API" target="_blank" rel="noopener">Nutzungsbedingungen der Overpass API</a>.</p>
+<p><strong>Wetter (optional):</strong> Nur wenn du bei einem Ort aktiv auf „Wetter hier abrufen" klickst, werden die Koordinaten dieses Ortes an Open-Meteo (<code>api.open-meteo.com</code>) gesendet. Bestätigungshinweis auch hier nur beim allerersten Klick. Es gelten die <a href="https://open-meteo.com/en/terms" target="_blank" rel="noopener">Nutzungsbedingungen von Open-Meteo</a>.</p>
+<p><strong>Route (optional):</strong> Wenn du bei einem Ort auf „🧭 Route" klickst, öffnest du in einem neuen Tab bzw. in der Karten-App Google Maps mit den Koordinaten des Ziels. Dabei werden nur die Zielkoordinaten über die aufgerufene URL an Google übertragen. Es gelten die <a href="https://policies.google.com/privacy" target="_blank" rel="noopener">Datenschutzerklärung von Google</a>.</p>
+
+<h2>4. Hosting</h2>
+<p>Diese App wird über GitHub Pages (GitHub Inc.) ausgeliefert. Beim Aufruf verarbeitet GitHub technisch notwendige Zugriffsdaten (z. B. IP-Adresse); siehe die <a href="https://docs.github.com/en/site-policy/privacy-policies/github-privacy-statement" target="_blank" rel="noopener">GitHub-Datenschutzerklärung</a>.</p>
+
+<h2>5. Deine Rechte</h2>
+<p>Du hast das Recht auf Auskunft und Löschung deiner lokal gespeicherten Daten (einfach im Browser löschen) sowie das Recht zur Beschwerde bei einer Datenschutz-Aufsichtsbehörde, z. B. beim Unabhängigen Landeszentrum für Datenschutz Schleswig-Holstein (ULD). Standortzugriff kannst du jederzeit in den Browser-/Geräteeinstellungen widerrufen.</p>
+
+<p style="font-size:12px;color:var(--sub)">Stand: September 2026</p>
+<script>
+document.addEventListener("gesturestart", function(e){ e.preventDefault(); }, {passive:false});
+document.addEventListener("gesturechange", function(e){ e.preventDefault(); }, {passive:false});
+document.addEventListener("touchmove", function(e){ if(e.touches.length > 1){ e.preventDefault(); } }, {passive:false});
+var owLastTouchEnd = 0;
+document.addEventListener("touchend", function(e){
+  var now = Date.now();
+  if(now - owLastTouchEnd <= 300){ e.preventDefault(); }
+  owLastTouchEnd = now;
+}, {passive:false});
+</script>
+</body></html>

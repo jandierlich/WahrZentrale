@@ -1,0 +1,52 @@
+<!DOCTYPE html><html lang="de"><head>
+    <meta name="robots" content="noindex, nofollow"><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no,viewport-fit=cover"><meta name="apple-mobile-web-app-capable" content="yes"><meta name="apple-mobile-web-app-status-bar-style" content="black-translucent"><meta name="apple-mobile-web-app-title" content="VorratsWahr"><meta name="theme-color" content="#ECF5F3" id="wzThemeColor"><title>Datenschutz - VorratsWahr</title><style>@view-transition{navigation:auto}:root{--bg:#ECF5F3;--text:#233B3D;--sub:#547274;--link:#12766C}html.theme-dark{--bg:#122B2E;--text:#E7F3F1;--sub:#9DBEBC;--link:#50DDCA}html{background:var(--bg);overscroll-behavior-y:none;touch-action:manipulation}body{font-family:-apple-system,system-ui;max-width:600px;margin:40px auto;padding:20px;color:var(--text);background:var(--bg);line-height:1.6}h1{font-size:22px}h2{font-size:16px;margin-top:24px}a{color:var(--link)}</style></head><body>
+<a href="./vw-index.html">← Zurück zur App</a> · <a href="./index.html">WahrZentrale</a>
+<h1>Datenschutzerklärung</h1>
+<p><strong>Verantwortlicher im Sinne der DSGVO</strong><br>
+Jan Dierlich, Steenacker 33, 25499 Tangstedt, jandierlich@googlemail.com</p>
+
+<p><strong>1. Grundsatz: Keine Server, kein Konto, keine Datenübertragung an uns</strong><br>
+VorratsWahr verarbeitet alle Fotos, erkannten Texte und Einträge ausschließlich auf deinem Gerät. Es gibt keinen eigenen Server, keine Registrierung, und wir erhalten keinerlei Daten von dir.</p>
+
+<p><strong>1a. Hell-/Dunkelmodus-Wahl</strong><br>
+Die App startet immer im Hellmodus. Über den Hell-/Dunkelmodus-Schalter kannst du für die aktuelle Sitzung auf Dunkel umschalten; diese Wahl wird nicht gespeichert und nicht an uns oder Dritte übertragen – bei jedem neuen Öffnen der App beginnt sie wieder im Hellmodus.</p>
+
+<p><strong>2. Foto &amp; Texterkennung (OCR, 100% lokal)</strong><br>
+Kamera-Zugriff erfolgt nur nach deiner expliziten Freigabe. Fotos deiner Gläser/Behälter und Labels werden nie hochgeladen und verlassen die Bilderkennung auf deinem Gerät nicht. Zur Texterkennung wird beim ersten Öffnen des Foto-Modus die Bibliothek Tesseract.js sowie das benötigte Sprachpaket automatisch vom Content Delivery Network jsDelivr nachgeladen. Dabei wird zwangsläufig deine IP-Adresse an dieses CDN übertragen, so wie bei jedem Laden einer Webseite über das Internet – das Foto selbst oder der erkannte Text werden dabei nicht übertragen, die Erkennung läuft anschließend lokal in deinem Browser. Einmal geladene Bestandteile speichert die App danach dauerhaft im Cache-Speicher deines Geräts, sodass sie auch offline funktionieren. Über "Label live scannen" öffnet sich zusätzlich eine Dauerkamera-Ansicht: Die Texterkennung läuft dabei automatisch alle paar Sekunden im Hintergrund weiter, ohne dass du auslösen musst – die Bildverarbeitung bleibt aber genauso wie beim Einzelfoto vollständig lokal auf deinem Gerät, es werden auch hier keine Bilder oder erkannten Texte übertragen. Tippst du auf "Übernehmen ▸", wird nur der zuletzt erkannte Text in das Eingabeformular übernommen, wo du ihn vor dem Speichern noch prüfen und ändern kannst – das zugehörige Kamerabild wird dabei nicht übernommen und nicht gespeichert.</p>
+
+<p><strong>3. Speicherung deiner Einträge</strong><br>
+Name, Anzahl, Kategorie, Datum und Notiz jedes Eintrags werden ausschließlich lokal im Browser-Speicher (localStorage) deines Geräts abgelegt. Diese Daten verlassen dein Gerät zu keinem Zeitpunkt. Das optionale Haltbarkeitsdatum wird dabei rein lokal ausgewertet, um bald ablaufende oder bereits abgelaufene Einträge farblich zu markieren und in Übersicht sowie PDF-Export weiter oben anzuzeigen. Das beim Scannen aufgenommene Foto wird ausdrücklich <strong>nicht</strong> gespeichert – es dient ausschließlich der Texterkennung im Moment des Scans und wird danach sofort verworfen, weder als Teil des Eintrags noch an anderer Stelle. Du kannst jeden Eintrag jederzeit bearbeiten oder löschen. Ebenso werden die von dir selbst vergebenen Kategorienamen lokal gespeichert, damit sie dir bei künftigen Einträgen als Vorschlag angeboten werden können.</p>
+
+<p><strong>4. PDF-Export</strong><br>
+Über "Als PDF" wird beim ersten Gebrauch einmalig die Bibliothek jsPDF vom selben Content Delivery Network jsDelivr nachgeladen (IP-Übertragung wie in Punkt 2 beschrieben, danach dauerhaft im Cache deines Geräts). Die eigentliche PDF-Erstellung läuft anschließend vollständig lokal in deinem Browser – deine Einträge werden dafür nicht übertragen. Die Vorschau zeigt dir das Ergebnis vor dem Speichern; über "Speichern/Teilen" bleibt die Datei auf deinem Gerät bzw. wird über das native Teilen-Menü deiner Wahl weitergegeben.</p>
+
+<p><strong>5. Sichern &amp; Wiederherstellen</strong><br>
+Über "Sichern" kannst du alle Einträge (Name, Kategorie, Datum, Notiz – ohne Fotos, da diese wie in Punkt 3 beschrieben nicht gespeichert werden) optional als Datei auf deinem Gerät speichern (z. B. für ein neues iPhone) und über "Wiederherstellen" wieder einlesen – auch das geschieht ausschließlich lokal, ohne Übertragung an einen Server.</p>
+
+<p><strong>6. Keine Cookies, kein Tracking, keine externen Datenbanken</strong><br>
+Kein Google Analytics, keine Cookies, keine Werbenetzwerke, kein Fingerprinting. Anders als andere Wahr-Apps fragt VorratsWahr keine externen Produktdatenbanken ab und prüft keine Zutatenlisten gegen Zusatzstoff- oder INCI-Datenbanken – es handelt sich um ein rein privates Inventar-Werkzeug. Es werden außer den CDN-Aufrufen (Punkt 2 und 4) keine weiteren externen Dienste eingebunden.</p>
+
+<p><strong>7. Teilen-Funktion</strong><br>
+Der "Sichern"-Button kann auf unterstützten Geräten das iOS-Teilen-Menü nutzen. Dabei werden keine Daten an uns oder Dritte außerhalb deiner eigenen Auswahl übertragen.</p>
+
+<p><strong>8. Deine Rechte (DSGVO)</strong><br>
+Da wir selbst keine personenbezogenen Daten erhalten, speichern oder verarbeiten, laufen Auskunfts-, Berichtigungs- und Löschungsansprüche uns gegenüber ins Leere. Beim Nachladen der Bibliotheken Tesseract.js und jsPDF über jsDelivr (siehe Punkt 2 und 4) verarbeitet der Anbieter kurzzeitig deine IP-Adresse in eigener Verantwortung; deine Rechte bestehen insoweit gegenüber diesem Anbieter direkt. Unabhängig davon hast du jederzeit das Recht, dich bei einer Datenschutz-Aufsichtsbehörde zu beschweren, z. B. beim Unabhängigen Landeszentrum für Datenschutz Schleswig-Holstein (ULD).</p>
+
+<p><strong>9. Kontakt für Datenschutz</strong><br>
+jandierlich@googlemail.com</p>
+<script>
+// Zwei-Finger-Pinch-Zoom zusätzlich per JS unterbinden: iOS ignoriert
+// "user-scalable=no"/"maximum-scale=1" im Viewport-Meta seit einigen
+// Versionen bewusst aus Barrierefreiheitsgründen — daher hier zusätzlich
+// die nativen WebKit-Gesture-Events sowie Mehrfinger-Touchmove abfangen.
+document.addEventListener("gesturestart", function(e){ e.preventDefault(); }, {passive:false});
+document.addEventListener("gesturechange", function(e){ e.preventDefault(); }, {passive:false});
+document.addEventListener("touchmove", function(e){ if(e.touches.length > 1){ e.preventDefault(); } }, {passive:false});
+var vwLastTouchEnd = 0;
+document.addEventListener("touchend", function(e){
+  var now = Date.now();
+  if(now - vwLastTouchEnd <= 300){ e.preventDefault(); }
+  vwLastTouchEnd = now;
+}, {passive:false});
+</script>
+</body></html>

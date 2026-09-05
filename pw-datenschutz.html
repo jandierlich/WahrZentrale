@@ -1,0 +1,61 @@
+<!DOCTYPE html><html lang="de"><head>
+    <meta name="robots" content="noindex, nofollow"><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no,viewport-fit=cover"><meta name="apple-mobile-web-app-capable" content="yes"><meta name="apple-mobile-web-app-status-bar-style" content="black-translucent"><meta name="apple-mobile-web-app-title" content="ProduktWahr"><meta name="theme-color" content="#ECF5F3" id="wzThemeColor"><title>Datenschutz - ProduktWahr</title><style>@view-transition{navigation:auto}:root{--bg:#ECF5F3;--text:#233B3D;--sub:#547274;--link:#12766C}html.theme-dark{--bg:#122B2E;--text:#E7F3F1;--sub:#9DBEBC;--link:#50DDCA}html{background:var(--bg);overscroll-behavior-y:none;touch-action:manipulation}body{font-family:-apple-system,system-ui;max-width:600px;margin:40px auto;padding:20px;color:var(--text);background:var(--bg);line-height:1.6}h1{font-size:22px}h2{font-size:16px;margin-top:24px}a{color:var(--link)}</style></head><body>
+<a href="./pw-index.html">← Zurück zur App</a> · <a href="./index.html">WahrZentrale</a>
+<h1>Datenschutzerklärung</h1>
+<p><strong>Verantwortlicher im Sinne der DSGVO</strong><br>
+Jan Dierlich, Steenacker 33, 25499 Tangstedt, jandierlich@googlemail.com</p>
+
+<p><strong>1. Grundsatz: Keine Server, kein Konto, keine Datenübertragung an uns</strong><br>
+ProduktWahr verarbeitet alle Eingaben, Fotos und Ergebnisse ausschließlich auf deinem Gerät. Es gibt keinen eigenen Server, keine Registrierung und wir erhalten keinerlei Daten von dir.</p>
+
+<p><strong>1a. Hell-/Dunkelmodus-Wahl</strong><br>
+Die App startet immer im Hellmodus. Über den Hell-/Dunkelmodus-Schalter kannst du für die aktuelle Sitzung auf Dunkel umschalten; diese Wahl wird nicht gespeichert und nicht an uns oder Dritte übertragen – bei jedem neuen Öffnen der App beginnt sie wieder im Hellmodus.</p>
+
+<p><strong>2. Foto-/Etikett-Scanner und Bild-Upload (OCR, 100% lokal)</strong><br>
+Kamera-Zugriff erfolgt nur nach deiner expliziten Freigabe. Fotos der Zutatenlisten und hochgeladene Bilder werden nie hochgeladen und verlassen die Bilderkennung auf deinem Gerät nicht. Zur Texterkennung wird beim ersten Öffnen des Scanners bzw. Uploads die Bibliothek Tesseract.js sowie das benötigte Sprachpaket automatisch vom Content Delivery Network jsDelivr nachgeladen. Dabei wird zwangsläufig deine IP-Adresse an dieses CDN übertragen, so wie bei jedem Laden einer Webseite über das Internet – die Bilder selbst oder erkannte Texte werden dabei nicht übertragen, die Erkennung läuft anschließend lokal in deinem Browser. Einmal geladene Bestandteile speichert die App danach dauerhaft im Cache-Speicher deines Geräts. Die anschließende Prüfung des erkannten Textes gegen die Zusatzstoff- und INCI-Datenbank läuft vollständig lokal. Über "Zutaten/ Inhaltsstoffe live scannen" öffnet sich ebenfalls eine Dauerkamera-Ansicht: Die Texterkennung läuft dabei automatisch alle paar Sekunden im Hintergrund weiter, ohne dass du auslösen musst – die Bildverarbeitung bleibt aber genauso wie beim einzelnen Foto-Scan vollständig lokal auf deinem Gerät, es werden keine Bilder oder erkannten Texte übertragen. Tippst du auf das Ergebnis-Overlay, wird die zuletzt erkannte Zutatenliste wie bei der manuellen Eingabe ausgewertet.</p>
+
+<p><strong>2a. Nachschlagen ohne Scan</strong><br>
+Das Suchfeld "Nachschlagen (ohne Scan)" durchsucht ausschließlich die auf deinem Gerät mitgelieferte Zusatzstoff- und INCI-Datenbank direkt im Browser – ganz ohne Kamera und ohne Netzwerkanfrage. Es wird dabei zu keinem Zeitpunkt eine Verbindung ins Internet aufgebaut.</p>
+
+<p><strong>3. Barcode-Live-Scanner &amp; automatische Produktabfrage</strong><br>
+Über "Barcode live scannen" öffnet sich eine Dauerkamera-Ansicht. Die Barcode-Erkennung selbst läuft komplett lokal auf deinem Gerät über die Bibliothek ZXing, die beim ersten Gebrauch ebenfalls über jsDelivr nachgeladen wird (IP-Adressübertragung an das CDN wie in Punkt 2 beschrieben). <strong>Anders als beim Foto-Scanner erfolgt hier keine Bestätigung per Tastendruck:</strong> Sobald ein Barcode erkannt wird, überträgt die App den Code automatisch an die Open-Food-Facts-API (world.openfoodfacts.org). Wird dort kein Produkt gefunden, wird derselbe Code automatisch zusätzlich an die Open-Beauty-Facts-API (world.openbeautyfacts.org) übermittelt, und falls auch dort nichts gefunden wird, zusätzlich an die Open-Products-Facts-API (world.openproductsfacts.org, für sonstige Produkte wie Haushalt, Elektronik oder Spielzeug) – alle drei betrieben von der Open Food Facts-Vereinigung nach französischem Recht. Dabei wird jeweils zwangsläufig deine IP-Adresse an den jeweiligen Anbieter übertragen. Dieses automatische Verhalten ist bewusst so gewählt, damit die Bewertung direkt im Kamerabild erscheint, ohne dass du extra bestätigen musst – wenn du das nicht möchtest, nutze stattdessen den Foto-Scanner oder die manuelle Eingabe, die beide vollständig lokal bleiben. Neben der Zutatenliste zeigt die Detailansicht bei Lebensmitteln, sofern von Open Food Facts mitgeliefert, zusätzlich Nährwerte, Nutri-Score, NOVA-Gruppe und Öko-Score an – diese stammen aus derselben Produktabfrage, es wird dafür keine zusätzliche Verbindung aufgebaut. Die geladene Zutatenliste fließt zusätzlich in die lokale Zusatzstoff-/INCI-Prüfung ein (bei Open Products Facts entfällt dieser Schritt, da diese Datenbank sonstige Produkte ohne Zutatenliste im Lebensmittel-/Kosmetiksinn führt); im Ergebnis wird die Datenquelle mit Lizenzhinweis (Open Database License, ODbL) sichtbar angezeigt. Ein Button "Vollständige Produktseite ansehen" öffnet die jeweilige Produktseite (bei Open Food/Beauty Facts in der deutschsprachigen Landes-Variante de.openfoodfacts.org bzw. de.openbeautyfacts.org, bei Open Products Facts auf world.openproductsfacts.org, da hierfür keine deutschsprachige Variante existiert) ohne Referrer-Weitergabe (rel="noreferrer") in deinem Browser; dort gelten die Datenschutzbestimmungen des jeweiligen Anbieters. Bereits abgefragte Barcode-Ergebnisse werden zusätzlich lokal im Browser-Speicher (localStorage) deines Geräts zwischengespeichert, damit derselbe Barcode nicht erneut abgefragt werden muss; diese Daten verlassen dein Gerät nicht und lassen sich jederzeit über das Löschen der Browserdaten entfernen.</p>
+
+<p><strong>4. Mein Profil (Allergien/Unverträglichkeiten)</strong><br>
+Deine Angaben im Profil-Bereich werden ausschließlich lokal im Browser-Speicher (localStorage) deines Geräts abgelegt und nicht an Open Food Facts, Open Beauty Facts oder Dritte übertragen. Der Abgleich mit deinem Profil erfolgt vollständig auf deinem Gerät.</p>
+
+<p><strong>5. Keine Cookies, kein Tracking</strong><br>
+Kein Google Analytics, keine Cookies, keine Werbenetzwerke, kein Fingerprinting. Es werden außer den CDN-Aufrufen (Punkt 2 und 3) sowie den Produktabfragen bei Open Food Facts/Open Beauty Facts/Open Products Facts (Punkt 3) keine weiteren externen Dienste eingebunden.</p>
+
+<p><strong>5a. Teilen-Funktion</strong><br>
+Die "Teilen"-Buttons nutzen ausschließlich die Bordmittel deines Geräts (iOS-Teilen-Menü bzw. Zwischenablage). Dabei werden keine Daten an uns oder Dritte außerhalb deiner eigenen Auswahl übertragen.</p>
+
+<p><strong>6. Favoriten</strong><br>
+Tippst du im Ergebnis auf den Stern ☆, speichert die App diesen Eintrag automatisch lokal im Browser-Speicher (localStorage) deines Geräts – ganz ohne separaten Schalter oder Opt-in, da hierfür ausschließlich der Stoffname und deine bewusste, einzelne Auswahl gespeichert werden. Diese Daten verlassen dein Gerät zu keinem Zeitpunkt. Du kannst einen Favoriten jederzeit über denselben Stern wieder entfernen oder alle auf einmal über "Leeren" löschen. Der Warenkorb-Modus im Barcode-Live-Scanner hält seine Übersicht nur temporär im Arbeitsspeicher und wird nicht dauerhaft gespeichert. Über "Sichern" kannst du deine Favoriten optional als Datei auf deinem Gerät speichern (z. B. für ein neues iPhone) und über "Wiederherstellen" wieder einlesen – auch das geschieht ausschließlich lokal, ohne Übertragung an einen Server.</p>
+
+<p><strong>6a. Einmalige Einführung</strong><br>
+Beim allerersten Start merkt sich die App rein technisch (ein einzelnes "gesehen"-Flag, keine sonstigen Daten), dass du die kurze Einführung bereits gesehen hast.</p>
+
+<p><strong>7. Quellen &amp; Haftung</strong><br>
+Zusatzstoffe: Verordnung (EG) Nr. 1333/2008. Allergene: Anhang II der Verordnung (EU) Nr. 1169/2011 (LMIV). Kosmetik/INCI: EU-Kosmetikverordnung (EG) Nr. 1223/2009 sowie REACH-Verordnung (EG) Nr. 1907/2006, Anhang XVII, Eintrag 78. Kurzbewertungen sind eigene, bewusst neutrale Zusammenfassungen auf Basis öffentlich zugänglicher Quellen (u. a. EFSA, ECHA, SCCS), Stand 08/2026. Nährwerte, Nutri-Score, NOVA-Gruppe und Öko-Score werden unverändert von Open Food Facts übernommen (Berechnung/Herkunft liegt bei Open Food Facts bzw. den dort hinterlegten Herstellerangaben) und sind keine amtliche Nährwertkennzeichnung. Kein Medizinprodukt, keine ärztliche, ernährungswissenschaftliche oder kosmetische Fachberatung, Angaben ohne Gewähr.</p>
+
+<p><strong>8. Deine Rechte (DSGVO)</strong><br>
+Da wir selbst keine personenbezogenen Daten erhalten, speichern oder verarbeiten, laufen Auskunfts-, Berichtigungs- und Löschungsansprüche uns gegenüber ins Leere. Beim Nachladen der Bibliotheken (Tesseract.js, ZXing über jsDelivr) sowie bei jeder Barcode-Live-Erkennung (automatische Übertragung an Open Food Facts, Open Beauty Facts bzw. Open Products Facts, siehe Punkt 3) verarbeiten die jeweiligen Anbieter kurzzeitig deine IP-Adresse in eigener Verantwortung; deine Rechte bestehen insoweit gegenüber diesen Anbietern direkt. Unabhängig davon hast du jederzeit das Recht, dich bei einer Datenschutz-Aufsichtsbehörde zu beschweren, z. B. beim Unabhängigen Landeszentrum für Datenschutz Schleswig-Holstein (ULD).</p>
+
+<p><strong>9. Kontakt für Datenschutz</strong><br>
+jandierlich@googlemail.com</p>
+<script>
+// Zwei-Finger-Pinch-Zoom zusätzlich per JS unterbinden: iOS ignoriert
+// "user-scalable=no"/"maximum-scale=1" im Viewport-Meta seit einigen
+// Versionen bewusst aus Barrierefreiheitsgründen — daher hier zusätzlich
+// die nativen WebKit-Gesture-Events sowie Mehrfinger-Touchmove abfangen.
+document.addEventListener("gesturestart", function(e){ e.preventDefault(); }, {passive:false});
+document.addEventListener("gesturechange", function(e){ e.preventDefault(); }, {passive:false});
+document.addEventListener("touchmove", function(e){ if(e.touches.length > 1){ e.preventDefault(); } }, {passive:false});
+var vwLastTouchEnd = 0;
+document.addEventListener("touchend", function(e){
+  var now = Date.now();
+  if(now - vwLastTouchEnd <= 300){ e.preventDefault(); }
+  vwLastTouchEnd = now;
+}, {passive:false});
+</script>
+</body></html>

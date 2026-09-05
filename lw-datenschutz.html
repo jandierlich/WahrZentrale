@@ -1,0 +1,48 @@
+<!DOCTYPE html><html lang="de"><head>
+    <meta name="robots" content="noindex, nofollow"><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no,viewport-fit=cover"><meta name="apple-mobile-web-app-capable" content="yes"><meta name="apple-mobile-web-app-status-bar-style" content="black-translucent"><meta name="apple-mobile-web-app-title" content="LautstärkeWahr"><meta name="theme-color" content="#ECF5F3" id="wzThemeColor"><title>Datenschutz - LautstärkeWahr</title><style>@view-transition{navigation:auto}:root{--bg:#ECF5F3;--text:#233B3D;--sub:#547274;--link:#12766C}html.theme-dark{--bg:#122B2E;--text:#E7F3F1;--sub:#9DBEBC;--link:#50DDCA}html{background:var(--bg);overscroll-behavior-y:none;touch-action:manipulation}body{font-family:-apple-system,system-ui;max-width:600px;margin:40px auto;padding:20px;color:var(--text);background:var(--bg);line-height:1.6}h1{font-size:22px}h2{font-size:16px;margin-top:24px}a{color:var(--link)}</style></head><body>
+<a href="./lw-index.html">← Zurück zur App</a> · <a href="./index.html">WahrZentrale</a>
+<h1>Datenschutzerklärung</h1>
+<p><strong>Verantwortlicher im Sinne der DSGVO</strong><br>
+Jan Dierlich, Steenacker 33, 25499 Tangstedt, jandierlich@googlemail.com</p>
+<p><strong>1. Grundsatz: Keine Server, kein Konto, keine Datenübertragung an uns</strong><br>
+LautstärkeWahr verarbeitet das Mikrofonsignal und den Verlauf ausschließlich auf deinem Gerät. Es gibt keinen eigenen Server, keine Registrierung und wir erhalten keinerlei Daten von dir. Die App funktioniert vollständig offline, sobald sie einmal geladen wurde.</p>
+<p><strong>1a. Hell-/Dunkelmodus-Wahl</strong><br>
+Die App startet immer im Hellmodus. Über den Hell-/Dunkelmodus-Schalter kannst du für die aktuelle Sitzung auf Dunkel umschalten; diese Wahl wird nicht gespeichert und nicht an uns oder Dritte übertragen – bei jedem neuen Öffnen der App beginnt sie wieder im Hellmodus.</p>
+<p><strong>2. Mikrofon-Zugriff</strong><br>
+Der Mikrofon-Zugriff erfolgt nur nach deiner expliziten Freigabe über den Browser und nur, wenn du aktiv auf "Messung starten" tippst. Das Audiosignal wird ausschließlich in Echtzeit im Browser über die Web Audio API analysiert, um daraus einen geschätzten Lautstärkewert (dB) zu berechnen. Es findet zu keinem Zeitpunkt eine Aufnahme, Speicherung oder Übertragung des tatsächlichen Tonsignals statt – weder an uns noch an Dritte noch lokal auf dein Gerät. Sobald du die Messung beendest oder die App schließt, wird der Mikrofon-Zugriff beendet und es verbleiben keine Audiodaten.</p>
+<p><strong>3. Keine externen Dienste, kein Tracking</strong><br>
+LautstärkeWahr lädt keine externen Bibliotheken nach und bindet keine Drittanbieter-Dienste ein. Kein Google Analytics, keine Cookies, keine Werbenetzwerke, kein Fingerprinting, keine CDN-Aufrufe.</p>
+<p><strong>4. Verlauf (optional, standardmäßig aus)</strong><br>
+Im Normalzustand wird dein Mess-Verlauf nur im Arbeitsspeicher deines Geräts gehalten, solange die App-Sitzung geöffnet ist – keine dauerhafte Speicherung. Aktivierst du im Verlauf-Bereich den Schalter "Dauerhaft merken", speichert die App gespeicherte Sitzungen (Zeitpunkt, Spitzenwert, Durchschnitt, Dauer sowie eine optionale von dir vergebene Notiz) zusätzlich lokal im Browser-Speicher (localStorage) deines Geräts, damit sie auch nach dem Schließen der App erhalten bleiben. Diese Daten verlassen dein Gerät zu keinem Zeitpunkt. Du kannst die Speicherung jederzeit über denselben Schalter wieder ausschalten (dabei wird der gespeicherte Verlauf gelöscht) oder Einträge einzeln bzw. über "Alle löschen" entfernen.</p>
+<p><strong>4a. Orts-Tag und Notiz</strong><br>
+Beim Speichern einer Sitzung kannst du optional eine Kategorie (z. B. "Zuhause", "Büro") sowie eine freie Notiz vergeben. Beides wird zusammen mit der Sitzung genauso behandelt wie in Punkt 4 beschrieben – also nur gespeichert, wenn "Dauerhaft merken" aktiviert ist, sonst nur für die laufende Sitzung im Arbeitsspeicher. Bitte trage in das Notizfeld keine Daten Dritter ein.</p>
+<p><strong>4b. Wochen-Statistik</strong><br>
+Die Übersicht "Diese Woche lauter/leiser als letzte Woche" wird ausschließlich im Browser aus deinen bereits vorhandenen Verlaufseinträgen live berechnet. Es werden dafür keine zusätzlichen Daten gespeichert oder irgendwohin übertragen.</p>
+<p><strong>4c. Schwellenwert-Alarm</strong><br>
+Ob der Alarm aktiv ist und ab welchem dB-Wert er auslösen soll, speichert die App unabhängig vom Verlauf-Schalter lokal im Browser-Speicher (localStorage), damit die Einstellung beim nächsten Öffnen erhalten bleibt. Es handelt sich um eine reine Geräteeinstellung ohne Personenbezug. Der Alarm-Ton wird lokal im Browser erzeugt (kein Audio-Sample, keine Aufnahme), eine Vibration nutzt – falls unterstützt – ausschließlich die Bordmittel deines Geräts.</p>
+<p><strong>4d. Export & Import (Backup)</strong><br>
+Über "Exportieren" kannst du deinen gespeicherten Verlauf als Datei sichern, z. B. um ihn auf ein neues Gerät zu übertragen. Je nachdem, was dein Gerät unterstützt, öffnet sich entweder das iOS-Teilen-Menü (die Datei bleibt dabei unter deiner Kontrolle, z. B. Speichern in "Dateien" oder AirDrop an dich selbst) oder die Datei wird direkt heruntergeladen. Es findet dabei keine Übertragung an uns oder Dritte statt. Über "Importieren" kannst du eine zuvor so erzeugte Datei wieder einlesen; du entscheidest dabei jeweils, ob die enthaltenen Sitzungen zum bestehenden Verlauf hinzugefügt oder dieser ersetzt werden soll. Da importierte Daten dauerhaft erhalten bleiben sollen, aktiviert ein Import automatisch den Schalter "Dauerhaft merken", falls er noch ausgeschaltet war.</p>
+<p><strong>4e. Einmalige Einführung</strong><br>
+Beim allerersten Start merkt sich die App rein technisch (ein einzelnes "gesehen"-Flag, keine sonstigen Daten), dass du die kurze Einführung bereits gesehen hast, damit sie dir nicht erneut angezeigt wird. Dieses Flag ist keine personenbezogene Information und unabhängig vom Schalter "Dauerhaft merken" aktiv.</p>
+<p><strong>5. Genauigkeit & Haftung</strong><br>
+Die angezeigten dB-Werte sind unkalibrierte Schätzungen auf Basis des jeweiligen Mikrofons und Browsers und können je nach Gerät deutlich abweichen. Kein Messgerät im technischen Sinne, kein Medizinprodukt, Angaben ohne Gewähr.</p>
+<p><strong>6. Deine Rechte (DSGVO)</strong><br>
+Da wir selbst keine personenbezogenen Daten erhalten, speichern oder verarbeiten, laufen Auskunfts-, Berichtigungs- und Löschungsansprüche uns gegenüber ins Leere – es liegt schlicht nichts bei uns vor. Unabhängig davon hast du jederzeit das Recht, dich bei einer Datenschutz-Aufsichtsbehörde zu beschweren, z. B. beim Unabhängigen Landeszentrum für Datenschutz Schleswig-Holstein (ULD).</p>
+<p><strong>7. Kontakt für Datenschutz</strong><br>
+jandierlich@googlemail.com</p>
+<script>
+// Zwei-Finger-Pinch-Zoom zusätzlich per JS unterbinden: iOS ignoriert
+// "user-scalable=no"/"maximum-scale=1" im Viewport-Meta seit einigen
+// Versionen bewusst aus Barrierefreiheitsgründen — daher hier zusätzlich
+// die nativen WebKit-Gesture-Events sowie Mehrfinger-Touchmove abfangen.
+document.addEventListener("gesturestart", function(e){ e.preventDefault(); }, {passive:false});
+document.addEventListener("gesturechange", function(e){ e.preventDefault(); }, {passive:false});
+document.addEventListener("touchmove", function(e){ if(e.touches.length > 1){ e.preventDefault(); } }, {passive:false});
+var vwLastTouchEnd = 0;
+document.addEventListener("touchend", function(e){
+  var now = Date.now();
+  if(now - vwLastTouchEnd <= 300){ e.preventDefault(); }
+  vwLastTouchEnd = now;
+}, {passive:false});
+</script>
+</body></html>

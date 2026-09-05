@@ -1,0 +1,201 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+    <meta name="robots" content="noindex, nofollow">
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no, viewport-fit=cover">
+<meta name="theme-color" content="#ECF5F3">
+<meta name="description" content="KompassWahr – Kompass mit Kamera-Übersicht und Informationen zu deinem Standort, ohne Werbung, ohne Tracking.">
+<title>KompassWahr</title>
+<link rel="manifest" href="kw-manifest.json">
+<link rel="apple-touch-icon" href="kw-icon-180.png">
+<link rel="icon" href="kw-icon-192.png">
+<link rel="stylesheet" href="kw-style.css">
+</head>
+<body>
+
+<!-- Onboarding -->
+<div id="kw-onboarding" class="kw-overlay">
+  <div class="kw-onboarding-card">
+    <div id="kw-onb-slides" class="kw-onb-slides">
+      <div class="kw-onb-slide kw-onb-active">
+        <div class="kw-onb-icon">🧭</div>
+        <h2>Willkommen bei KompassWahr</h2>
+        <p>Ein Kompass mit Kamera-Übersicht und Informationen zu deinem Umfeld – ganz ohne Werbung, Konto oder Tracking. Alle Daten bleiben auf deinem Gerät.</p>
+      </div>
+      <div class="kw-onb-slide">
+        <div class="kw-onb-icon">📷</div>
+        <h2>Kamera als Hintergrund</h2>
+        <p>Die Kamera zeigt nur ein Live-Bild als Hintergrund für die Richtungsanzeige. Es wird nichts fotografiert, gespeichert oder übertragen.</p>
+      </div>
+      <div class="kw-onb-slide">
+        <div class="kw-onb-icon">📍</div>
+        <h2>Standort nötig</h2>
+        <p>Für Umfeld-Infos, Sonnen-/Mondstand und nahe Orte wird dein Standort einmalig abgefragt. Er wird nur lokal auf deinem Gerät gespeichert.</p>
+      </div>
+      <div class="kw-onb-slide">
+        <div class="kw-onb-icon">📌</div>
+        <h2>Eigene Wegpunkte</h2>
+        <p>Merke dir Orte wie "Auto" oder "Zeltplatz" – der Kompass zeigt dir jederzeit Richtung und Entfernung dorthin, komplett offline.</p>
+      </div>
+    </div>
+    <div class="kw-onb-dots" id="kw-onb-dots"></div>
+    <div class="kw-onb-actions">
+      <button id="kw-onb-skip" class="kw-btn kw-btn-ghost">Überspringen</button>
+      <button id="kw-onb-next" class="kw-btn kw-btn-primary">Weiter</button>
+    </div>
+  </div>
+</div>
+
+<!-- Schwebende Kopfzeilen-Buttons (wie in den übrigen Wahr-Apps) -->
+<a href="./index.html" class="kw-float kw-float-home" title="Zur Startseite" aria-label="Zur WahrZentrale">🏠</a>
+<button id="kw-theme-btn" class="kw-float kw-float-theme" title="Hell/Dunkel" aria-label="Hell- oder Dunkelmodus umschalten">🌓</button>
+<button id="kw-location-btn" class="kw-float kw-float-location" title="Standort" aria-label="Standort wählen">📍</button>
+
+<!-- Header -->
+<header class="kw-header">
+  <div class="kw-header-inner">
+    <span class="kw-logo">KompassWahr</span>
+  </div>
+  <div id="kw-location-name" class="kw-location-name">Standort wird ermittelt …</div>
+</header>
+
+<!-- Standort-Overlay -->
+<div id="kw-location-overlay" class="kw-overlay kw-hidden">
+  <div class="kw-sheet">
+    <h3>Standort</h3>
+    <button id="kw-location-auto" class="kw-btn kw-btn-primary kw-full">📍 Automatisch (mein Standort)</button>
+    <div class="kw-search-row">
+      <input id="kw-location-search" type="text" placeholder="Ort eingeben …" class="kw-input">
+      <button id="kw-location-search-btn" class="kw-btn kw-btn-primary" aria-label="Suchen">🔍</button>
+    </div>
+    <div id="kw-location-results" class="kw-location-results"></div>
+
+    <div class="kw-decl-box">
+      <h3 style="margin-top:0">Missweisung (optional)</h3>
+      <p class="kw-hint" style="margin-top:0">
+        Der Kompass zeigt magnetisch Nord, Sonne/Mond/Orte werden aber geografisch (echt Nord) berechnet.
+        Trag hier einmalig die Missweisung für deinen Ort ein, um beides in Deckung zu bringen.
+        Aktuellen Wert z. B. über den offiziellen
+        <a href="https://geomag.colorado.edu/calculators/GMC/index.html" target="_blank" rel="noopener">Geomagnetic Model Calculator (NOAA/BGS)</a>
+        für deinen Ort nachsehen und hier eintragen.
+      </p>
+      <div class="kw-search-row">
+        <input id="kw-decl-input" type="number" step="0.1" placeholder="z. B. 3.0" class="kw-input">
+        <button id="kw-decl-save" class="kw-btn kw-btn-primary" aria-label="Speichern">✓</button>
+      </div>
+      <div id="kw-decl-status" class="kw-hint"></div>
+    </div>
+
+    <button id="kw-location-close" class="kw-btn kw-btn-ghost kw-full">Schließen</button>
+  </div>
+</div>
+
+<main>
+
+  <!-- Seite: Start -->
+  <section id="kw-page-start" class="kw-page kw-page-active">
+    <div class="kw-start-hero">
+      <img src="./kw-icon-512.png" alt="KompassWahr Logo" class="app-logo app-logo-light" width="84" height="84" decoding="sync" fetchpriority="high">
+      <img src="./kw-icon-512-dark.png" alt="KompassWahr Logo" class="app-logo app-logo-dark" width="84" height="84" decoding="sync">
+      <h2>KompassWahr</h2>
+      <p class="kw-hint">Kompass mit Kamera-Übersicht und Informationen zu deinem Umfeld – ganz ohne Werbung, Konto oder Tracking.</p>
+    </div>
+    <div class="kw-start-tiles">
+      <button class="kw-start-tile" data-page="kompass">🧭<span>Kompass</span></button>
+      <button class="kw-start-tile" data-page="umfeld">🌍<span>Umfeld</span></button>
+      <button class="kw-start-tile" data-page="orte">📍<span>Orte</span></button>
+      <button class="kw-start-tile" data-page="wegpunkte">📌<span>Wegpunkte</span></button>
+    </div>
+    <div class="kw-start-legal">
+      <a href="./index.html" class="kw-btn kw-btn-ghost kw-full">🏠 Zur WahrZentrale</a>
+      <a href="./kw-impressum.html" class="kw-btn kw-btn-ghost kw-full">Impressum</a>
+      <a href="./kw-datenschutz.html" class="kw-btn kw-btn-ghost kw-full">Datenschutz</a>
+    </div>
+  </section>
+
+  <!-- Seite: Kompass -->
+  <section id="kw-page-kompass" class="kw-page">
+    <div id="kw-cam-wrap" class="kw-cam-wrap">
+      <video id="kw-cam-video" class="kw-cam-video" autoplay playsinline muted></video>
+      <div id="kw-cam-off" class="kw-cam-off">
+        <p>Kamera ist aus.</p>
+        <button id="kw-cam-enable" class="kw-btn kw-btn-primary">📷 Kamera aktivieren</button>
+      </div>
+
+      <!-- Peilstreifen (Grad-Skala) oben -->
+      <div class="kw-hud-top">
+        <div id="kw-heading-tape" class="kw-heading-tape"></div>
+        <div class="kw-heading-pointer"></div>
+        <div class="kw-heading-readout">
+          <span id="kw-heading-deg">–°</span>
+          <span id="kw-heading-card">–</span>
+        </div>
+      </div>
+
+      <!-- Ziel-Pins (Sonne/Mond/Orte/Wegpunkte) -->
+      <div id="kw-ar-layer" class="kw-ar-layer"></div>
+
+      <!-- Mini-Radar: 360°-Übersicht über Orte/Wegpunkte, unabhängig vom Kamera-Ausschnitt -->
+      <div id="kw-mini-radar" class="kw-mini-radar" aria-hidden="true">
+        <div class="kw-mini-radar-n">N</div>
+        <div id="kw-mini-radar-needle" class="kw-mini-radar-needle"></div>
+        <div id="kw-mini-radar-dots" class="kw-mini-radar-dots"></div>
+      </div>
+
+      <!-- Info-Leiste unten -->
+      <div id="kw-hud-bottom" class="kw-hud-bottom"></div>
+    </div>
+
+    <div id="kw-compass-status" class="kw-compass-status"></div>
+    <button id="kw-compass-enable" class="kw-btn kw-btn-primary kw-hidden kw-full">🧭 Kompass aktivieren</button>
+  </section>
+
+  <!-- Seite: Umfeld -->
+  <section id="kw-page-umfeld" class="kw-page">
+    <div id="kw-umfeld-content">
+      <div class="kw-card kw-skeleton" id="kw-umfeld-loading"><div class="kw-shimmer"></div></div>
+    </div>
+  </section>
+
+  <!-- Seite: Orte -->
+  <section id="kw-page-orte" class="kw-page">
+    <div class="kw-poi-header-row">
+      <h3 class="kw-poi-heading">Themen</h3>
+      <button id="kw-poi-reset" class="kw-poi-reset-btn" type="button">↺ Zurücksetzen</button>
+    </div>
+    <div id="kw-poi-filters"></div>
+    <div class="kw-radius-row">
+      <span class="kw-radius-label">Umkreis</span>
+      <div class="kw-poi-filters" id="kw-poi-radius"></div>
+    </div>
+    <button id="kw-poi-search" class="kw-btn kw-btn-primary kw-full">🔍 Orte in der Nähe suchen</button>
+    <div id="kw-poi-status" class="kw-hint"></div>
+    <div id="kw-poi-list" class="kw-poi-list"></div>
+    <p class="kw-attribution">Ortsdaten: © <a href="https://www.openstreetmap.org/copyright" target="_blank" rel="noopener">OpenStreetMap</a>-Mitwirkende (ODbL)</p>
+  </section>
+
+  <!-- Seite: Wegpunkte -->
+  <section id="kw-page-wegpunkte" class="kw-page">
+    <div class="kw-card">
+      <h3>Neuer Wegpunkt</h3>
+      <input id="kw-wp-name" type="text" placeholder="Name (z. B. Auto, Zeltplatz)" class="kw-input">
+      <button id="kw-wp-add" class="kw-btn kw-btn-primary kw-full">📌 Aktuellen Standort merken</button>
+    </div>
+    <div id="kw-wp-list" class="kw-wp-list"></div>
+  </section>
+
+</main>
+
+<!-- Pill-Navigation -->
+<nav class="kw-pillnav">
+  <button class="kw-pill kw-pill-active" data-page="start">🏠<span>Start</span></button>
+  <button class="kw-pill" data-page="kompass">🧭<span>Kompass</span></button>
+  <button class="kw-pill" data-page="umfeld">🌍<span>Umfeld</span></button>
+  <button class="kw-pill" data-page="orte">📍<span>Orte</span></button>
+  <button class="kw-pill" data-page="wegpunkte">📌<span>Wegpunkte</span></button>
+</nav>
+
+<script src="kw-app.js"></script>
+</body>
+</html>

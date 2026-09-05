@@ -1,0 +1,15 @@
+{
+  "name": "ProduktWahr - Zusatzstoffe, Kosmetik & Barcode-Check",
+  "short_name": "ProduktWahr",
+  "description": "Ein Scan für Zusatzstoffe, Kosmetik-Inhaltsstoffe und Produktbewertungen per Barcode – 100% lokal, mit Live-Barcode-Check.",
+  "start_url": "./pw-index.html",
+  "scope": "./",
+  "display": "standalone",
+  "background_color": "#ECF5F3",
+  "theme_color": "#ECF5F3",
+  "icons": [
+    {"src": "pw-icon-192.png", "sizes": "192x192", "type": "image/png"},
+    {"src": "pw-icon-512.png", "sizes": "512x512", "type": "image/png"},
+    {"src": "pw-icon-180.png", "sizes": "180x180", "type": "image/png"}
+  ]
+}

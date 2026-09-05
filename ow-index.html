@@ -1,0 +1,653 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+    <meta name="robots" content="noindex, nofollow">
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no, viewport-fit=cover">
+<link rel="manifest" href="./ow-manifest.json">
+<link rel="apple-touch-icon" sizes="180x180" href="./ow-icon-180.png">
+<meta name="theme-color" content="#ECF5F3" id="owThemeColor">
+
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="apple-mobile-web-app-title" content="OrteWahr">
+<title>OrteWahr - Deutschlandweit stille Plätze finden</title>
+<meta name="description" content="Live ruhige Plätze in Deutschland finden – Orte, Cafés & Eisdielen via OpenStreetMap. 100% lokal, keine Datensammlung.">
+<link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"/>
+<script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+<style>@view-transition{navigation:auto}
+[hidden]{display:none!important}
+:root{
+  --bg1:#ECF5F3;--bg2:#ECF5F3;--card:#F6FBF9;--cardB:#B5E4D9;--primary:#547274;--accent:#12766C;
+  --text:#233B3D;--text2:#547274;--muted:#547274;--green:#34C759;--yellow:#FFCC02;--red:#FF3B30;
+  --shadow:0 1px 2px rgba(35,59,61,.06), 0 6px 14px rgba(35,59,61,.07);
+  --btn-warm:#CEEBE4;
+}
+html.theme-dark{
+  --bg1:#122B2E;--bg2:#122B2E;--card:#183D40;--cardB:#266664;--primary:#9DBEBC;--accent:#50DDCA;
+  --text:#E7F3F1;--text2:#9DBEBC;--muted:#9DBEBC;--green:#34C759;--yellow:#FFCC02;--red:#FF3B30;
+  --shadow:0 1px 2px rgba(0,0,0,.3), 0 6px 14px rgba(0,0,0,.28);
+  --btn-warm:#1D5156;
+}
+*{box-sizing:border-box;-webkit-tap-highlight-color:transparent}
+@media (prefers-reduced-motion: reduce){*{transition:none!important}}
+html,body{margin:0;padding:0;max-width:100%;overflow-x:hidden;overscroll-behavior-y:none;-webkit-overflow-scrolling:touch}
+body{touch-action:manipulation;font-family:-apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;font-size:16px;font-weight:400;line-height:1.5;background:var(--bg1);color:var(--text);min-height:100dvh;padding-bottom:env(safe-area-inset-bottom)}
+.wrap{max-width:480px;margin:0 auto;padding:0 16px 32px;padding-top:calc(env(safe-area-inset-top) + 60px)}
+header{padding:6px 0 6px;text-align:center}
+.app-logo{width:84px;height:84px;object-fit:contain;margin:0 auto 12px;border-radius:20px;display:block}
+.app-logo-dark{display:none}
+html.theme-dark .app-logo-light{display:none!important}
+html.theme-dark .app-logo-dark{display:block!important}
+h1{font-size:26px;line-height:1.15;margin:0;font-weight:500;letter-spacing:-.01em}
+h1 small{display:block;font-weight:400;font-size:13px;color:var(--text2);margin-top:6px;letter-spacing:0}
+.theme-toggle,.home-link{position:fixed;top:calc(env(safe-area-inset-top,0px) + 14px);z-index:9999;width:40px;height:40px;border-radius:20px;border:1px solid rgba(120,120,128,0.3);background:rgba(255,255,255,0.7);backdrop-filter:blur(8px);-webkit-backdrop-filter:blur(8px);font-size:16px;text-align:center;line-height:38px;padding:0;cursor:pointer;box-shadow:0 2px 8px rgba(0,0,0,0.12);text-decoration:none;color:var(--text)}
+.theme-toggle{right:16px}
+.home-link{right:64px}
+html.theme-dark .theme-toggle,html.theme-dark .home-link{background:rgba(27,24,48,0.7);border-color:rgba(180,170,220,0.25)}
+@media (min-width:640px){.theme-toggle{right:calc(50vw - 195px + 16px) !important}.home-link{right:calc(50vw - 195px + 64px) !important}}
+#map{height:38dvh;min-height:260px;border-radius:20px;border:1px solid var(--cardB);box-shadow:var(--shadow);overflow:hidden;margin:10px 0}
+.leaflet-tile-pane{filter:saturate(.9) brightness(1) contrast(1.02)}
+html.theme-dark .leaflet-tile-pane{filter:saturate(.8) brightness(.82) contrast(1.05)}
+.card{background:var(--card);border:1px solid var(--cardB);border-radius:20px;padding:16px;margin:12px 0;overflow-wrap:break-word}
+.label{display:block;font-size:12px;font-weight:600;letter-spacing:.05em;text-transform:uppercase;color:var(--text2);margin-bottom:6px}
+.pill{color:var(--text);text-decoration:none;border:1px solid var(--cardB);background:var(--btn-warm);border-radius:999px;padding:9px 14px;font-size:13px;font-weight:500;cursor:pointer;margin:4px 4px 4px 0;display:inline-flex;align-items:center;gap:6px;user-select:none}
+.pill-sm{color:var(--text2);text-decoration:none;border:1px solid var(--cardB);background:var(--card);border-radius:10px;padding:7px 10px;font-size:11.5px;font-weight:500;cursor:pointer;display:inline-flex;align-items:center;gap:5px;user-select:none}
+.pill-sm:active{transform:scale(.97)}
+.pill:active,.btn:active{transform:scale(.97)}
+.pill.active{background:var(--accent);color:var(--bg1);border-color:var(--accent)}
+.dot{width:10px;height:10px;border-radius:50%;display:inline-block}
+input[type=text],textarea{width:100%;border-radius:14px;border:1px solid var(--cardB);background:var(--card);padding:12px 14px;font-size:15px;font-weight:400;color:var(--text);outline:none;font-family:inherit}
+input[type=text]::placeholder,textarea::placeholder{color:var(--text2)}
+.slider{width:100%;accent-color:var(--accent)}
+.btn{background:var(--btn-warm);color:var(--text);border:1px solid var(--cardB);border-radius:16px;padding:16px 14px;font-weight:500;cursor:pointer;font-size:15.5px;font-family:inherit}
+.small{font-size:13px;font-weight:400;color:var(--muted);line-height:1.5}
+.fav{cursor:pointer;font-size:20px}
+.details{max-height:0;overflow:hidden;transition:max-height .45s ease}
+.details.open{max-height:2200px}
+.badge{font-size:11px;background:var(--green);color:#08260F;border-radius:999px;padding:3px 8px;font-weight:700;margin-left:6px}
+#map.fs{width:100%;height:100dvh!important;border-radius:0;border:0;margin:0}
+.mapFsBtn{position:absolute;top:10px;right:10px;z-index:500;background:var(--card)}
+#mapFsOverlay{display:none;position:fixed;inset:0;z-index:999999;background:var(--bg1)}
+#mapFsOverlay.show{display:block}
+#mapFsOverlay .mapFsBtn{position:fixed;top:calc(14px + env(safe-area-inset-top));right:14px;z-index:999999;width:46px;height:46px;padding:0;justify-content:center;border-radius:50%;font-size:20px;font-weight:600;box-shadow:0 2px 8px rgba(0,0,0,.12);border-width:1px;background:var(--card)}
+@media print{.orb,header,.card{display:none!important}}
+</style>
+</head>
+<body>
+<a class="home-link" href="./index.html" aria-label="Zur WahrZentrale">🏠</a>
+<button class="theme-toggle" id="themeBtn" aria-label="Hell-/Dunkelmodus umschalten">🌙</button>
+<div class="wrap">
+<header><img src="./ow-icon-512.png" alt="OrteWahr Logo" class="app-logo app-logo-light" width="84" height="84" decoding="sync" fetchpriority="high"><img src="./ow-icon-512-dark.png" alt="OrteWahr Logo" class="app-logo app-logo-dark" width="84" height="84" decoding="sync"><h1>OrteWahr<small>Deutschlandweit stille Plätze finden</small></h1></header>
+
+<div style="display:flex;gap:6px;margin-bottom:2px;justify-content:center">
+<a href="./ow-anleitung.html" class="pill">📖 Anleitung</a>
+</div>
+
+<div style="position:relative" id="mapWrap"><div id="map"></div><button class="pill mapFsBtn" id="fullscreenBtn" aria-label="Karte im Vollbild anzeigen">⛶ Vollbild</button></div>
+
+<div style="display:flex;gap:6px;flex-wrap:wrap;margin-top:4px">
+<button class="pill" id="toggleStandort" aria-label="Standort und Suche ein-/ausklappen">📍 Standort &amp; Suche ▴</button>
+<button class="pill" id="toggleFilter" aria-label="Filter und Aktionen ein-/ausklappen">🎯 Filter &amp; Aktionen ▾</button>
+</div>
+
+<div class="details open" id="secStandort"><div class="card" style="margin-top:8px">
+<div style="display:flex;gap:8px;flex-wrap:wrap"><button class="btn" id="locBtn" style="flex:1" aria-label="Meinen aktuellen Standort verwenden">📍 Mein Standort</button></div>
+<div style="margin-top:10px;display:flex;gap:6px;flex-wrap:wrap"><input type="text" id="searchInput" placeholder="Ort eingeben, z.B. Tangstedt, Hamburg" style="flex:1 1 180px;width:auto;min-width:0"><button class="pill" id="searchBtn">Suchen</button></div>
+<div style="margin-top:8px; display:flex; gap:6px; flex-wrap:wrap">
+<button class="btn" id="overpassBtn" style="background:var(--accent); color:var(--bg1); border-color:var(--accent); flex:1; font-size:14px">🔍 Live: Orte, Cafés & Eis hier finden (OSM)</button>
+</div>
+<div class="small" id="overpassInfo" style="margin-top:6px; display:none; background:rgba(107,163,208,0.15); padding:8px; border-radius:12px">
+<b>Rechtlich:</b> Klick sendet deinen Standort + eingestellten Radius an einen von mehreren Overpass-Servern (<code>overpass-api.de</code> oder Spiegelserver, OSM Community). Daten © OpenStreetMap ODbL. Nur temporär, wird nicht gespeichert außer du übernimmst es zu Favoriten. Ergebnisse werden nach Entfernung sortiert, gecached 5 Min.
+</div>
+<div class="small" style="margin-top:6px">GPS bleibt nur im Browser. Ortssuche via OpenStreetMap Nominatim nur nach Klick auf Suchen.</div>
+<div style="margin-top:14px"><div style="display:flex;justify-content:space-between;align-items:center"><label class="label" style="margin-bottom:0">Radius</label><b id="radVal">5 km</b></div><input type="range" id="radius" class="slider" min="1" max="20" step="1" value="5"></div>
+</div></div>
+
+<div class="details" id="secFilter"><div class="card" style="margin-top:8px">
+<div style="display:flex;justify-content:space-between;align-items:center"><div class="label" style="margin-bottom:0">ORTSTYPEN</div><button class="pill" id="resetBtn" style="margin:0">↺ Filter zurücksetzen</button></div>
+<div id="typeFilters" style="margin-top:6px;display:flex;gap:6px;flex-wrap:wrap"></div>
+<div class="label" style="margin-top:20px">ANSICHT</div>
+<div style="margin-top:6px;display:flex;gap:6px;flex-wrap:wrap">
+<button class="pill" id="favFilter">❤️ Meine Orte (<span id="favCount">0</span>)</button>
+<button class="pill" id="sortBtn">🔀 Nach Kategorie sortieren</button>
+</div>
+<div class="label" style="margin-top:20px">SICHERN &amp; TEILEN</div>
+<div style="margin-top:6px;display:flex;gap:8px;flex-wrap:wrap">
+<button class="pill-sm" id="exportBtn">⬇️ Backup exportieren</button>
+<button class="pill-sm" id="importBtn">⬆️ Backup importieren</button>
+<input type="file" id="importFile" accept="application/json" style="display:none">
+<button class="pill-sm" id="printBtn">🖨️ Meine Orte drucken</button>
+<button class="pill-sm" id="shareFavBtn">🔗 Alle Favoriten teilen</button>
+</div>
+</div></div>
+
+<div class="label" style="margin:14px 4px 4px" id="resultCount">Orte</div>
+<div id="list"></div>
+
+<div class="card" style="text-align:center">
+<a href="./ow-anleitung.html" class="pill">📖 Anleitung</a>
+<a href="./ow-impressum.html" class="pill">📄 Impressum</a>
+<a href="./ow-datenschutz.html" class="pill">🔒 Datenschutz</a>
+</div>
+</div>
+
+<div id="mapFsOverlay"></div>
+<script>
+let places=[]; // Keine feste Orte-Liste mehr – ausschließlich Live-Ergebnisse (Overpass API) + selbst gemerkte Orte
+let userLat=null,userLon=null,radius=5,favOnly=false,activeTypes=[],sortMode='distance';
+// Kategorien wie bei KompassWahr gruppiert (Gruppenüberschriften + Icons), erweitert
+// um die dortigen Alltags-Kategorien. Ursprüngliche 9 "Ruhige Orte"-Kategorien bleiben
+// wie gewohnt standardmäßig aktiv, die neu ergänzten sind zunächst abgewählt (Opt-in),
+// damit die Liste nicht sofort mit Bank/Bahnhof/Haltestelle etc. überladen wirkt.
+const typeList = [
+ {key:"Aussicht", label:"🌄 Aussichtspunkt", group:"Natur & Ruhe", tag:"tourism=viewpoint", kind:"node", cap:15, def:true, moods:["Durchatmen","Lesen"], why:"Aus OpenStreetMap – Aussichtspunkt in der Nähe."},
+ {key:"Park", label:"🌳 Park", group:"Natur & Ruhe", tag:"leisure=park", kind:"way", extra:'["access"!="private"]', cap:20, def:true, moods:["Durchatmen","Lesen"], why:"Aus OpenStreetMap – Parkanlage in der Nähe."},
+ {key:"Strand/Seeufer", label:"🏖️ Strand/Seeufer", group:"Natur & Ruhe", tag:"natural=beach", kind:"both", cap:15, def:true, moods:["Durchatmen","Mit Kind"], why:"Aus OpenStreetMap – Strand/Seeufer in der Nähe."},
+ {key:"Naturschutzgebiet", label:"🌲 Naturschutzgebiet", group:"Natur & Ruhe", tag:"leisure=nature_reserve", kind:"way", cap:15, def:true, moods:["Durchatmen","Lesen"], why:"Aus OpenStreetMap – Naturschutzgebiet."},
+ {key:"Streuobstwiese", label:"🌾 Streuobstwiese", group:"Natur & Ruhe", tag:"landuse=orchard", kind:"way", cap:10, def:true, moods:["Durchatmen"], why:"Aus OpenStreetMap – Streuobstwiese in der Nähe."},
+ {key:"Café", label:"☕ Café", group:"Essen & Trinken", tag:"amenity=cafe", kind:"node", cap:20, def:true, moods:["Mit Kind"], why:"Aus OpenStreetMap – Café in der Nähe."},
+ {key:"Eisdiele", label:"🍦 Eisdiele", group:"Essen & Trinken", tag:"amenity=ice_cream", kind:"node", cap:10, def:true, moods:["Mit Kind"], why:"Aus OpenStreetMap – Eisdiele in der Nähe."},
+ {key:"Restaurant", label:"🍽️ Restaurant", group:"Essen & Trinken", tag:"amenity=restaurant", kind:"node", cap:20, def:true, moods:["Mit Kind"], why:"Aus OpenStreetMap – Restaurant in der Nähe."},
+ {key:"Bäckerei", label:"🥐 Bäckerei", group:"Essen & Trinken", tag:"shop=bakery", kind:"node", cap:10, moods:["Mit Kind"], why:"Aus OpenStreetMap – Bäckerei in der Nähe."},
+ {key:"Supermarkt", label:"🛒 Supermarkt", group:"Einkaufen", tag:"shop=supermarket", kind:"node", cap:15, moods:[], why:"Aus OpenStreetMap – Supermarkt in der Nähe."},
+ {key:"Apotheke", label:"💊 Apotheke", group:"Einkaufen", tag:"amenity=pharmacy", kind:"node", cap:10, moods:[], why:"Aus OpenStreetMap – Apotheke in der Nähe."},
+ {key:"Bank", label:"🏦 Bank", group:"Einkaufen", tag:"amenity=bank", kind:"node", cap:10, moods:[], why:"Aus OpenStreetMap – Bank in der Nähe."},
+ {key:"Wochenmarkt", label:"🧺 Wochenmarkt", group:"Einkaufen", tag:"amenity=marketplace", kind:"both", cap:10, moods:[], why:"Aus OpenStreetMap – Wochenmarkt in der Nähe."},
+ {key:"Hofladen", label:"🌻 Hofladen", group:"Einkaufen", tag:"shop=farm", kind:"node", cap:10, moods:[], why:"Aus OpenStreetMap – Hofladen in der Nähe."},
+ {key:"Tankstelle", label:"⛽ Tankstelle", group:"Mobilität", tag:"amenity=fuel", kind:"node", cap:10, moods:[], why:"Aus OpenStreetMap – Tankstelle in der Nähe."},
+ {key:"Parkplatz", label:"🅿️ Parkplatz", group:"Mobilität", tag:"amenity=parking", kind:"node", cap:10, moods:[], why:"Aus OpenStreetMap – Parkplatz in der Nähe."},
+ {key:"Bahnhof", label:"🚆 Bahnhof", group:"Mobilität", tag:"railway=station", kind:"node", cap:8, moods:[], why:"Aus OpenStreetMap – Bahnhof in der Nähe."},
+ {key:"Haltestelle", label:"🚏 Haltestelle", group:"Mobilität", tag:"highway=bus_stop", kind:"node", cap:10, moods:[], why:"Aus OpenStreetMap – Haltestelle in der Nähe."},
+ {key:"Krankenhaus", label:"🏥 Krankenhaus", group:"Gesundheit", tag:"amenity=hospital", kind:"node", cap:8, moods:[], why:"Aus OpenStreetMap – Krankenhaus in der Nähe."},
+ {key:"Sehenswürdigkeit", label:"🎡 Sehenswürdigkeit", group:"Freizeit & Kultur", tag:"tourism=attraction", kind:"node", cap:10, moods:["Lesen"], why:"Aus OpenStreetMap – Sehenswürdigkeit in der Nähe."},
+ {key:"Kirche", label:"⛪ Kirche", group:"Freizeit & Kultur", tag:"amenity=place_of_worship", kind:"node", cap:10, moods:["Durchatmen","Lesen"], why:"Aus OpenStreetMap – Kirche in der Nähe."},
+ {key:"Theater", label:"🎭 Theater", group:"Freizeit & Kultur", tag:"amenity=theatre", kind:"node", cap:10, moods:["Lesen"], why:"Aus OpenStreetMap – Theater in der Nähe."},
+ {key:"Museum", label:"🏛️ Museum", group:"Freizeit & Kultur", tag:"tourism=museum", kind:"node", cap:15, moods:["Lesen"], why:"Aus OpenStreetMap – Museum in der Nähe."},
+ {key:"Tierpark", label:"🦁 Tierpark", group:"Freizeit & Kultur", tag:"tourism=zoo", kind:"way", cap:10, moods:["Mit Kind"], why:"Aus OpenStreetMap – Tierpark in der Nähe."},
+ {key:"Freizeitpark", label:"🎢 Freizeitpark", group:"Freizeit & Kultur", tag:"tourism=theme_park", kind:"way", cap:10, moods:["Mit Kind"], why:"Aus OpenStreetMap – Freizeitpark in der Nähe."},
+ {key:"Hotel", label:"🏨 Hotel", group:"Übernachtung", tag:"tourism=hotel", kind:"node", cap:15, moods:[], why:"Aus OpenStreetMap – Hotel in der Nähe."},
+];
+const groupOrder = ["Natur & Ruhe","Essen & Trinken","Einkaufen","Mobilität","Gesundheit","Freizeit & Kultur","Übernachtung"];
+// Ortstyp-Auswahl wird lokal gemerkt und beim nächsten App-Start wiederhergestellt (nur gültige Keys übernehmen,
+// falls sich die Kategorienliste seither geändert hat).
+const validTypeKeys = new Set(typeList.map(t=>t.key));
+activeTypes = (JSON.parse(localStorage.getItem('ortewahr-activetypes')||'[]')).filter(k=>validTypeKeys.has(k));
+const saveActiveTypes=()=>localStorage.setItem('ortewahr-activetypes', JSON.stringify(activeTypes));
+let osmResults=[],osmCache={},lastOverpassFetch=0;
+const map=L.map('map',{zoomControl:false}).setView([53.73,10.08],12);
+let mapTiles=L.tileLayer('https://tile.openstreetmap.org/{z}/{x}/{y}.png',{attribution:'© <a href="https://www.openstreetmap.org/copyright" target="_blank" rel="noopener">OpenStreetMap</a> contributors',maxZoom:19}).addTo(map);
+let userMarker=null,circle=null,markers=[];
+function hav(a,b,c,d){const R=6371, dLa=(c-a)*Math.PI/180, dLo=(d-b)*Math.PI/180, e=Math.sin(dLa/2)**2+Math.cos(a*Math.PI/180)*Math.cos(c*Math.PI/180)*Math.sin(dLo/2)**2; return R*2*Math.atan2(Math.sqrt(e),Math.sqrt(1-e));}
+const load=(k,d)=>{try{return JSON.parse(localStorage.getItem(k))||d}catch{return d}}; const save=(k,v)=>localStorage.setItem(k,JSON.stringify(v));
+let favs=load('ortewahr-favs',[]),notes=load('ortewahr-notes',{}),checks=load('ortewahr-checks',{}),photos=load('ortewahr-photos',{});
+places.push(...load('ortewahr-custom',[])); // zuvor per „⭐ Merken" gespeicherte OSM-Orte wieder laden
+const MAX_PHOTOS=3;
+// Migration: frühere Version speicherte 1 Foto als String statt Array
+let photosMigrated=false;
+Object.keys(photos).forEach(k=>{ if(typeof photos[k]==='string'){ photos[k]=[photos[k]]; photosMigrated=true; } });
+if(photosMigrated) save('ortewahr-photos',photos);
+function updateMap(){
+ if(userLat){
+  if(!userMarker) userMarker=L.circleMarker([userLat,userLon],{radius:9,color:'#fff',fillColor:'#12766C',fillOpacity:1,weight:3}).addTo(map);
+  else userMarker.setLatLng([userLat,userLon]);
+  if(circle) map.removeLayer(circle);
+  circle=L.circle([userLat,userLon],{radius:radius*1000,color:'#12766C',fillColor:'#12766C',fillOpacity:.12,dashArray:'10 8'}).addTo(map);
+ } renderList(); renderMarkers();
+}
+function renderMarkers(){
+ markers.forEach(m=>map.removeLayer(m)); markers=[];
+ let filtered=getFiltered();
+ filtered.forEach(p=>{
+  const isOSM = p.isOSM; const m=L.circleMarker([p.lat,p.lon],{radius:isOSM?9:11,color:'#fff',fillColor:'#12766C',fillOpacity:isOSM?0.8:.95,weight:3}).addTo(map).bindPopup(esc(p.name) + (isOSM?' (OSM Live)':''));
+  m._quietId=p.id;
+  m.on('click',()=>document.getElementById(p.id)?.scrollIntoView({behavior:'smooth',block:'center'}));
+  markers.push(m);
+ });
+}
+function getBestColor(v){return v==='grün'?'var(--green)':v==='gelb'?'var(--yellow)':'var(--red)'}
+// Typbasierte Einschätzung, wann an einem Ort voraussichtlich Ruhe herrscht (grün=ruhig, gelb=mittel, rot=voll).
+// Wochenende bezieht sich auf Sa/So insgesamt, unabhängig von der Tageszeit.
+const BEST_BY_TYPE = {
+ 'Café':            {morgens:'gelb', mittags:'rot',  abends:'grün', wochenende:'rot'},
+ 'Eisdiele':        {morgens:'grün', mittags:'gelb', abends:'rot',  wochenende:'rot'},
+ 'Restaurant':      {morgens:'grün', mittags:'gelb', abends:'rot',  wochenende:'rot'},
+ 'Aussicht':        {morgens:'grün', mittags:'rot',  abends:'gelb', wochenende:'rot'},
+ 'Park':            {morgens:'grün', mittags:'gelb', abends:'gelb', wochenende:'rot'},
+ 'Strand/Seeufer':  {morgens:'grün', mittags:'rot',  abends:'gelb', wochenende:'rot'},
+ 'Naturschutzgebiet':{morgens:'grün',mittags:'gelb', abends:'grün', wochenende:'gelb'},
+ 'Streuobstwiese':  {morgens:'grün', mittags:'grün', abends:'grün', wochenende:'gelb'},
+ 'Tierpark':        {morgens:'grün', mittags:'rot',  abends:'gelb', wochenende:'rot'},
+ 'Freizeitpark':    {morgens:'grün', mittags:'rot',  abends:'gelb', wochenende:'rot'},
+ 'Sonstiges':       {morgens:'grün', mittags:'gelb', abends:'gelb', wochenende:'gelb'}
+};
+const MIN_CHECKS_FOR_OVERRIDE=2; // ab so vielen eigenen Checks in einem Zeitraum wird die Einschätzung durch echte Daten ersetzt
+function bucketOf(ts){
+ const d=new Date(ts), day=d.getDay(), h=d.getHours();
+ if(day===0||day===6) return 'wochenende';
+ if(h>=5&&h<11) return 'morgens';
+ if(h>=11&&h<17) return 'mittags';
+ return 'abends';
+}
+function computeBest(p){
+ const base = {...(BEST_BY_TYPE[p.tags?.[0]]||BEST_BY_TYPE['Sonstiges'])};
+ const own = checks[p.id];
+ const fromChecks = {};
+ if(own && own.length){
+  const buckets={morgens:[],mittags:[],abends:[],wochenende:[]};
+  own.forEach(c=>buckets[bucketOf(c.t)].push(c.v));
+  Object.keys(buckets).forEach(k=>{
+   const arr=buckets[k];
+   if(arr.length>=MIN_CHECKS_FOR_OVERRIDE){
+    const avg=arr.reduce((a,b)=>a+b,0)/arr.length;
+    base[k]= avg>=3.8?'grün':avg>=2.5?'gelb':'rot';
+    fromChecks[k]=arr.length;
+   }
+  });
+ }
+ return {values:base, fromChecks};
+}
+function esc(s){return String(s??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));}
+
+/* Einmalige, statt bei jedem Klick wiederholte, Zustimmung pro externem Dienst:
+   Beim allerersten Aufruf einer Funktion erscheint der Hinweis auf den externen
+   Dienst als Bestätigungsdialog; bei Zustimmung wird das dauerhaft in localStorage
+   vermerkt und der Hinweis erscheint danach nie wieder. Bei Ablehnung bleibt der
+   Dienst gesperrt (kein "Nicht mehr fragen" ohne Zustimmung) und der Hinweis kommt
+   beim nächsten Versuch erneut. Die Erklärung bleibt zusätzlich dauerhaft in der
+   Datenschutzerklärung sowie als Kleintext in der App sichtbar. */
+function askOnce(key, message){
+ if(localStorage.getItem(key)==='1') return true;
+ if(confirm(message+'\n\nDieser Hinweis erscheint nur einmal – die Angaben stehen dauerhaft in der Datenschutzerklärung.')){ localStorage.setItem(key,'1'); return true; }
+ return false;
+}
+
+// Lokale Sonnenauf-/-untergangsberechnung (vereinfachter NOAA-Algorithmus) – ohne externe API
+function sunTimes(lat,lon,date){
+ const rad=Math.PI/180;
+ const dayMs=86400000;
+ const startOfYear=new Date(date.getFullYear(),0,0);
+ const dayOfYear=Math.floor((date-startOfYear)/dayMs);
+ const gamma=2*Math.PI/365*(dayOfYear-1);
+ const eqtime=229.18*(0.000075+0.001868*Math.cos(gamma)-0.032077*Math.sin(gamma)-0.014615*Math.cos(2*gamma)-0.040849*Math.sin(2*gamma));
+ const decl=0.006918-0.399912*Math.cos(gamma)+0.070257*Math.sin(gamma)-0.006758*Math.cos(2*gamma)+0.000907*Math.sin(2*gamma)-0.002697*Math.cos(3*gamma)+0.00148*Math.sin(3*gamma);
+ const zenith=90.833*rad;
+ const cosH=(Math.cos(zenith)-Math.sin(lat*rad)*Math.sin(decl))/(Math.cos(lat*rad)*Math.cos(decl));
+ if(cosH>1||cosH<-1) return null; // Polarnacht/Mitternachtssonne, hier irrelevant für DE
+ const haDeg=Math.acos(cosH)/rad;
+ const tzOffsetMin=-date.getTimezoneOffset();
+ const sunriseMin=720-4*(lon+haDeg)-eqtime+tzOffsetMin;
+ const sunsetMin=720-4*(lon-haDeg)-eqtime+tzOffsetMin;
+ const toDate=m=>{const d=new Date(date); d.setHours(0,Math.round(m),0,0); return d;};
+ return {sunrise:toDate(sunriseMin), sunset:toDate(sunsetMin)};
+}
+function sunTimesText(lat,lon){
+ const t=sunTimes(lat,lon,new Date());
+ if(!t) return 'heute nicht berechenbar';
+ const fmt=d=>d.toLocaleTimeString('de-DE',{hour:'2-digit',minute:'2-digit'});
+ const goldenEvening=new Date(t.sunset.getTime()-40*60000);
+ const goldenMorning=new Date(t.sunrise.getTime()+40*60000);
+ return `Sonnenaufgang ${fmt(t.sunrise)} (golden bis ${fmt(goldenMorning)}) • Sonnenuntergang ${fmt(t.sunset)} (golden ab ${fmt(goldenEvening)})`;
+}
+
+window.loadWeather=async(id,lat,lon)=>{
+ const box=document.getElementById('wx-'+id);
+ if(!askOnce('ortewahr-consent-openmeteo','Wetter für diesen Ort abrufen? Die Koordinaten werden dafür an api.open-meteo.com gesendet (kostenloser Dienst ohne Login/Tracking).')) return;
+ box.textContent='⏳ Lädt...';
+ try{
+  const r=await fetch(`https://api.open-meteo.com/v1/forecast?latitude=${lat}&longitude=${lon}&current=temperature_2m,precipitation,wind_speed_10m&timezone=auto`);
+  const j=await r.json();
+  const c=j.current;
+  box.innerHTML=`🌡️ ${c.temperature_2m}°C · 💨 ${c.wind_speed_10m} km/h Wind · 🌧️ ${c.precipitation} mm Niederschlag <span style="opacity:.7">(<a href="https://open-meteo.com/" target="_blank" rel="noopener" style="color:inherit">Open-Meteo</a>)</span>`;
+ }catch{ box.textContent='❌ Wetter konnte nicht geladen werden.'; }
+};
+
+window.savePhoto=(id,input)=>{
+ const file=input.files[0]; if(!file) return;
+ if(!photos[id]) photos[id]=[];
+ if(photos[id].length>=MAX_PHOTOS){ alert('Maximal '+MAX_PHOTOS+' Fotos pro Ort.'); input.value=''; return; }
+ const img=new Image();
+ const reader=new FileReader();
+ reader.onload=()=>{
+  img.onload=()=>{
+   // Auf max. 800px Breite verkleinern, damit localStorage nicht überläuft
+   const scale=Math.min(1,800/img.width);
+   const canvas=document.createElement('canvas');
+   canvas.width=img.width*scale; canvas.height=img.height*scale;
+   canvas.getContext('2d').drawImage(img,0,0,canvas.width,canvas.height);
+   const dataUrl=canvas.toDataURL('image/jpeg',0.75);
+   photos[id].push(dataUrl); save('ortewahr-photos',photos);
+   renderList();
+   setTimeout(()=>{const d=document.getElementById('det-'+id); if(d) d.classList.add('open'); document.getElementById(id)?.scrollIntoView({behavior:'smooth',block:'center'});},50);
+  };
+  img.src=reader.result;
+ };
+ reader.readAsDataURL(file);
+};
+window.removePhoto=(id,i)=>{ if(photos[id]){ photos[id].splice(i,1); if(!photos[id].length) delete photos[id]; } save('ortewahr-photos',photos); renderList(); setTimeout(()=>{const d=document.getElementById('det-'+id); if(d) d.classList.add('open');},50); };
+
+async function fetchOverpass(){
+  if(!userLat){ alert('Bitte zuerst oben per GPS oder Ortssuche einen Standort festlegen – die Live-Suche sucht ab jetzt genau im eingestellten km-Radius um diesen Standort (nicht mehr um den Kartenausschnitt).'); return; }
+  if(!activeTypes.length){ alert('Bitte zuerst mindestens einen Ortstyp weiter unten auswählen – die Live-Suche fragt nur noch die ausgewählten Ortstypen ab (schneller & stabiler).'); return; }
+  const queryTypes = typeList.filter(t=>activeTypes.includes(t.key));
+  const rMeters = Math.round(radius*1000);
+  const cacheKey = userLat.toFixed(3)+','+userLon.toFixed(3)+','+radius+'_'+activeTypes.slice().sort().join(',')+'_'+Math.floor(Date.now()/300000); // 5 min cache
+  if(osmCache[cacheKey]){ osmResults=osmCache[cacheKey]; renderList(); renderMarkers(); document.getElementById('overpassInfo').style.display='block'; return; }
+  if(Date.now()-lastOverpassFetch < 10000){ alert('Bitte 10 Sek warten - Overpass fair use.'); return; }
+  if(!askOnce('ortewahr-consent-overpass',`Live-Suche via Overpass API nutzen? Sendet deinen Standort + Radius an einen von mehreren Overpass-Servern (overpass-api.de oder Spiegelserver, OSM Community). Daten: © OpenStreetMap ODbL.`)) return;
+  lastOverpassFetch=Date.now();
+  const info = document.getElementById('overpassInfo');
+  info.innerHTML='⏳ Suche läuft... (Overpass, kann bis zu 30 Sek dauern)';
+  info.style.display='block';
+  info.scrollIntoView({behavior:'smooth',block:'nearest'});
+  // Radius-basierte Suche (around:Meter,lat,lon) statt Kartenausschnitt -
+  // so bleibt der Suchbereich exakt an den Radius-Regler gekoppelt.
+  // Jede Ortsart bekommt großzügig Puffer, danach wird global nach Entfernung
+  // sortiert und gekappt, damit bei größerem Radius keine näheren Orte durch
+  // unsortierte Treffer anderer Orten verdrängt werden.
+  const around = `around:${rMeters},${userLat},${userLon}`;
+  const query = `[out:json][timeout:25];`
+    + queryTypes.map(t=>{
+        const [k,v] = t.tag.split('=');
+        const filter = `["${k}"="${v}"]${t.extra||''}`;
+        if(t.kind==='way') return `way${filter}(${around});out center ${t.cap};`;
+        if(t.kind==='both') return `(node${filter}(${around});way${filter}(${around}););out center ${t.cap};`;
+        return `node${filter}(${around});out center ${t.cap};`;
+      }).join('');
+  const mirrors = ['https://overpass-api.de/api/interpreter','https://overpass.kumi.systems/api/interpreter','https://overpass.osm.ch/api/interpreter','https://overpass.private.coffee/api/interpreter'];
+  let json=null, lastErr=null;
+  for(const mirror of mirrors){
+    // Pro Server 2 Versuche (kurzer erneuter Versuch bei Timeout/Fehler), bevor der nächste Server drankommt
+    for(let attempt=0; attempt<2 && !json; attempt++){
+      try{
+        const ctrl = new AbortController();
+        const timer = setTimeout(()=>ctrl.abort(), 14000);
+        const res = await fetch(mirror, {method:'POST', body:'data='+encodeURIComponent(query), headers:{'Content-Type':'application/x-www-form-urlencoded'}, signal: ctrl.signal});
+        clearTimeout(timer);
+        if(!res.ok) throw new Error('HTTP '+res.status);
+        const j = await res.json();
+        if(!j || !Array.isArray(j.elements)) throw new Error('Unerwartete Antwort ohne Ergebnisliste');
+        json = j;
+      }catch(e){ lastErr=e; if(attempt===0) await new Promise(r=>setTimeout(r,800)); }
+    }
+    if(json) break;
+  }
+  try{
+    if(!json) throw lastErr || new Error('Alle Overpass-Server nicht erreichbar');
+    osmResults = json.elements.map((el,i)=>{
+      const lat = el.lat || el.center?.lat;
+      const lon = el.lon || el.center?.lon;
+      if(!lat) return null;
+      const tags = el.tags||{};
+      // Ortsart anhand der OSM-Tags der passenden typeList-Definition zuordnen
+      const t = queryTypes.find(t=>{ const [k,v]=t.tag.split('='); return tags[k]===v; });
+      if(!t) return null;
+      const name = tags.name || (t.label.replace(/^\S+\s/,'') + ' (OSM)');
+      return {id:'osm_'+el.id, name, lat, lon, why: tags.description||t.why, tags: [t.key, 'OSM Live'], moods: t.moods, wheelchair: tags.wheelchair||null, regeln:"OSM Daten – vor Ort prüfen, ODbL", geschichte:"Gefunden via Overpass API, Daten © OpenStreetMap contributors.", anreise:"Standort siehe Markierung auf der Karte oben", isOSM:true, osmTags:tags};
+    }).filter(Boolean);
+    // Duplikate vermeiden: OSM-Treffer verwerfen, die <60m von einem bereits gemerkten Ort liegen
+    osmResults = osmResults.filter(o => !places.some(p => hav(o.lat,o.lon,p.lat,p.lon) < 0.06));
+    // Global nach Entfernung sortieren und großzügig kappen, damit die nächstgelegenen
+    // Orte über alle Ortsarten hinweg immer erhalten bleiben, auch bei großem Radius.
+    osmResults = osmResults
+      .map(o=>({...o, _d: hav(userLat,userLon,o.lat,o.lon)}))
+      .sort((a,b)=>a._d-b._d)
+      .slice(0,150)
+      .map(({_d, ...o})=>o);
+    osmCache[cacheKey]=osmResults;
+    if(osmResults.length===0){
+      info.innerHTML = 'ℹ️ Suche war erfolgreich, aber keine passenden Orte im eingestellten Radius gefunden. Radius vergrößern und nochmal versuchen.';
+    } else {
+      info.innerHTML = `✅ ${osmResults.length} OSM-Orte im ${radius}-km-Radius gefunden, nach Entfernung sortiert – temporär, nicht gespeichert. Daten © OpenStreetMap ODbL. <button class="pill" onclick="clearOSM()">Löschen</button>`;
+    }
+    renderList(); renderMarkers();
+  }catch(e){
+    info.innerHTML='❌ Overpass gerade nicht erreichbar (alle Server überlastet, zu langsam oder ohne Antwort) – bitte in 1-2 Minuten nochmal versuchen. Tipp: weniger Ortstypen gleichzeitig auswählen beschleunigt die Suche.';
+    console.error(e);
+  }
+}
+function clearOSM(){ osmResults=[]; renderList(); renderMarkers(); document.getElementById('overpassInfo').style.display='none'; }
+window.clearOSM=clearOSM;
+function getFiltered(){
+ let all = [...places, ...osmResults];
+ let f=all.map(p=>({...p,dist:userLat?hav(userLat,userLon,p.lat,p.lon):0}))
+ .filter(p=>{
+  if(favOnly) return favs.includes(p.id);
+  if(userLat && p.dist>radius) return false;
+  if(activeTypes.length && !activeTypes.includes(p.tags[0])) return false;
+  return true;
+ });
+ if(sortMode==='category'){
+  const order=typeList.map(t=>t.key);
+  f.sort((a,b)=>(order.indexOf(a.tags[0])-order.indexOf(b.tags[0]))||(a.dist-b.dist));
+ } else {
+  f.sort((a,b)=>a.dist-b.dist);
+ }
+ return f;
+}
+function renderList(){
+ const list=document.getElementById('list'); list.innerHTML='';
+ let filtered=getFiltered();
+ document.getElementById('resultCount').textContent=filtered.length+' Orte'+(userLat? ' im Radius':'')+(osmResults.length? ' • Live von OSM':'');
+ document.getElementById('favCount').textContent=favs.length;
+ if(!filtered.length){
+  const nichtsGesucht = places.length===0 && osmResults.length===0;
+  list.innerHTML = nichtsGesucht
+   ? '<div class="card small" style="text-align:center;padding:30px 16px"><div style="font-size:38px;margin-bottom:8px">🔍</div>Noch keine Orte geladen.<br>Tippe oben auf „Live: Orte, Cafés &amp; Eis hier finden", um Ergebnisse aus deiner Umgebung zu laden.</div>'
+   : '<div class="card small" style="text-align:center;padding:30px 16px"><div style="font-size:38px;margin-bottom:8px">🧭</div>Kein Ort im Radius/Filter – vergrößere den Radius, wähle mehr Ortstypen aus oder starte die Live-Suche erneut.</div>';
+  return;
+ }
+ let lastCat=null;
+ filtered.forEach(p=>{
+  const isFav=favs.includes(p.id);
+  if(sortMode==='category' && p.tags[0]!==lastCat){
+   lastCat=p.tags[0];
+   const h=document.createElement('div'); h.className='label'; h.style.margin='16px 4px 4px'; h.textContent=lastCat;
+   list.appendChild(h);
+  }
+  const d=document.createElement('div'); d.className='card'; d.id=p.id;
+  d.innerHTML=`
+   <div style="display:flex;justify-content:space-between;align-items:start">
+    <div><b>${esc(p.name)}</b> <span class="small">${p.dist? p.dist.toFixed(1)+' km':''}</span><br><span class="small">${esc(p.why)}</span></div>
+    <span class="fav" data-fav="${p.id}" role="button" aria-label="${isFav?'Favorit entfernen':'Als Favorit speichern'}">${isFav?'❤️':'🤍'}</span>
+   </div>
+   <div style="margin-top:8px">${p.tags.filter(t=>t!=='Bank mit Lehne').map(t=>`<span class="pill" style="font-size:12.5px;padding:6px 11px">${esc(t)}</span>`).join('')}</div>
+   <div style="margin-top:10px;display:flex;gap:8px;align-items:center;flex-wrap:wrap"><span class="small">Beste Zeit:</span>
+    ${(()=>{const bt=computeBest(p); return Object.entries(bt.values).map(([k,v])=>{const n=bt.fromChecks[k]; const tip=`${k}: ${v}`+(n?` (aus ${n} eigenen Checks)`:' (Einschätzung)'); return `<span title="${esc(tip)}" style="display:flex;flex-direction:column;align-items:center;gap:2px"><span class="dot" style="background:${getBestColor(v)};${n?'box-shadow:0 0 0 2px var(--accent)':''}"></span><span class="small" style="font-size:10.5px">${k.slice(0,2).toUpperCase()}</span></span>`}).join('');})()}
+   </div>
+   <div style="margin-top:10px;display:flex;gap:6px;flex-wrap:wrap;align-items:center"><button class="pill" onclick="toggleDet('${p.id}')">Details ▼</button><button class="pill-sm" onclick="focusOnMap('${p.id}')">📍 Karte</button><a class="pill-sm" href="https://www.google.com/maps/dir/?api=1&destination=${p.lat},${p.lon}" target="_blank" rel="noopener" style="text-decoration:none">🧭 Route</a><button class="pill-sm" onclick="sharePlace('${p.id}')">🔗 Teilen</button>${p.isOSM?`<button class="pill-sm" onclick="saveOsmAsFavorite('${p.id}')">⭐ Merken</button>`:''}</div>
+   <div class="details" id="det-${p.id}">
+    <div style="margin-top:14px;border-top:1px solid var(--cardB);padding-top:14px">
+     ${p.dist?`<b>📍 Entfernung von deinem Standort:</b> <span class="small">${p.dist.toFixed(1)} km</span><br><br>`:''}
+     ${p.moods&&p.moods.length?`<b>💭 Könnte passen für:</b> <span class="small">${p.moods.map(esc).join(', ')}</span><br><br>`:''}
+     ${p.wheelchair?`<b>♿ Barrierefrei laut OSM:</b> <span class="small">${p.wheelchair==='yes'?'ja':p.wheelchair==='limited'?'eingeschränkt':p.wheelchair==='no'?'nein':esc(p.wheelchair)}</span><br><br>`:''}
+     ${p.osmTags&&p.osmTags.opening_hours?`<b>🕒 Öffnungszeiten laut OSM:</b> <span class="small">${esc(p.osmTags.opening_hours)}</span><br><br>`:''}
+     <b>📖 Geschichte:</b><br><span class="small">${esc(p.geschichte)}</span><br><br>
+     <b>📜 Regeln:</b><br><span class="small">${esc(p.regeln)}</span><br><br>
+     <b>🚶 Ruhige Anreise:</b><br><span class="small">${esc(p.anreise)}</span><br><br>
+     <b>🌅 Goldene Stunde heute:</b><br><span class="small" id="sun-${p.id}">wird berechnet...</span><br><br>
+     <button class="pill" onclick="loadWeather('${p.id}',${p.lat},${p.lon})">🌦️ Wetter hier abrufen</button>
+     <div class="small" id="wx-${p.id}" style="margin-top:6px"></div><br>
+     <b>📝 Meine Notiz (nur lokal):</b><br><textarea id="note-${p.id}" rows="2" placeholder="z.B. Linke Bank besser, mehr Schatten...">${esc(notes[p.id]||'')}</textarea><br>
+     <div style="margin:6px 0;display:flex;gap:6px;flex-wrap:wrap" id="photo-${p.id}">${(photos[p.id]||[]).map((ph,i)=>`<div style="position:relative"><img src="${ph}" style="width:84px;height:84px;object-fit:cover;border-radius:14px;display:block"><span onclick="removePhoto('${p.id}',${i})" role="button" aria-label="Foto löschen" style="position:absolute;top:-6px;right:-6px;background:#fff;color:#20302B;border-radius:50%;width:22px;height:22px;display:flex;align-items:center;justify-content:center;box-shadow:0 2px 6px rgba(0,0,0,.3);cursor:pointer;font-size:12px">🗑️</span></div>`).join('')}</div>
+     <input type="file" accept="image/*" id="photoInput-${p.id}" style="display:none" onchange="savePhoto('${p.id}',this)">
+     ${(photos[p.id]||[]).length<MAX_PHOTOS?`<button class="pill" onclick="document.getElementById('photoInput-${p.id}').click()" aria-label="Foto hinzufügen">📷 Foto hinzufügen (${(photos[p.id]||[]).length}/${MAX_PHOTOS})</button>`:`<span class="small">Max. ${MAX_PHOTOS} Fotos erreicht</span>`}
+     <br><button class="pill" onclick="saveNote('${p.id}')" style="margin-top:6px">Speichern</button><br><br>
+     <b>🔇 Wie ruhig war es gerade?</b><br>
+     <input type="range" min="1" max="5" value="${(checks[p.id]?.slice(-1)[0]?.v||3)}" id="check-${p.id}" class="slider" style="margin:6px 0"><div class="small">1 = laut, 5 = sehr ruhig</div>
+     <button class="pill" onclick="saveCheck('${p.id}')" style="margin-top:6px">Check speichern</button> <span class="small" id="ci-${p.id}">${(checks[p.id]?.length||0)} Checks</span>
+    </div>
+   </div>`;
+  list.appendChild(d);
+ });
+ filtered.forEach(p=>{ const el=document.getElementById('sun-'+p.id); if(el) el.textContent=sunTimesText(p.lat,p.lon); });
+ document.querySelectorAll('[data-fav]').forEach(el=>el.onclick=()=>{const id=el.dataset.fav; if(favs.includes(id)) favs=favs.filter(f=>f!==id); else favs.push(id); save('ortewahr-favs',favs); renderList(); renderMarkers();});
+ if(location.hash){const id=location.hash.slice(1); setTimeout(()=>{const e=document.getElementById(id); if(e){e.scrollIntoView({behavior:'smooth',block:'center'}); const d=document.getElementById('det-'+id); if(d) d.classList.add('open');}},500);}
+}
+window.toggleDet=id=>document.getElementById('det-'+id).classList.toggle('open');
+
+function setupClusterToggle(btnId,secId,label){
+ const btn=document.getElementById(btnId), sec=document.getElementById(secId);
+ btn.classList.toggle('active', sec.classList.contains('open'));
+ btn.onclick=()=>{const open=sec.classList.toggle('open'); btn.textContent=label+(open?' ▴':' ▾'); btn.classList.toggle('active',open);};
+}
+setupClusterToggle('toggleStandort','secStandort','📍 Standort & Suche');
+setupClusterToggle('toggleFilter','secFilter','🎯 Filter & Aktionen');
+window.saveNote=id=>{notes[id]=document.getElementById('note-'+id).value; save('ortewahr-notes',notes); alert('Notiz lokal gespeichert');};
+window.saveCheck=id=>{const v=document.getElementById('check-'+id).value; if(!checks[id]) checks[id]=[]; checks[id].push({v:+v,t:Date.now()}); save('ortewahr-checks',checks); document.getElementById('ci-'+id).textContent=checks[id].length+' Checks';};
+window.focusOnMap=id=>{
+ const all=[...places,...osmResults]; const p=all.find(x=>x.id===id); if(!p) return;
+ map.invalidateSize();
+ map.setView([p.lat,p.lon],15,{animate:true});
+ const marker=markers.find(m=>m._quietId===id);
+ if(marker) marker.openPopup(); else L.popup().setLatLng([p.lat,p.lon]).setContent(p.name).openOn(map);
+ document.getElementById('mapWrap').scrollIntoView({behavior:'smooth',block:'center'});
+};
+window.saveOsmAsFavorite=id=>{
+ const p=osmResults.find(x=>x.id===id); if(!p) return;
+ if(!confirm('Diesen OSM Ort zu deinen lokalen Favoriten speichern? (nur lokal, OSM Quelle bleibt genannt)')) return;
+ const customId='custom_'+Date.now(); const toSave={...p, id:customId, isOSM:false, name:p.name+' ⭐', why:p.why+' [Quelle OSM, übernommen]'};
+ let custom=load('ortewahr-custom',[]); custom.push(toSave); save('ortewahr-custom',custom); places.push(toSave);
+ alert('Als Favorit gespeichert (nur lokal)'); renderList();
+};
+window.sharePlace=id=>{
+ const all=[...places,...osmResults]; const p=all.find(x=>x.id===id); if(!p) return;
+ const url = p.isOSM ? `https://www.openstreetmap.org/?mlat=${p.lat}&mlon=${p.lon}#map=17/${p.lat}/${p.lon}` : location.origin+location.pathname+'#'+id;
+ const shareTitle = p.isOSM ? p.name+' (via OrteWahr)' : p.name;
+ const fallbackPrompt=()=>{ try{ window.prompt('Link kopieren (markieren + Cmd/Strg+C):', url); }catch{ alert('Link: '+url); } };
+ if(navigator.share){
+  navigator.share({title:shareTitle,url}).catch(e=>{ if(e && e.name==='AbortError') return; fallbackPrompt(); });
+ } else if(navigator.clipboard && navigator.clipboard.writeText){
+  navigator.clipboard.writeText(url).then(()=>alert('Link kopiert: '+url)).catch(fallbackPrompt);
+ } else { fallbackPrompt(); }
+};
+
+
+document.getElementById('radius').oninput=e=>{radius=+e.target.value; document.getElementById('radVal').textContent=radius+' km'; updateMap(); if(userLat && circle) map.fitBounds(circle.getBounds(),{padding:[24,24]});};
+document.getElementById('locBtn').onclick=e=>{
+ const btn=e.currentTarget; const orig=btn.textContent; btn.textContent='⏳ Suche GPS...'; btn.disabled=true;
+ navigator.geolocation.getCurrentPosition(
+  pos=>{userLat=pos.coords.latitude; userLon=pos.coords.longitude; map.setView([userLat,userLon],13); updateMap(); if(circle) map.fitBounds(circle.getBounds(),{padding:[24,24]}); btn.textContent=orig; btn.disabled=false;},
+  err=>{alert('GPS: '+err.message); btn.textContent=orig; btn.disabled=false;}
+ );
+};
+async function doSearch(){
+ const q=document.getElementById('searchInput').value.trim(); if(!q) return;
+ if(!askOnce('ortewahr-consent-nominatim','Externe Suche via OpenStreetMap Nominatim nutzen? Text wird an nominatim.openstreetmap.org gesendet.')) return;
+ const btn=document.getElementById('searchBtn'); const orig=btn.textContent; btn.textContent='⏳ Suche...'; btn.disabled=true;
+ try{
+   const ctrl=new AbortController(); const timer=setTimeout(()=>ctrl.abort(),9000);
+   const r=await fetch('https://nominatim.openstreetmap.org/search?format=json&q='+encodeURIComponent(q)+'&limit=1&countrycodes=de',{headers:{'Accept-Language':'de'},signal:ctrl.signal});
+   clearTimeout(timer);
+   if(!r.ok) throw new Error('HTTP '+r.status);
+   const j=await r.json();
+   if(j[0]){userLat=+j[0].lat; userLon=+j[0].lon; map.setView([userLat,userLon],13); updateMap(); if(circle) map.fitBounds(circle.getBounds(),{padding:[24,24]});} else alert('Nichts gefunden');
+ }catch(e){ alert(e.name==='AbortError' ? 'Suche hat zu lange gedauert (Timeout) – bitte nochmal versuchen.' : 'Suche fehlgeschlagen'); }
+ finally{ btn.textContent=orig; btn.disabled=false; }
+}
+document.getElementById('searchBtn').onclick=doSearch;
+document.getElementById('searchInput').addEventListener('keydown',e=>{if(e.key==='Enter'){e.preventDefault(); doSearch();}});
+const typeDiv=document.getElementById('typeFilters');
+function renderTypeFilters(){
+ typeDiv.innerHTML='';
+ groupOrder.forEach(group=>{
+  const types = typeList.filter(t=>t.group===group);
+  if(!types.length) return;
+  const section=document.createElement('div'); section.style.margin='10px 0 2px'; section.style.flex='1 0 100%';
+  const heading=document.createElement('div'); heading.className='label'; heading.style.margin='0 0 4px'; heading.textContent=group;
+  section.appendChild(heading);
+  const row=document.createElement('div'); row.style.display='flex'; row.style.gap='6px'; row.style.flexWrap='wrap';
+  types.forEach(t=>{
+   const b=document.createElement('button'); b.className='pill'+(activeTypes.includes(t.key)?' active':''); b.textContent=t.label;
+   b.onclick=()=>{ if(activeTypes.includes(t.key)) activeTypes=activeTypes.filter(x=>x!==t.key); else activeTypes.push(t.key); b.classList.toggle('active'); saveActiveTypes(); renderList(); renderMarkers(); };
+   row.appendChild(b);
+  });
+  section.appendChild(row);
+  typeDiv.appendChild(section);
+ });
+}
+renderTypeFilters();
+document.getElementById('resetBtn').onclick=()=>{favOnly=false; activeTypes=[]; sortMode='distance'; saveActiveTypes(); document.getElementById('favFilter').classList.remove('active'); const sb=document.getElementById('sortBtn'); sb.classList.remove('active'); sb.textContent='🔀 Nach Kategorie sortieren'; renderTypeFilters(); renderList(); renderMarkers();};
+document.getElementById('favFilter').onclick=e=>{favOnly=!favOnly; e.currentTarget.classList.toggle('active',favOnly); renderList();};
+document.getElementById('sortBtn').onclick=e=>{sortMode = sortMode==='distance'?'category':'distance'; e.currentTarget.classList.toggle('active', sortMode==='category'); e.currentTarget.textContent = sortMode==='category' ? '📍 Nach Entfernung sortieren' : '🔀 Nach Kategorie sortieren'; renderList();};
+
+ document.getElementById('overpassBtn').onclick=fetchOverpass;
+
+document.getElementById('exportBtn').onclick=()=>{
+ const backup={version:1,exported:new Date().toISOString(),favs,notes,checks,photos,custom:load('ortewahr-custom',[])};
+ const blob=new Blob([JSON.stringify(backup,null,2)],{type:'application/json'});
+ const a=document.createElement('a'); a.href=URL.createObjectURL(blob); a.download='ortewahr-backup-'+new Date().toISOString().slice(0,10)+'.json';
+ document.body.appendChild(a); a.click(); a.remove();
+};
+document.getElementById('importBtn').onclick=()=>document.getElementById('importFile').click();
+document.getElementById('importFile').onchange=e=>{
+ const file=e.target.files[0]; if(!file) return;
+ const reader=new FileReader();
+ reader.onload=()=>{
+  try{
+   const data=JSON.parse(reader.result);
+   if(!confirm('Backup importieren? Das ersetzt deine aktuellen Favoriten, Notizen, Fotos und Checks auf diesem Gerät.')) return;
+   favs=data.favs||[]; notes=data.notes||{}; checks=data.checks||{}; photos=data.photos||{};
+   save('ortewahr-favs',favs); save('ortewahr-notes',notes); save('ortewahr-checks',checks); save('ortewahr-photos',photos);
+   if(data.custom){ save('ortewahr-custom',data.custom); places.push(...data.custom.filter(c=>!places.some(p=>p.id===c.id))); }
+   renderList(); renderMarkers();
+   alert('Backup importiert.');
+  }catch{ alert('Diese Datei konnte nicht gelesen werden – ist es eine gültige Backup-JSON-Datei?'); }
+ };
+ reader.readAsText(file);
+ e.target.value='';
+};
+
+document.getElementById('printBtn').onclick=()=>{
+ const favPlaces=[...places,...osmResults].filter(p=>favs.includes(p.id));
+ if(!favPlaces.length){ alert('Noch keine Favoriten gespeichert.'); return; }
+ const win=window.open('','_blank');
+ win.document.write(`<!DOCTYPE html><html lang="de"><head><meta charset="UTF-8"><title>Meine ruhigen Orte</title>
+ <style>body{font-family:-apple-system,Arial,sans-serif;color:#20302B;max-width:600px;margin:30px auto;font-size:15px}h1{font-size:24px}h2{font-size:18px;margin:22px 0 4px;border-top:1px solid #ccc;padding-top:12px}p{font-size:14.5px;line-height:1.55;margin:4px 0}img{max-width:200px;border-radius:8px;display:block;margin:6px 0}</style>
+ </head><body><h1>Meine ruhigen Orte</h1>`+
+ favPlaces.map(p=>`<h2>${esc(p.name)}</h2>${photos[p.id]&&photos[p.id][0]?`<img src="${photos[p.id][0]}">`:''}<p>${esc(p.why)}</p><p><b>Anreise:</b> ${esc(p.anreise)}</p><p><b>Regeln:</b> ${esc(p.regeln)}</p>${notes[p.id]?`<p><b>Meine Notiz:</b> ${esc(notes[p.id])}</p>`:''}`).join('')+
+ `</body></html>`);
+ win.document.close(); win.focus(); setTimeout(()=>win.print(),300);
+};
+document.getElementById('shareFavBtn').onclick=()=>{
+ const favPlaces=[...places,...osmResults].filter(p=>favs.includes(p.id));
+ if(!favPlaces.length){ alert('Noch keine Favoriten gespeichert.'); return; }
+ const text='Meine ruhigen Orte:\n'+favPlaces.map(p=>'• '+p.name).join('\n');
+ if(navigator.share){ navigator.share({title:'Meine ruhigen Orte',text}).catch(e=>{ if(e && e.name==='AbortError') return; }); }
+ else if(navigator.clipboard && navigator.clipboard.writeText){ navigator.clipboard.writeText(text).then(()=>alert('Liste kopiert:\n\n'+text)).catch(()=>alert(text)); }
+ else alert(text);
+};
+
+
+const themeBtn=document.getElementById('themeBtn');
+const owThemeColor=document.getElementById('owThemeColor');
+function applyTheme(dark){document.documentElement.classList.toggle('theme-dark',dark);themeBtn.textContent=dark?'☀️':'🌙'; if(owThemeColor) owThemeColor.setAttribute('content', dark?'#122B2E':'#ECF5F3');}
+applyTheme(false);
+themeBtn.onclick=()=>{applyTheme(!document.documentElement.classList.contains('theme-dark'));};
+
+const fsBtn=document.getElementById('fullscreenBtn'), mapEl=document.getElementById('map');
+const mapWrap=document.getElementById('mapWrap'), fsOverlay=document.getElementById('mapFsOverlay');
+const mapPlaceholder=document.createComment('map-slot');
+mapWrap.parentNode.insertBefore(mapPlaceholder, mapWrap);
+function setFullscreen(on){
+ if(on){
+  fsOverlay.appendChild(mapWrap);
+  fsOverlay.classList.add('show');
+  mapEl.classList.add('fs');
+ }else{
+  mapPlaceholder.parentNode.insertBefore(mapWrap, mapPlaceholder.nextSibling);
+  fsOverlay.classList.remove('show');
+  mapEl.classList.remove('fs');
+ }
+ fsBtn.textContent=on?'✕':'⛶ Vollbild';
+ setTimeout(()=>map.invalidateSize(),60);
+}
+fsBtn.onclick=()=>setFullscreen(!fsOverlay.classList.contains('show'));
+document.addEventListener('keydown',e=>{if(e.key==='Escape'&&fsOverlay.classList.contains('show')) setFullscreen(false);});
+
+
+renderList(); updateMap();
+if('serviceWorker' in navigator){ window.addEventListener('load',()=>navigator.serviceWorker.register('./ow-sw.js').catch(()=>{})); }
+</script>
+</body>
+</html>

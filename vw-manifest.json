@@ -1,0 +1,15 @@
+{
+  "name": "VorratsWahr - Vorrats-Überblick für Gläser & Behälter",
+  "short_name": "VorratsWahr",
+  "description": "Foto-basiertes Inventar für Gläser und Behälter mit eigenem Klebelabel – 100% lokal.",
+  "start_url": "./vw-index.html",
+  "scope": "./",
+  "display": "standalone",
+  "background_color": "#ECF5F3",
+  "theme_color": "#ECF5F3",
+  "icons": [
+    {"src": "vw-icon-192.png", "sizes": "192x192", "type": "image/png"},
+    {"src": "vw-icon-512.png", "sizes": "512x512", "type": "image/png"},
+    {"src": "vw-icon-180.png", "sizes": "180x180", "type": "image/png"}
+  ]
+}

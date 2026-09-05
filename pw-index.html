@@ -1,0 +1,223 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+    <meta name="robots" content="noindex, nofollow">
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no, viewport-fit=cover">
+<title>ProduktWahr - Der Produkt-Check</title>
+<meta name="description" content="Ein Scan für Zusatzstoffe, Kosmetik-Inhaltsstoffe und Produktbewertungen per Barcode – 100% lokal, mit Live-Barcode-Check.">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="apple-mobile-web-app-title" content="ProduktWahr">
+<meta name="theme-color" content="#ECF5F3">
+<link rel="apple-touch-icon" href="./pw-icon-180.png">
+<link rel="manifest" href="./pw-manifest.json">
+<link rel="stylesheet" href="./pw-style.css">
+</head>
+<body>
+<a href="./index.html" id="pw-home-link" class="tap44" aria-label="Zur WahrZentrale" style="position:fixed;top:calc(env(safe-area-inset-top,0px) + 14px);right:64px;z-index:9999;width:40px;height:40px;border-radius:20px;border:1px solid rgba(120,120,128,0.3);background:rgba(255,255,255,0.7);backdrop-filter:blur(8px);-webkit-backdrop-filter:blur(8px);font-size:16px;line-height:38px;text-align:center;text-decoration:none;box-shadow:0 2px 8px rgba(0,0,0,0.12)">🏠</a>
+<button id="pw-theme-toggle" class="tap44" aria-label="Hell-/Dunkelmodus umschalten" style="position:fixed;top:calc(env(safe-area-inset-top,0px) + 14px);right:16px;z-index:9999;width:40px;height:40px;border-radius:20px;border:1px solid rgba(120,120,128,0.3);background:rgba(255,255,255,0.7);backdrop-filter:blur(8px);-webkit-backdrop-filter:blur(8px);font-size:16px;line-height:38px;text-align:center;padding:0;cursor:pointer;box-shadow:0 2px 8px rgba(0,0,0,0.12)">🌙</button>
+<style>@view-transition{navigation:auto}
+  html.theme-dark #pw-home-link,html.theme-dark #pw-theme-toggle{background:rgba(27,24,48,0.7);border-color:rgba(180,170,220,0.25)}
+  @media (min-width:640px){#pw-theme-toggle{right:calc(50vw - 195px + 16px) !important;top:38px !important}#pw-home-link{right:calc(50vw - 195px + 64px) !important;top:38px !important}}
+</style>
+<div class="app safe-top">
+
+  <div id="home">
+    <div style="padding:6px 24px 20px;text-align:center">
+      <img src="./pw-icon-512.png" alt="ProduktWahr Logo" class="app-logo app-logo-light" style="width:84px;height:84px;object-fit:contain;margin:0 auto 16px;display:block;border-radius:20px" width="84" height="84" decoding="sync" fetchpriority="high">
+      <img src="./pw-icon-512-dark.png" alt="ProduktWahr Logo" class="app-logo app-logo-dark" style="width:84px;height:84px;object-fit:contain;margin:0 auto 16px;display:none;border-radius:20px" width="84" height="84" decoding="sync">
+      <h1 style="font-size:26px;font-weight:500;letter-spacing:-0.01em;color:var(--text);white-space:nowrap;line-height:1;margin:0">ProduktWahr</h1>
+      <p style="font-size:13px;color:var(--sub);margin:8px 0 0;font-weight:400;letter-spacing:0.02em">Zusatzstoffe, Kosmetik &amp; Barcode – ein Check</p>
+      <p style="font-size:11px;color:var(--sub);margin:4px 0 0">Nur Information – keine medizinische oder kosmetische Fachberatung.</p>
+    </div>
+    <div class="card">
+      <div class="section-title" style="margin:0 0 8px">Was möchtest du prüfen?</div>
+      <div class="mode-switch" id="modeSwitch">
+        <button class="mode-btn active" data-mode="auto">🔀 Automatisch</button>
+        <button class="mode-btn" data-mode="lebensmittel">🍎 Lebensmittel</button>
+        <button class="mode-btn" data-mode="kosmetik">💄 Kosmetik</button>
+      </div>
+      <p style="font-size:11px;color:var(--sub);margin:8px 2px 0" id="modeHint">Prüft automatisch gegen beide Datenbanken und zeigt die passende Quelle. Bei bekannter Produktart hilft die gezielte Auswahl, Fehltreffer durch Namensüberschneidungen zu vermeiden.</p>
+      <button class="btn btn-white" id="btnLiveTextScan" style="margin-top:14px">Zutaten/ Inhaltsstoffe live scannen</button>
+      <button class="btn btn-white" id="btnBarcodeScan" style="margin-top:10px">Barcode live scannen</button>
+      <button class="btn btn-white" id="btnScan" style="margin-top:10px">Zutaten/ Inhaltsstoffe scannen</button>
+      <button class="btn btn-white" id="btnUpload" style="margin-top:10px">Bild oder Datei hochladen</button>
+      <input type="file" id="uploadInput" accept="image/*" style="display:none">
+      <div style="margin-top:14px">
+        <textarea id="manualInput" placeholder="Oder Zutatenliste/INCI-Liste hier einfügen bzw. eintippen ..."></textarea>
+        <button class="btn btn-secondary" id="btnCheckManual" style="margin-top:10px">Prüfen</button>
+      </div>
+    </div>
+
+    <div class="section-title">Nachschlagen (ohne Scan)</div>
+    <div class="card" style="padding:14px 18px">
+      <input type="text" id="lookupInput" class="search-input" placeholder="Stoffname oder E-Nummer eingeben, z. B. „E102“ oder „Triclosan“ …">
+      <div id="lookupResults" style="margin-top:4px">
+        <p style="font-size:12px;color:var(--sub);margin:8px 2px 0">Mindestens 2 Zeichen eingeben, um in beiden Datenbanken nachzuschlagen – ganz ohne Foto oder Barcode.</p>
+      </div>
+    </div>
+
+    <div class="section-title">Favoriten</div>
+    <div class="card" style="padding:14px 18px" id="swFavCard">
+      <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:8px">
+        <b style="font-size:13px">⭐ Favoriten</b>
+        <button class="share-btn" id="btnClearFav" style="display:none">Leeren</button>
+      </div>
+      <div id="swFavList"><p style="font-size:12px;color:var(--sub);margin:0">Noch keine Favoriten. Tippe im Ergebnis auf den Stern ☆.</p></div>
+    </div>
+    <p style="font-size:11px;color:var(--sub);margin:8px 4px 0;line-height:1.4">Favoriten werden automatisch lokal auf diesem Gerät gespeichert, sobald du den Stern antippst – jederzeit über den Stern oder "Leeren" wieder entfernbar.</p>
+    <div class="share-row" style="margin-top:8px">
+      <button class="share-btn" id="btnExportBackup">⬆️ Sichern</button>
+      <button class="share-btn" id="btnImportBackup">⬇️ Wiederherstellen</button>
+    </div>
+    <input type="file" id="importBackupFile" accept="application/json,.json" style="display:none">
+    <p style="font-size:11px;color:var(--sub);margin:6px 4px 0;line-height:1.4">"Sichern" erzeugt eine Datei mit deinen Favoriten (z. B. für ein neues iPhone) – "Wiederherstellen" liest sie wieder ein. Beides bleibt lokal, es wird nichts an einen Server übertragen.</p>
+
+    <div class="section-title" style="display:flex;align-items:center;justify-content:space-between">
+      <span>Mein Profil</span>
+      <button class="share-btn" id="btnOpenProfil">Öffnen</button>
+    </div>
+    <div class="card" style="padding:12px 18px;font-size:12.5px;color:var(--sub)">Hinterlege deine Allergien/Unverträglichkeiten – beim Barcode-Live-Scan wird automatisch gewarnt, wenn ein Produkt betroffen ist.</div>
+
+    <div class="section-title">Kategorien</div>
+    <div class="card" style="padding:14px 18px">
+      <div class="glossary-item"><b>🍎 Zusatzstoffe (E-Nummern)</b><p>Nach Verordnung (EG) Nr. 1333/2008 zugelassene Lebensmittelzusatzstoffe – Farbstoffe, Konservierungsstoffe, Süßungsmittel u. a.</p></div>
+      <div class="glossary-item"><b>💄 Hormonell wirksame Stoffe</b><p>Stehen im Verdacht, das Hormonsystem zu beeinflussen (z. B. bestimmte Parabene, UV-Filter).</p></div>
+      <div class="glossary-item"><b>💄 Mikroplastik</b><p>Feste, schwer abbaubare Kunststoffpartikel in der Formel.</p></div>
+      <div class="glossary-item"><b>💄 Duftstoff-Allergene</b><p>EU-weit deklarationspflichtige Duftstoffe, die Kontaktallergien auslösen können.</p></div>
+      <div class="glossary-item"><b>💄 Bedenkliche Konservierungsstoffe</b><p>Können Haut reizen oder stehen unter Beobachtung.</p></div>
+      <div class="glossary-item"><b>💄 Tierisch/nicht vegan &amp; Silikone/Mineralöle</b><p>Hinweis auf tierischen Ursprung bzw. schwer abbaubare Stoffe.</p></div>
+      <div class="glossary-item"><b>⚠️ 14 EU-Pflichtallergene</b><p>Werden zusätzlich in jedem gescannten Text erkannt (Gluten, Milch, Nüsse, Soja u. a.).</p></div>
+    </div>
+    <div class="section-title">Rechtliches</div>
+    <div class="card" style="padding:10px 18px">
+      <p style="font-size:12px;color:var(--sub);margin:0">Zusatzstoffe: Verordnung (EG) Nr. 1333/2008, Kurzbewertungen auf Basis öffentlich zugänglicher EFSA-Stellungnahmen. Allergene: Anhang II der Verordnung (EU) Nr. 1169/2011 (LMIV). Kosmetik/INCI: Verordnung (EG) Nr. 1223/2009, Mikroplastik-Einstufung zusätzlich auf Basis REACH-VO (EG) Nr. 1907/2006, Anhang XVII Nr. 78. Barcode-Produktdaten: © Open Food Facts-, Open Beauty Facts- bzw. Open Products Facts-Mitwirkende, Lizenz ODbL. Alle Einstufungen sind eigene, neutrale Zusammenfassungen ohne Gewähr.</p>
+    </div>
+  </div>
+
+  <div id="resultView" class="hidden">
+    <button class="btn btn-secondary" id="btnBack" style="margin-top:10px">← Zurück</button>
+    <div class="disclaimer" style="margin-top:10px">Nur Information – keine medizinische oder kosmetische Fachberatung.</div>
+    <div id="resultSource" class="hidden" style="font-size:11px;color:var(--sub);margin:8px 4px 0"></div>
+    <div id="resultAllergene" class="hidden" style="margin:10px 0"></div>
+    <div class="section-title">Gefundene Stoffe</div>
+    <div id="resultList"></div>
+    <div class="share-row">
+      <button class="share-btn" id="btnShareAll">Ganzes Ergebnis teilen</button>
+    </div>
+  </div>
+
+  <footer>
+    <a href="#" id="btnShowOnboarding">Einführung</a> · <a href="./pw-impressum.html">Impressum</a> · <a href="./pw-datenschutz.html">Datenschutz</a>
+  </footer>
+</div>
+
+<!-- Foto-/Etikett-Scanner (OCR) -->
+<div id="scannerView" class="scanner-view hidden">
+  <div class="scanner-top"><button class="icon-btn" id="btnCloseScanner">✕</button></div>
+  <video id="video" autoplay playsinline muted></video>
+  <div class="scan-hint">Zutatenliste/Etikett hier einrahmen</div>
+  <div class="scan-frame"></div>
+  <canvas id="canvas" class="hidden"></canvas>
+  <div class="scanner-controls">
+    <button class="btn btn-primary" id="btnCapture">Foto aufnehmen</button>
+    <button class="btn btn-secondary" id="btnManualInsteadInScanner" style="background:rgba(255,255,255,.15);color:#fff;border:none">Stattdessen manuell eingeben</button>
+  </div>
+</div>
+
+<!-- Live-Text-Scan (fortlaufende Zutaten-Erkennung ohne Auslöser, analog Barcode-Live) -->
+<div id="liveTextView" class="scanner-view hidden">
+  <div class="scanner-top">
+    <button class="icon-btn" id="btnCloseLiveTextScan">✕</button>
+    <button class="icon-btn" id="btnLiveTextTorch" title="Licht">💡</button>
+  </div>
+  <video id="liveTextVideo" autoplay playsinline muted></video>
+  <div class="scan-hint" id="liveTextStatus">Zutatenliste ins Bild halten …</div>
+  <div class="scan-frame"></div>
+
+  <div class="overlay-card" id="liveTextCard">
+    <div class="overlay-ampel" id="liveTextAmpel"></div>
+    <div class="overlay-text">
+      <p class="overlay-name" id="liveTextName">–</p>
+      <p class="overlay-meta" id="liveTextMeta">–</p>
+    </div>
+    <button class="overlay-expand" id="liveTextExpand">Details ▸</button>
+  </div>
+</div>
+
+<!-- Barcode-Live-Scan (BlickWahr-Prinzip: dauerhafte Erkennung, Overlay direkt im Bild) -->
+<div id="liveScanView" class="live-stage hidden">
+  <video id="liveVideo" playsinline autoplay muted></video>
+  <div class="live-top">
+    <button class="icon-btn" id="btnCloseLiveScan">✕</button>
+    <button class="icon-btn" id="btnTorch" title="Licht">💡</button>
+  </div>
+  <div class="live-hint" id="liveHint">Barcode ins Bild halten …</div>
+
+  <button class="korb-toggle" id="korbToggle">
+    <span>🧺</span><span id="korbToggleLabel">Warenkorb-Modus</span>
+    <span class="korb-count" id="korbCount" hidden>0</span>
+  </button>
+
+  <div class="overlay-card" id="overlayCard">
+    <div class="overlay-ampel" id="overlayAmpel"></div>
+    <div class="overlay-text">
+      <p class="overlay-name" id="overlayName">–</p>
+      <p class="overlay-meta" id="overlayMeta">–</p>
+    </div>
+    <button class="overlay-expand" id="overlayExpand">Details ▸</button>
+  </div>
+
+  <button class="korb-fertig hidden" id="korbFertig">Warenkorb auswerten (<span id="korbFertigCount">0</span>)</button>
+
+  <div class="overlay-detail" id="overlayDetail">
+    <button class="detail-close" id="detailClose">✕</button>
+    <div id="detailContent"></div>
+  </div>
+  <div class="overlay-detail" id="korbSummary">
+    <button class="detail-close" id="korbSummaryClose">✕</button>
+    <div id="korbSummaryContent"></div>
+  </div>
+</div>
+
+<!-- Profil (Allergien/Unverträglichkeiten) -->
+<div id="profilView" class="hidden" style="position:fixed;inset:0;z-index:60;background:var(--bg);padding:20px 18px;padding-top:calc(20px + env(safe-area-inset-top));overflow-y:auto">
+  <button class="btn btn-secondary" id="btnCloseProfil" style="width:auto;display:inline-block;padding:10px 16px">← Zurück</button>
+  <h2 style="margin:16px 0 4px">Mein Profil</h2>
+  <p style="font-size:12.5px;color:var(--sub);margin:0 0 14px">Ausgewählte Punkte werden beim Barcode-Live-Scan sowie beim Foto-/Textscan sofort als Warnung markiert.</p>
+  <div id="profilListe"></div>
+  <p style="font-size:11px;color:var(--sub);margin-top:14px">Wird ausschließlich lokal auf diesem Gerät gespeichert.</p>
+</div>
+
+<div id="onboardOverlay" class="hidden" style="position:fixed;inset:0;z-index:70;background:var(--bg);display:flex;flex-direction:column">
+  <div style="flex:1;display:flex;align-items:center;justify-content:center;text-align:center;padding:32px 28px">
+    <div>
+      <div id="onboardIcon" style="font-size:48px;margin-bottom:18px">🔎</div>
+      <h2 id="onboardTitle" style="font-size:20px;margin:0 0 10px;color:var(--text)"></h2>
+      <p id="onboardText" style="font-size:14.5px;line-height:1.6;color:var(--sub);margin:0;max-width:300px"></p>
+    </div>
+  </div>
+  <div style="padding:0 28px 8px;display:flex;justify-content:center;gap:6px">
+    <span class="ob-dot" data-dot="0" style="width:7px;height:7px;border-radius:50%;background:var(--border)"></span>
+    <span class="ob-dot" data-dot="1" style="width:7px;height:7px;border-radius:50%;background:var(--border)"></span>
+    <span class="ob-dot" data-dot="2" style="width:7px;height:7px;border-radius:50%;background:var(--border)"></span>
+    <span class="ob-dot" data-dot="3" style="width:7px;height:7px;border-radius:50%;background:var(--border)"></span>
+    <span class="ob-dot" data-dot="4" style="width:7px;height:7px;border-radius:50%;background:var(--border)"></span>
+    <span class="ob-dot" data-dot="5" style="width:7px;height:7px;border-radius:50%;background:var(--border)"></span>
+    <span class="ob-dot" data-dot="6" style="width:7px;height:7px;border-radius:50%;background:var(--border)"></span>
+  </div>
+  <div style="padding:16px 28px calc(24px + env(safe-area-inset-bottom))">
+    <button id="btnOnboardNext" class="btn btn-primary" style="width:100%">Weiter</button>
+  </div>
+</div>
+<div id="loadingOverlay" class="loading-overlay hidden">
+  <div><div class="spinner"></div><div id="loadingText">Texterkennung läuft ...</div></div>
+</div>
+
+<script src="./additive-engine.js"></script>
+<script src="./inci-database.js"></script>
+<script src="./pw-check-engine.js"></script>
+<script src="./pw-app.js"></script>
+</body>
+</html>

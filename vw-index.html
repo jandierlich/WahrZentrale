@@ -1,0 +1,176 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+    <meta name="robots" content="noindex, nofollow">
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no, viewport-fit=cover">
+<title>VorratsWahr - Vorrats-Überblick</title>
+<meta name="description" content="VorratsWahr – Vorrats-Überblick für Gläser & Behälter mit eigenem Klebelabel, per Live-Scan erkannt. 100% lokal, keine Datensammlung.">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="apple-mobile-web-app-title" content="VorratsWahr">
+<meta name="theme-color" content="#ECF5F3">
+<link rel="apple-touch-icon" href="./vw-icon-180.png">
+<link rel="manifest" href="./vw-manifest.json">
+<link rel="stylesheet" href="./vw-style.css">
+</head>
+<body>
+<a href="./index.html" id="vw-home-link" class="tap44" aria-label="Zur WahrZentrale" style="position:fixed;top:calc(env(safe-area-inset-top,0px) + 14px);right:64px;z-index:9999;width:40px;height:40px;border-radius:20px;border:1px solid rgba(120,120,128,0.3);background:rgba(255,255,255,0.7);backdrop-filter:blur(8px);-webkit-backdrop-filter:blur(8px);font-size:16px;line-height:38px;text-align:center;text-decoration:none;box-shadow:0 2px 8px rgba(0,0,0,0.12)">🏠</a>
+<button id="vw-theme-toggle" class="tap44" aria-label="Hell-/Dunkelmodus umschalten" style="position:fixed;top:calc(env(safe-area-inset-top,0px) + 14px);right:16px;z-index:9999;width:40px;height:40px;border-radius:20px;border:1px solid rgba(120,120,128,0.3);background:rgba(255,255,255,0.7);backdrop-filter:blur(8px);-webkit-backdrop-filter:blur(8px);font-size:16px;line-height:38px;text-align:center;padding:0;cursor:pointer;box-shadow:0 2px 8px rgba(0,0,0,0.12)">🌙</button>
+<style>@view-transition{navigation:auto}
+  html.theme-dark #vw-home-link,html.theme-dark #vw-theme-toggle{background:rgba(27,24,48,0.7);border-color:rgba(180,170,220,0.25)}
+  @media (min-width:640px){#vw-theme-toggle{right:calc(50vw - 195px + 16px) !important;top:38px !important}#vw-home-link{right:calc(50vw - 195px + 64px) !important;top:38px !important}}
+</style>
+
+<div class="app safe-top">
+
+<div id="home">
+  <div style="padding:6px 24px 20px;text-align:center">
+    <img src="./vw-icon-512.png" alt="VorratsWahr Logo" class="app-logo app-logo-light" style="width:84px;height:84px;object-fit:contain;margin:0 auto 16px;display:block;border-radius:20px" width="84" height="84" decoding="sync" fetchpriority="high">
+    <img src="./vw-icon-512-dark.png" alt="VorratsWahr Logo" class="app-logo app-logo-dark" style="width:84px;height:84px;object-fit:contain;margin:0 auto 16px;display:none;border-radius:20px" width="84" height="84" decoding="sync">
+    <h1 style="font-size:26px;font-weight:500;letter-spacing:-0.01em;color:var(--text);white-space:nowrap;line-height:1;margin:0">VorratsWahr</h1>
+    <p style="font-size:13px;color:var(--sub);margin:8px 0 0;font-weight:400;letter-spacing:0.02em">Vorrats-Überblick per Live-Scan</p>
+  </div>
+
+  <div class="card">
+    <div class="section-title" style="margin:0 0 8px">Neuen Eintrag erfassen</div>
+    <button class="btn btn-white" id="btnScanLive">Label live scannen</button>
+    <button class="btn btn-white" id="btnScanEinzel" style="margin-top:10px">Einzelfoto aufnehmen</button>
+    <button class="btn btn-white" id="btnManuellNeu" style="margin-top:10px">Manuell eintragen</button>
+  </div>
+
+  <div class="section-title" id="ueberblickTitel">Überblick</div>
+  <input type="text" class="search-input" id="searchInput" placeholder="🔎 Suchen (Name, Kategorie, Notiz) …">
+  <div class="mode-switch" id="kategorieFilter" style="margin-top:10px;flex-wrap:wrap"></div>
+  <div id="vorratListe" style="margin-top:10px"><p class="empty">Noch nichts erfasst. Tippe oben auf "Label live scannen" oder "Manuell eintragen".</p></div>
+
+  <div class="section-title">Sichern &amp; Wiederherstellen</div>
+  <div class="card" style="padding:14px 18px">
+    <p style="font-size:12px;color:var(--sub);margin:0 0 10px">Alle Einträge als Datei sichern oder von einem anderen Gerät wiederherstellen – rein lokal, es wird nichts an einen Server übertragen.</p>
+    <div class="share-row">
+      <button class="share-btn" id="btnExportBackup">⬆️ Sichern</button>
+      <button class="share-btn" id="btnImportBackup">⬇️ Wiederherstellen</button>
+      <button class="share-btn" id="btnExportPdf">📄 Als PDF</button>
+    </div>
+    <input type="file" id="importBackupFile" accept="application/json,.json" style="display:none">
+    <p style="font-size:11px;color:var(--sub);margin:6px 4px 0;line-height:1.4">"Als PDF" erstellt eine druckbare, alphabetisch sortierte Liste der aktuell angezeigten Einträge (berücksichtigt Suche/Kategorie-Filter) – mit Vorschau vor dem Speichern.</p>
+  </div>
+
+  <div class="section-title">Rechtliches</div>
+  <div class="card" style="padding:14px 18px">
+    <p style="font-size:12px;color:var(--sub);margin:0">VorratsWahr ist ein rein privates Inventar-Werkzeug: Foto und erkannter Text verlassen dein Gerät nie, außer beim einmaligen Nachladen der Texterkennungs-Bibliothek (siehe Datenschutzerklärung). Keine Zusatzstoff- oder Kosmetik-Prüfung, keine Barcode-Abfrage, keine externen Produktdatenbanken – dafür gibt es <a href="./pw-index.html" style="color:inherit">ProduktWahr</a>.</p>
+  </div>
+
+  <footer>
+    <a href="#" id="btnShowOnboarding">Einführung</a> · <a href="./vw-impressum.html">Impressum</a> · <a href="./vw-datenschutz.html">Datenschutz</a> · <a href="./index.html">WahrZentrale</a>
+  </footer>
+</div>
+
+<!-- Einzelfoto-Scanner (ein Auslöser-Foto) -->
+<div id="scannerView" class="scanner-view hidden">
+  <div class="scanner-top"><button class="icon-btn" id="btnCloseScanner">✕</button></div>
+  <video id="video" autoplay playsinline muted></video>
+  <div class="scan-hint">Label hier einrahmen</div>
+  <div class="scan-frame"></div>
+  <canvas id="canvas" class="hidden"></canvas>
+  <div class="scanner-controls">
+    <button class="btn btn-primary" id="btnCapture">Foto aufnehmen</button>
+    <button class="btn btn-secondary" id="btnManualInsteadInScanner" style="background:rgba(255,255,255,.15);color:#fff;border:none">Stattdessen manuell eintragen</button>
+  </div>
+</div>
+
+<!-- Live-Scan (fortlaufende Texterkennung ohne Auslöser, analog ProduktWahr) -->
+<div id="liveScanView" class="scanner-view hidden">
+  <div class="scanner-top">
+    <button class="icon-btn" id="btnCloseLiveScan">✕</button>
+    <button class="icon-btn" id="btnLiveTorch" title="Licht">💡</button>
+  </div>
+  <video id="liveVideo" autoplay playsinline muted></video>
+  <div class="scan-hint" id="liveStatus">Label ins Bild halten …</div>
+  <div class="scan-frame"></div>
+
+  <div class="overlay-card" id="liveCard">
+    <div class="overlay-ampel green" id="liveAmpel"></div>
+    <div class="overlay-text">
+      <p class="overlay-name" id="liveName">–</p>
+      <p class="overlay-meta" id="liveMeta">–</p>
+    </div>
+    <button class="overlay-expand" id="liveExpand">Übernehmen ▸</button>
+  </div>
+</div>
+
+<!-- Eintrag-Formular (Neu/Bearbeiten) -->
+<div id="formView" class="hidden" style="position:fixed;inset:0;z-index:60;background:var(--bg);padding:20px 18px;padding-top:calc(20px + env(safe-area-inset-top));overflow-y:auto">
+  <button class="btn btn-secondary" id="btnFormBack" style="width:auto;display:inline-block;padding:10px 16px">← Zurück</button>
+  <h2 id="formTitel" style="margin:16px 0 4px">Neuer Eintrag</h2>
+
+  <label class="form-label" for="formName">Name *</label>
+  <input type="text" class="form-input" id="formName" placeholder="">
+
+  <label class="form-label" for="formAnzahl">Anzahl</label>
+  <div style="display:flex;align-items:center;gap:10px">
+    <button type="button" class="btn btn-secondary" id="btnAnzahlMinus" style="width:44px;flex:none;padding:12px;font-size:18px" aria-label="Anzahl verringern">−</button>
+    <input type="number" class="form-input" id="formAnzahl" value="1" min="1" step="1" inputmode="numeric" style="text-align:center;flex:none;width:64px">
+    <button type="button" class="btn btn-secondary" id="btnAnzahlPlus" style="width:44px;flex:none;padding:12px;font-size:18px" aria-label="Anzahl erhöhen">+</button>
+  </div>
+
+  <label class="form-label" for="formKategorie">Kategorie</label>
+  <input type="text" class="form-input" id="formKategorie" placeholder="Eigene Kategorie eintragen">
+  <div id="kategorieVorschlaege" style="display:flex;flex-wrap:wrap;gap:6px;margin-top:8px"></div>
+
+  <label class="form-label" for="formDatum">Haltbar bis (optional)</label>
+  <input type="date" class="form-input" id="formDatum">
+
+  <label class="form-label" for="formNotiz">Notiz / erkannter Text</label>
+  <textarea id="formNotiz" placeholder="Weitere Angaben vom Label, Menge, Besonderheiten …"></textarea>
+
+  <div class="row" style="margin-top:18px">
+    <button class="btn btn-primary" id="btnFormSpeichern">Speichern</button>
+  </div>
+  <button class="btn btn-secondary" id="btnFormLeeren" style="margin-top:10px">Formular leeren</button>
+  <button class="btn btn-secondary" id="btnFormLoeschen" style="margin-top:10px;color:var(--rot)" hidden>Eintrag löschen</button>
+</div>
+
+<!-- Einmalige Einführung -->
+<div id="onboardOverlay" class="hidden" style="position:fixed;inset:0;z-index:70;background:var(--bg);display:flex;flex-direction:column">
+  <div style="flex:1;display:flex;align-items:center;justify-content:center;text-align:center;padding:32px 28px">
+    <div>
+      <div id="onboardIcon" style="font-size:48px;margin-bottom:18px">🫙</div>
+      <h2 id="onboardTitle" style="font-size:20px;margin:0 0 10px;color:var(--text)"></h2>
+      <p id="onboardText" style="font-size:14.5px;line-height:1.6;color:var(--sub);margin:0;max-width:300px"></p>
+    </div>
+  </div>
+  <div style="padding:0 28px 8px;display:flex;justify-content:center;gap:6px">
+    <span class="ob-dot" data-dot="0" style="width:7px;height:7px;border-radius:50%;background:var(--border)"></span>
+    <span class="ob-dot" data-dot="1" style="width:7px;height:7px;border-radius:50%;background:var(--border)"></span>
+    <span class="ob-dot" data-dot="2" style="width:7px;height:7px;border-radius:50%;background:var(--border)"></span>
+  </div>
+  <div style="padding:16px 28px calc(24px + env(safe-area-inset-bottom))">
+    <button id="btnOnboardNext" class="btn btn-primary" style="width:100%">Weiter</button>
+  </div>
+</div>
+
+<div class="loading-overlay hidden" id="loadingOverlay">
+  <div style="text-align:center"><div class="spinner"></div><div id="loadingText">Texterkennung läuft ...</div></div>
+</div>
+
+<!-- PDF-Vorschau (passt vollständig auf den Bildschirm, kein Herausscrollen des Fensters selbst) -->
+<div id="pdfModal" class="pdf-modal hidden">
+  <div class="pdf-modal-inner">
+    <div class="pdf-modal-head">
+      <b style="font-size:15px">PDF-Vorschau</b>
+      <button class="share-btn" id="btnPdfClose">✕</button>
+    </div>
+    <div class="pdf-modal-frame"><iframe id="pdfFrame" title="PDF-Vorschau"></iframe></div>
+    <div class="pdf-modal-foot">
+      <button class="btn btn-secondary" id="btnPdfClose2" style="flex:1">Schließen</button>
+      <button class="btn btn-primary" id="btnPdfSave" style="flex:1">Speichern/Teilen</button>
+    </div>
+  </div>
+</div>
+
+</div>
+
+<script src="./vw-app.js"></script>
+</body>
+</html>

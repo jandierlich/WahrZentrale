@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+    <meta name="robots" content="noindex, nofollow">
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Datenschutz – KompassWahr</title>
+<link rel="stylesheet" href="./kw-style.css">
+<style>body{padding:20px 20px 60px;max-width:640px;margin:0 auto;background:var(--bg);color:var(--text)} h1{font-size:1.3rem;} h2{font-size:1.05rem;margin-top:26px;} a{color:var(--violett)} li{margin-bottom:6px;}</style>
+</head>
+<body>
+<h1>Datenschutzerklärung</h1>
+<p>KompassWahr verzichtet bewusst auf Konten, Werbung, Tracking und Cookies. Alle Daten bleiben, soweit möglich, ausschließlich auf deinem Gerät.</p>
+
+<h2>1. Verantwortlicher</h2>
+<p>Jan Dierlich, Steenacker 33, 25499 Tangstedt, Deutschland – <a href="mailto:jandierlich@googlemail.com">jandierlich@googlemail.com</a></p>
+
+<h2>2. Kamera</h2>
+<p>Die Kamera dient ausschließlich als Live-Hintergrundbild für die Richtungsanzeige (AR-Overlay). Das Kamerabild wird nicht aufgezeichnet, gespeichert oder übertragen – es verlässt niemals dein Gerät. Der Zugriff wird vom Browser abgefragt und kann jederzeit widerrufen werden.</p>
+
+<h2>3. Standort</h2>
+<p>Für Kompass-Umfeld, Umfeld-Informationen und die Orte-Suche wird dein Standort über die Geolocation-Schnittstelle deines Browsers abgefragt. Alternativ kannst du manuell einen Ort suchen. Der zuletzt genutzte Standort-Modus sowie ein manuell gewählter Ort werden nur lokal auf deinem Gerät gespeichert (siehe Abschnitt 6).</p>
+
+<h2>4. Kompass-Sensor</h2>
+<p>Für die Richtungs- und Neigungsanzeige (z. B. Positionierung von Sonne, Mond, Planeten und Orten im Kamera-Livebild) wird die Ausrichtungssensorik deines Geräts (Kompass/Gyroskop) über die Device-Orientation-Schnittstelle des Browsers ausgelesen. Diese Werte werden nur zur Anzeige verwendet und nicht gespeichert oder übertragen.</p>
+
+<h2>5. Externe Datenquellen</h2>
+<p>Für Umfeld- und Ortsinformationen lädt die App bei Bedarf Daten von folgenden kostenlosen Diensten nach, wobei jeweils dein Standort (Koordinaten bzw. Suchtext) an den Anbieter übermittelt wird:</p>
+<ul>
+  <li><strong>Open-Meteo</strong> (api.open-meteo.com für Wetter/Höhe, air-quality-api.open-meteo.com für Luftqualität) – Lizenz CC BY 4.0. Dabei wird deine IP-Adresse technisch bedingt an Open-Meteo übertragen.</li>
+  <li><strong>Nominatim / OpenStreetMap</strong> (nominatim.openstreetmap.org) – Adresssuche und Ortsnamen-Ermittlung (Reverse-Geocoding), Lizenz ODbL, es gelten die <a href="https://operations.osmfoundation.org/policies/nominatim/" target="_blank" rel="noopener">Nutzungsbedingungen von Nominatim</a>. Dabei wird deine IP-Adresse technisch bedingt an die OpenStreetMap Foundation übertragen. Zwei getrennte Fälle: (1) wenn du aktiv einen Ort suchst, wird der eingegebene Text gesendet; (2) bei automatischer Standortbestimmung wird zusätzlich dein aktueller Standort (Koordinaten) gesendet, um daraus einen lesbaren Ortsnamen zu ermitteln. Für beide Fälle erscheint jeweils beim allerersten Mal ein eigener Bestätigungshinweis, danach entfällt er.</li>
+  <li><strong>Overpass API / OpenStreetMap</strong> (der Reihe nach versucht: overpass-api.de, overpass.kumi.systems, overpass.osm.ch, overpass.private.coffee – falls einer nicht erreichbar ist) – Suche nach Orten in deiner Nähe (z. B. Cafés, Supermärkte), Lizenz ODbL. Dabei wird deine IP-Adresse technisch bedingt an den jeweiligen Server übertragen. Nur wenn du aktiv auf „Orte in der Nähe suchen“ tippst; auch hier erscheint der Bestätigungshinweis nur beim allerersten Mal.</li>
+  <li><strong>Apple Maps</strong> (maps.apple.com) – nur wenn du bei einem Ort oder Wegpunkt aktiv auf "In Karten-App öffnen" tippst, wird die Zielposition per Link an die Karten-App von Apple übergeben</li>
+  <li><strong>Geomagnetic Model Calculator von NOAA/BGS</strong> (geomag.colorado.edu) – nur wenn du im Bereich „Missweisung“ aktiv auf den verlinkten Rechner tippst, öffnet sich dieser in einem neuen Tab; es werden dabei keine Daten von KompassWahr aus automatisch übertragen</li>
+</ul>
+<p>Sonnen- und Mondrichtung, Mondphase sowie die Richtungen von Venus, Mars, Jupiter, Saturn und dem Polarstern werden vollständig lokal auf deinem Gerät berechnet (astronomische Näherungsformeln), hierfür ist keine externe Schnittstelle nötig.</p>
+
+<h2>6. Lokale Speicherung (localStorage)</h2>
+<p>Folgende Daten werden ausschließlich lokal in deinem Browser gespeichert, nicht an uns übertragen und jederzeit über die Browser- bzw. App-Einstellungen löschbar:</p>
+<ul>
+  <li><code>kw-location-mode</code> – ob Standort automatisch oder manuell gewählt ist</li>
+  <li><code>kw-manual-location</code> – manuell gewählter Ort (Name, Koordinaten)</li>
+  <li><code>kw-waypoints</code> – von dir gespeicherte Wegpunkte (Name, Koordinaten, Zeitpunkt)</li>
+  <li><code>kw-poi-radius</code> – zuletzt gewählter Umkreis für die Orte-Suche</li>
+  <li><code>kw-poitypes</code> – zuletzt ausgewählte Ortstyp-Filter</li>
+  <li><code>kw-declination</code> – optional von dir eingetragene Missweisung (Korrekturwert in Grad) zur Kompassanzeige</li>
+  <li><code>kw-onboarding-seen</code> – ob die Einführung bereits gezeigt wurde</li>
+  <li><code>kw-consent-nominatim</code>, <code>kw-consent-nominatim-reverse</code>, <code>kw-consent-overpass</code> – ob der einmalige Bestätigungshinweis für die Nominatim-Textsuche, die automatische Nominatim-Ortsnamen-Ermittlung bzw. Overpass bereits akzeptiert wurde</li>
+</ul>
+
+<h2>7. Hosting</h2>
+<p>Diese App wird über GitHub Pages (GitHub Inc.) ausgeliefert. Beim Aufruf verarbeitet GitHub technisch notwendige Zugriffsdaten (z. B. IP-Adresse); nähere Informationen findest du in der Datenschutzerklärung von GitHub.</p>
+
+<h2>8. Deine Rechte</h2>
+<p>Du kannst Kamera-, Standort- und Sensorzugriff jederzeit in den Browser-/Geräteeinstellungen widerrufen sowie lokal gespeicherte Daten über die Browser-Einstellungen löschen. Bei Fragen erreichst du uns unter der oben genannten E-Mail-Adresse.</p>
+
+<p><a href="./kw-index.html">← Zurück zur App</a> · <a href="./index.html">WahrZentrale</a></p>
+</body>
+</html>

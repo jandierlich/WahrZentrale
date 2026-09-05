@@ -1,0 +1,223 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+    <meta name="robots" content="noindex, nofollow">
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no, viewport-fit=cover">
+<title>QRWahr - Der unabhängige QR-Scanner</title>
+<meta name="description" content="QR-Code scannen, Inhalt anzeigen, bei Bedarf per Klick öffnen. 100% lokal, keine Datensammlung.">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="apple-mobile-web-app-title" content="QRWahr">
+<meta name="theme-color" content="#ECF5F3" id="qrThemeColor">
+<link rel="apple-touch-icon" sizes="180x180" href="./qr-icon-180.png">
+<link rel="manifest" href="./qr-manifest.json">
+<style>@view-transition{navigation:auto}
+  [hidden]{display:none!important}
+  :root{
+    --bg:#ECF5F3; --card:#F6FBF9; --card2:#CEEBE4; --btn-warm:#CEEBE4; --text:#233B3D; --sub:#547274; --sub-onbg:#5C5B60;
+    --border:#B5E4D9; --cta-bg:#12766C; --cta-text:#FFFFFF;
+  }
+  html.theme-dark{
+    --bg:#122B2E; --card:#183D40; --card2:#1D5156; --btn-warm:var(--card2); --text:#E7F3F1; --sub:#9DBEBC; --sub-onbg:#9DBEBC;
+    --border:#266664; --cta-bg:#50DDCA; --cta-text:#233B3D;
+  }
+  *{box-sizing:border-box;-webkit-tap-highlight-color:transparent}
+  html,body{margin:0;padding:0;background:var(--bg);width:100%;overflow-x:hidden;overscroll-behavior-y:none;-webkit-overflow-scrolling:touch;touch-action:manipulation}
+  body{font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;color:var(--text);line-height:1.5}
+  .app{max-width:480px;margin:0 auto;min-height:100vh;padding:0 16px 28px;position:relative}
+  .safe-top{padding-top:calc(env(safe-area-inset-top) + 60px)}
+  header{padding:6px 0 20px;text-align:center}
+  .logo-badge{width:84px;height:84px;margin:0 auto 16px}
+  html.theme-dark .logo-badge img{filter:invert(1) saturate(0) brightness(1.15)}
+  .logo-badge img{width:100%;height:100%;display:block;object-fit:contain}
+  header h1{font-size:26px;margin:0;font-weight:500;letter-spacing:-.01em}
+  header p{font-size:13px;color:var(--sub-onbg);margin:8px 0 0}
+
+  .theme-toggle,.home-link{position:fixed;top:calc(env(safe-area-inset-top,0px) + 14px);z-index:9999;width:40px;height:40px;border-radius:20px;border:1px solid rgba(120,120,128,0.3);background:rgba(255,255,255,0.7);backdrop-filter:blur(8px);-webkit-backdrop-filter:blur(8px);font-size:16px;text-align:center;line-height:38px;padding:0;cursor:pointer;box-shadow:0 2px 8px rgba(0,0,0,0.12);text-decoration:none;color:var(--text)}
+  .theme-toggle{right:16px}
+  .home-link{right:64px}
+  html.theme-dark .theme-toggle,html.theme-dark .home-link{background:rgba(27,24,48,0.7);border-color:rgba(180,170,220,0.25)}
+  @media (min-width:640px){.theme-toggle{right:calc(50vw - 195px + 16px) !important}.home-link{right:calc(50vw - 195px + 64px) !important}}
+
+  .cta{display:block;width:100%;padding:16px 14px;border-radius:16px;border:none;background:var(--btn-warm);color:var(--text);font-size:16px;font-weight:500;font-family:inherit;text-align:center;cursor:pointer}
+  .cta.secondary{background:var(--btn-warm);color:var(--text)}
+  .cta:active{opacity:.85}
+
+  .hint-card{background:var(--card2);border-radius:16px;padding:14px 16px;font-size:12.5px;color:var(--sub-onbg);margin-top:16px;text-align:center}
+
+  .result-card{background:#fff;border:1px solid var(--border);border-radius:18px;padding:18px;margin-top:18px}
+  html.theme-dark .result-card{background:var(--card)}
+  .result-card .label{font-size:12px;text-transform:uppercase;letter-spacing:.05em;color:var(--sub-onbg);font-weight:600;margin-bottom:8px}
+  .result-card .content{font-size:15px;word-break:break-all;white-space:pre-wrap;margin-bottom:14px}
+  .result-card .btnrow{display:flex;gap:8px}
+  .result-card .btnrow .cta{padding:12px}
+  .copied{font-size:12.5px;color:var(--sub-onbg);text-align:center;margin-top:8px;height:16px}
+
+  /* Scan-Ansicht */
+  .scan-view{position:fixed;inset:0;background:#000;z-index:9998;display:flex;flex-direction:column}
+  .scan-view[hidden]{display:none}
+  .scan-video-wrap{flex:1;position:relative;overflow:hidden}
+  .scan-video-wrap video{width:100%;height:100%;object-fit:cover}
+  .scan-frame{position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);width:min(70vw,280px);height:min(70vw,280px);border:3px solid rgba(255,255,255,0.85);border-radius:24px;box-shadow:0 0 0 2000px rgba(0,0,0,0.35)}
+  .scan-hint{position:absolute;bottom:calc(env(safe-area-inset-bottom,0px) + 110px);left:0;right:0;text-align:center;color:#fff;font-size:13.5px;padding:0 24px}
+  .scan-close{position:absolute;top:calc(env(safe-area-inset-top,0px) + 14px);left:16px;width:40px;height:40px;border-radius:20px;border:1px solid rgba(255,255,255,0.3);background:rgba(0,0,0,0.4);color:#fff;font-size:18px;text-align:center;line-height:38px;padding:0;cursor:pointer}
+
+  footer{text-align:center;padding:22px 0 6px;font-size:14px;font-weight:600;color:var(--text)}
+  footer a{color:var(--text);text-decoration:underline}
+</style>
+</head>
+<body>
+<a class="home-link" href="./index.html" aria-label="Zur WahrZentrale">🏠</a>
+<button class="theme-toggle" id="themeToggle" aria-label="Hell-/Dunkelmodus umschalten">🌙</button>
+
+<div class="app safe-top">
+  <header>
+    <div class="logo-badge"><img src="./qr-logo-white.png" alt="QRWahr Logo" width="84" height="84" decoding="sync" fetchpriority="high"></div>
+    <h1>QRWahr</h1>
+    <p>QR-Code scannen, Inhalt sehen, selbst entscheiden.</p>
+  </header>
+
+  <button class="cta" id="btnStartScan">📷 QR-Code scannen</button>
+  <div class="hint-card">Der Inhalt wird nur angezeigt – nichts öffnet sich automatisch. Alles läuft lokal auf deinem Gerät.</div>
+
+  <div class="result-card" id="resultCard" hidden>
+    <div class="label">Erkannter Inhalt</div>
+    <div class="content" id="resultContent"></div>
+    <div class="btnrow">
+      <button class="cta" id="btnOpenExternal" style="flex:1" hidden>Extern öffnen ↗</button>
+      <button class="cta secondary" id="btnCopy" style="flex:1">Kopieren</button>
+    </div>
+    <div class="copied" id="copiedHint"></div>
+  </div>
+
+  <footer>
+    <a href="./qr-impressum.html">Impressum</a> · <a href="./qr-datenschutz.html">Datenschutz</a>
+  </footer>
+</div>
+
+<!-- Scan-Ansicht -->
+<div class="scan-view" id="scanView" hidden>
+  <div class="scan-video-wrap">
+    <video id="scanVideo" muted playsinline autoplay></video>
+    <div class="scan-frame"></div>
+    <div class="scan-hint" id="scanHint">QR-Code in den Rahmen halten</div>
+  </div>
+  <button class="scan-close" id="btnCloseScan" aria-label="Scan schließen">✕</button>
+</div>
+
+<script>
+(function(){
+  // ---------- Theme (startet immer hell, Umschalten nur für die Sitzung) ----------
+  var root=document.documentElement;
+  var metaTheme=document.getElementById("qrThemeColor");
+  var themeBtn=document.getElementById("themeToggle");
+  var manual=false;
+  function applyTheme(){
+    root.classList.toggle("theme-dark", manual === true);
+    metaTheme.setAttribute("content", manual === true ? "#122B2E" : "#ECF5F3");
+    themeBtn.textContent = manual === true ? "☀️" : "🌙";
+  }
+  themeBtn.addEventListener("click", function(){
+    manual = manual === true ? false : true;
+    applyTheme();
+  });
+  applyTheme();
+
+  // ---------- QR-Scan (unabhängig, keine Verbindung zu anderen Apps/Datenbanken) ----------
+  var scanView = document.getElementById("scanView");
+  var scanVideo = document.getElementById("scanVideo");
+  var scanHint = document.getElementById("scanHint");
+  var resultCard = document.getElementById("resultCard");
+  var resultContent = document.getElementById("resultContent");
+  var btnOpenExternal = document.getElementById("btnOpenExternal");
+  var btnCopy = document.getElementById("btnCopy");
+  var copiedHint = document.getElementById("copiedHint");
+  var codeReader = null;
+  var lastText = null;
+
+  function loadZXing(){
+    return new Promise(function(resolve, reject){
+      if(window.ZXing){ resolve(); return; }
+      var s = document.createElement("script");
+      s.src = "https://cdn.jsdelivr.net/npm/@zxing/library@0.21.3/umd/index.min.js";
+      s.onload = resolve; s.onerror = reject;
+      document.head.appendChild(s);
+    });
+  }
+
+  function isLikelyUrl(text){
+    if(!text) return false;
+    var t = text.trim();
+    return /^https?:\/\//i.test(t) || /^[a-z0-9.-]+\.[a-z]{2,}(\/\S*)?$/i.test(t.split(/\s/)[0]);
+  }
+  function toOpenableUrl(text){
+    var t = text.trim();
+    if(/^https?:\/\//i.test(t)) return t;
+    return "https://" + t;
+  }
+
+  function showResult(text){
+    lastText = text;
+    resultContent.textContent = text;
+    if(isLikelyUrl(text)){
+      btnOpenExternal.hidden = false;
+    } else {
+      btnOpenExternal.hidden = true;
+    }
+    copiedHint.textContent = "";
+    resultCard.hidden = false;
+    resultCard.scrollIntoView({behavior:"smooth", block:"nearest"});
+  }
+
+  function openScan(){
+    scanView.hidden = false;
+    scanHint.textContent = "QR-Code in den Rahmen halten";
+    loadZXing().then(function(){
+      var hints = new Map();
+      hints.set(ZXing.DecodeHintType.POSSIBLE_FORMATS, [ZXing.BarcodeFormat.QR_CODE]);
+      codeReader = new ZXing.BrowserMultiFormatReader(hints);
+      codeReader.decodeFromConstraints({video:{facingMode:{ideal:"environment"}}}, scanVideo, function(result){
+        if(result){
+          closeScan();
+          showResult(result.getText());
+        }
+      }).catch(function(){
+        scanHint.textContent = "Kamerazugriff nicht möglich. Bitte Berechtigung erlauben.";
+      });
+    }).catch(function(){
+      scanHint.textContent = "Scanner konnte nicht geladen werden.";
+    });
+  }
+  function closeScan(){
+    if(codeReader){ try{ codeReader.reset(); }catch(e){} codeReader = null; }
+    scanView.hidden = true;
+  }
+
+  document.getElementById("btnStartScan").addEventListener("click", openScan);
+  document.getElementById("btnCloseScan").addEventListener("click", closeScan);
+
+  btnOpenExternal.addEventListener("click", function(){
+    if(lastText) window.open(toOpenableUrl(lastText), "_blank", "noopener,noreferrer");
+  });
+  btnCopy.addEventListener("click", function(){
+    if(!lastText) return;
+    var done = function(){ copiedHint.textContent = "In Zwischenablage kopiert."; setTimeout(function(){ copiedHint.textContent=""; }, 2000); };
+    if(navigator.clipboard && navigator.clipboard.writeText){
+      navigator.clipboard.writeText(lastText).then(done).catch(function(){ copiedHint.textContent = "Kopieren nicht möglich."; });
+    } else {
+      copiedHint.textContent = "Kopieren nicht möglich.";
+    }
+  });
+})();
+
+if("serviceWorker" in navigator){
+  window.addEventListener("load", function(){
+    navigator.serviceWorker.register("./qr-sw.js").catch(function(err){
+      console.error("SW registration failed:", err);
+    });
+  });
+}
+</script>
+</body>
+</html>

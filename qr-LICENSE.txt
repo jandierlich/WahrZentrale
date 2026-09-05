@@ -1,0 +1,12 @@
+Alle Rechte vorbehalten / All Rights Reserved.
+
+Copyright (c) 2026 Jan Dierlich
+
+Dieser Quellcode ist urheberrechtlich geschützt. Eine Nutzung,
+Vervielfältigung, Weiterverbreitung, Veränderung oder Weitergabe –
+auch auszugsweise – ist ohne ausdrückliche schriftliche Zustimmung
+des Autors nicht gestattet.
+
+Eingebundene Drittkomponente: @zxing/library (Apache-2.0-Lizenz), geladen über
+das CDN jsDelivr zur lokalen QR-Code-Erkennung im Browser. Es werden
+keine Bild- oder Scandaten an jsDelivr oder Dritte übertragen.

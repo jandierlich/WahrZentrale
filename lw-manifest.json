@@ -1,0 +1,15 @@
+{
+  "name": "LautstärkeWahr - Der Lautstärke-Check",
+  "short_name": "LautstärkeWahr",
+  "description": "Wie laut ist es wirklich? Lautstärke live messen, verstehen und im Blick behalten. 100% lokal.",
+  "start_url": "./lw-index.html",
+  "scope": "./",
+  "display": "standalone",
+  "background_color": "#ECF5F3",
+  "theme_color": "#ECF5F3",
+  "icons": [
+    {"src": "lw-icon-192.png", "sizes": "192x192", "type": "image/png"},
+    {"src": "lw-icon-512.png", "sizes": "512x512", "type": "image/png"},
+    {"src": "lw-icon-180.png", "sizes": "180x180", "type": "image/png"}
+  ]
+}
