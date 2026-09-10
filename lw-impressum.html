@@ -1,0 +1,34 @@
+<!DOCTYPE html><html lang="de"><head>
+    <meta name="robots" content="noindex, nofollow"><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no,viewport-fit=cover"><meta name="apple-mobile-web-app-capable" content="yes"><meta name="apple-mobile-web-app-status-bar-style" content="black-translucent"><meta name="apple-mobile-web-app-title" content="LautstärkeWahr"><meta name="theme-color" content="#ECF5F3" id="wzThemeColor"><title>Impressum - LautstärkeWahr</title><style>@view-transition{navigation:auto}:root{--bg:#ECF5F3;--text:#233B3D;--sub:#547274;--link:#12766C}html.theme-dark{--bg:#122B2E;--text:#E7F3F1;--sub:#9DBEBC;--link:#50DDCA}html{background:var(--bg);overscroll-behavior-y:none;touch-action:manipulation}body{font-family:-apple-system,system-ui;max-width:600px;margin:40px auto;padding:20px;color:var(--text);background:var(--bg)}h1{font-size:22px}a{color:var(--link)}</style></head><body>
+<a href="./lw-index.html">← Zurück zur App</a> · <a href="./index.html">WahrZentrale</a>
+<h1>Impressum</h1>
+<p><strong>Angaben gemäß § 5 DDG</strong><br>
+Jan Dierlich<br>
+Steenacker 33<br>
+25499 Tangstedt<br>
+Deutschland</p>
+<p><strong>Kontakt</strong><br>
+E-Mail: jandierlich@googlemail.com<br>
+Telefon: +49 162 7112283</p>
+<p><strong>Verantwortlich für den Inhalt nach § 18 Abs. 2 MStV</strong><br>
+Jan Dierlich, Steenacker 33, 25499 Tangstedt, Deutschland</p>
+<p><strong>Haftungshinweis</strong><br>
+Dies ist eine private Informations-App. Die angezeigte Lautstärke ist eine Schätzung des Mikrofonsignals über die Web Audio API und nicht kalibriert. Kein Messgerät im technischen Sinne, kein Medizinprodukt, keine Grundlage für Gehörschutz-Entscheidungen mit rechtlicher oder medizinischer Verbindlichkeit. Angaben ohne Gewähr.</p>
+<p><strong>Quellen</strong><br>
+Die Referenzwerte in der App-Übersicht (z. B. Flüstern, Gespräch, Presslufthammer) sind allgemein bekannte, gerundete Richtwerte aus frei zugänglichen Quellen zur Schallpegel-Orientierung, Stand 08/2026.</p>
+<script>
+// Zwei-Finger-Pinch-Zoom zusätzlich per JS unterbinden: iOS ignoriert
+// "user-scalable=no"/"maximum-scale=1" im Viewport-Meta seit einigen
+// Versionen bewusst aus Barrierefreiheitsgründen — daher hier zusätzlich
+// die nativen WebKit-Gesture-Events sowie Mehrfinger-Touchmove abfangen.
+document.addEventListener("gesturestart", function(e){ e.preventDefault(); }, {passive:false});
+document.addEventListener("gesturechange", function(e){ e.preventDefault(); }, {passive:false});
+document.addEventListener("touchmove", function(e){ if(e.touches.length > 1){ e.preventDefault(); } }, {passive:false});
+var vwLastTouchEnd = 0;
+document.addEventListener("touchend", function(e){
+  var now = Date.now();
+  if(now - vwLastTouchEnd <= 300){ e.preventDefault(); }
+  vwLastTouchEnd = now;
+}, {passive:false});
+</script>
+</body></html>

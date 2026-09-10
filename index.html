@@ -1,0 +1,161 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+    <meta name="robots" content="noindex, nofollow">
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no, viewport-fit=cover">
+<title>WahrZentrale - Alle Wahr-Apps auf einen Blick</title>
+<meta name="description" content="Die Übersicht aller Wahr-Apps: ProduktWahr, VorratsWahr, LautstärkeWahr, OrteWahr, KompassWahr und weitere. 100% lokal, keine Datensammlung.">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="apple-mobile-web-app-title" content="WahrZentrale">
+<meta name="theme-color" content="#12766C">
+<link rel="apple-touch-icon" sizes="180x180" href="./icon-180.png">
+<link rel="manifest" href="./manifest.json">
+<style>
+  [hidden]{display:none!important}
+  :root{
+    --bg:#ECF5F3; --card:#F6FBF9; --ink:#233B3D; --sub:#547274;
+    --violet:#12766C; --violet-deep:#0B4F49; --line:#CEEBE4;
+    --shadow-dark-soft: rgba(35,59,61,.16); --shadow-light-soft: rgba(255,255,255,.75);
+  }
+  html.theme-dark{
+    --bg:#122B2E; --card:#183D40; --ink:#E7F3F1; --sub:#9DBEBC;
+    --violet:#50DDCA; --violet-deep:#12766C; --line:#266664;
+    --shadow-dark-soft: rgba(0,0,0,.45); --shadow-light-soft: rgba(255,255,255,.04);
+  }
+  *{box-sizing:border-box;-webkit-tap-highlight-color:transparent}
+  html,body{margin:0;padding:0;background:var(--bg);width:100%;overflow-x:hidden;overscroll-behavior-y:none;-webkit-overflow-scrolling:touch;touch-action:manipulation}
+  body{font-family:-apple-system,sans-serif;color:var(--ink);font-weight:500;line-height:1.5}
+  .app{max-width:480px;margin:0 auto;min-height:100dvh;display:flex;flex-direction:column}
+
+  .header{background:linear-gradient(150deg,var(--violet) 0%,var(--violet-deep) 100%);color:#fff;padding:calc(env(safe-area-inset-top) + 6px) 20px 26px;position:relative;overflow:hidden;border-radius:0 0 30px 30px;box-shadow:0 14px 28px var(--shadow-dark-soft);flex:0 0 auto}
+  .blob1{position:absolute;width:170px;height:170px;border-radius:50%;background:rgba(255,255,255,.10);top:-75px;right:-55px}
+  .blob2{position:absolute;width:100px;height:100px;border-radius:50%;background:rgba(255,255,255,.07);bottom:-45px;left:30px}
+  .header-inner{position:relative;display:flex;flex-direction:column;align-items:center;text-align:center}
+  .logo-badge{width:72px;height:72px;margin:0 0 14px}
+  .logo-badge img{width:100%;height:100%;display:block;border-radius:18px;box-shadow:0 14px 30px rgba(20,16,35,.35)}
+  .header h1{font-size:23px;margin:0;font-weight:700;font-family:ui-rounded,-apple-system,sans-serif;letter-spacing:-.02em;text-shadow:0 1px 3px rgba(0,0,0,.25)}
+  .header p{font-size:12.5px;opacity:.88;margin:8px 0 0;max-width:300px;line-height:1.5;text-shadow:0 1px 2px rgba(0,0,0,.2)}
+  .theme-toggle{position:absolute;top:calc(env(safe-area-inset-top,0px) + 14px);right:16px;background:rgba(255,255,255,.16);border:none;color:#fff;border-radius:14px;width:36px;height:36px;font-size:15px;cursor:pointer;z-index:5}
+  .theme-toggle:active{transform:scale(.90)}
+  @media (min-width:640px){.theme-toggle{right:calc(50vw - 195px + 16px) !important}}
+
+  .content{flex:1;padding:20px 16px calc(env(safe-area-inset-bottom) + 24px);overflow-y:auto}
+  .section-title{font-size:11px;font-weight:700;letter-spacing:1.6px;text-transform:uppercase;color:var(--sub);margin:2px 4px 12px}
+
+  .tile-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+  .tile{background:var(--card);border-radius:20px;padding:13px;box-shadow:6px 6px 14px var(--shadow-dark-soft),-6px -6px 14px var(--shadow-light-soft);color:var(--ink);display:flex;flex-direction:column;gap:8px;text-decoration:none;border:none;transition:transform .12s ease}
+  .tile:active{transform:scale(.97)}
+  .tile-icon-wrap{width:48px;height:48px;border-radius:14px;overflow:hidden;background:var(--bg);display:flex;align-items:center;justify-content:center;box-shadow:0 4px 10px var(--shadow-dark-soft)}
+  html.theme-dark .tile-icon-wrap img{filter:invert(1) saturate(0) brightness(1.15)}
+  .tile-icon-wrap img{width:100%;height:100%;object-fit:cover;display:block}
+  .tile-label{font-size:14.5px;font-weight:700;line-height:1.25}
+  .tile-sub{font-size:11.5px;color:var(--sub);font-weight:600;line-height:1.35}
+  .tile.wide{grid-column:1/-1;flex-direction:row;align-items:center}
+  .tile.wide .tile-icon-wrap{flex-shrink:0}
+
+  .notice{border-radius:18px;padding:14px;margin-top:16px;background:var(--card);border:1.5px solid var(--line);font-size:12.5px;line-height:1.55;color:var(--sub);text-align:center}
+
+  footer{text-align:center;padding:18px 0 4px;font-size:13px;font-weight:600;color:var(--ink)}
+  footer a{color:var(--ink);text-decoration:underline}
+
+  @media (max-width:360px){
+    .tile-grid{grid-template-columns:1fr}
+    .tile.wide{grid-column:auto}
+  }
+
+  @media (max-height:700px){
+    .header{padding:calc(env(safe-area-inset-top) + 6px) 20px 20px}
+    .logo-badge{width:56px;height:56px}
+    .content{padding-top:16px}
+  }
+</style>
+</head>
+<body>
+<div class="app">
+  <div class="header">
+    <div class="blob1"></div><div class="blob2"></div>
+    <button class="theme-toggle" id="themeToggle" aria-label="Hell-/Dunkelmodus umschalten">🌙</button>
+    <div class="header-inner">
+      <div class="logo-badge"><img src="./icon-512.png" alt="WahrZentrale Logo" width="68" height="68" decoding="sync" fetchpriority="high"></div>
+      <h1>WahrZentrale</h1>
+      <p>Alle Wahr-Apps an einem Ort – 100% lokal, keine Datensammlung.</p>
+    </div>
+  </div>
+
+  <div class="content">
+    <div class="section-title">Apps</div>
+    <div class="tile-grid">
+      <a class="tile" href="./pw-index.html">
+        <div class="tile-icon-wrap"><img src="./pw-logo-hub.png" alt="ProduktWahr Icon"></div>
+        <div><div class="tile-label">ProduktWahr</div><div class="tile-sub">Zusatzstoffe, Kosmetik &amp; Barcode</div></div>
+      </a>
+      <a class="tile" href="./vw-index.html">
+        <div class="tile-icon-wrap"><img src="./vw-logo-hub.png" alt="VorratsWahr Icon"></div>
+        <div><div class="tile-label">VorratsWahr</div><div class="tile-sub">Vorrats-Überblick per Scan</div></div>
+      </a>
+      <a class="tile" href="./qr-index.html">
+        <div class="tile-icon-wrap"><img src="./qr-logo-hub.png" alt="QRWahr Icon"></div>
+        <div><div class="tile-label">QRWahr</div><div class="tile-sub">Unabhängiger QR-Scanner</div></div>
+      </a>
+      <a class="tile" href="./ow-index.html">
+        <div class="tile-icon-wrap"><img src="./ow-logo-hub.png" alt="OrteWahr Icon"></div>
+        <div><div class="tile-label">OrteWahr</div><div class="tile-sub">Live ruhige Plätze finden</div></div>
+      </a>
+      <a class="tile" href="./kw-index.html">
+        <div class="tile-icon-wrap"><img src="./kw-logo-hub.png" alt="KompassWahr Icon"></div>
+        <div><div class="tile-label">KompassWahr</div><div class="tile-sub">Kompass mit Kamera-Übersicht</div></div>
+      </a>
+      <a class="tile" href="./lw-index.html">
+        <div class="tile-icon-wrap"><img src="./lw-logo-hub.png" alt="LautstärkeWahr Icon"></div>
+        <div><div class="tile-label">LautstärkeWahr</div><div class="tile-sub">Der Lautstärke-Check</div></div>
+      </a>
+      <a class="tile wide" href="./hinweise.html">
+        <div class="tile-icon-wrap"><img src="./hinweise-icon-hub.png" alt="Hinweise Icon"></div>
+        <div><div class="tile-label">Hinweise</div><div class="tile-sub">Was die Ampel-Bewertung bedeutet</div></div>
+      </a>
+    </div>
+
+    <div class="notice">Jede App ist eigenständig: eigene Funktion, eigenes Impressum und eigene Datenschutzerklärung. Die WahrZentrale ist nur der gemeinsame Einstieg.</div>
+
+    <footer>
+      <a href="./impressum.html">Impressum</a> · <a href="./datenschutz.html">Datenschutz</a>
+    </footer>
+  </div>
+</div>
+
+<script>document.addEventListener("touchstart", function(){}, {passive:true});</script>
+<script>(function(){
+  var root=document.documentElement;
+  var metaTheme=document.querySelector('meta[name="theme-color"]');
+  var btn=document.getElementById("themeToggle");
+  var manual=false;
+  function apply(){
+    root.classList.toggle("theme-dark", manual);
+    if(metaTheme) metaTheme.setAttribute("content", manual ? "#50DDCA" : "#12766C");
+    btn.textContent = manual ? "☀️" : "🌙";
+  }
+  btn.addEventListener("click", function(){
+    manual = !manual;
+    apply();
+  });
+  apply();
+})();</script>
+<script>
+  if("serviceWorker" in navigator){
+    window.addEventListener("load", function(){
+      navigator.serviceWorker.register("./sw.js").catch(function(err){
+        console.error("SW registration failed:", err);
+      });
+    });
+    var swRefreshing = false;
+    navigator.serviceWorker.addEventListener("controllerchange", function(){
+      if(swRefreshing) return;
+      swRefreshing = true;
+      window.location.reload();
+    });
+  }
+</script>
+</body>
+</html>

@@ -1,0 +1,20 @@
+Alle Rechte vorbehalten / All Rights Reserved.
+
+Copyright (c) 2026 Jan Dierlich
+
+Dieser Quellcode sowie alle redaktionellen Inhalte (u. a. die Referenztabelle
+typischer Lautstärken und die Ampel-Erklärung) sind urheberrechtlich
+geschützt. Eine Nutzung, Vervielfältigung, Weiterverbreitung, Veränderung
+oder Weitergabe – auch auszugsweise – ist ohne ausdrückliche schriftliche
+Zustimmung des Autors nicht gestattet.
+
+Die verwendeten Richtwerte (z. B. "Presslufthammer ~100–115 dB") sind
+allgemein bekannte, gerundete Orientierungswerte ohne Schöpfungshöhe und
+daher selbst nicht schutzfähig; die redaktionelle Auswahl, Formulierung,
+Struktur und Programmierung dieser App sind hiervon nicht betroffen und
+bleiben geschützt.
+
+Eingebundene Drittkomponenten: keine. LautstärkeWahr verwendet ausschließlich
+native Browser-Schnittstellen (Web Audio API, MediaDevices.getUserMedia,
+Canvas, localStorage, Service Worker) und lädt keinerlei externe
+Bibliotheken, Schriftarten oder CDN-Ressourcen nach.

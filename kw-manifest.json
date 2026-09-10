@@ -1,0 +1,26 @@
+{
+  "name": "KompassWahr",
+  "short_name": "KompassWahr",
+  "description": "Kompass mit Kamera-Übersicht und Informationen zu deinem Umfeld – ohne Werbung, ohne Tracking.",
+  "start_url": "./kw-index.html",
+  "scope": "./",
+  "display": "standalone",
+  "orientation": "portrait",
+  "background_color": "#ECF5F3",
+  "theme_color": "#12766C",
+  "lang": "de",
+  "icons": [
+    {
+      "src": "kw-icon-192.png",
+      "sizes": "192x192",
+      "type": "image/png",
+      "purpose": "any"
+    },
+    {
+      "src": "kw-icon-512.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "any"
+    }
+  ]
+}

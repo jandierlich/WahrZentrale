@@ -1,0 +1,25 @@
+Alle Rechte vorbehalten / All Rights Reserved.
+
+Copyright (c) 2026 Jan Dierlich
+
+Dieser Quellcode ist urheberrechtlich geschützt. Eine Nutzung,
+Vervielfältigung, Weiterverbreitung, Veränderung oder Weitergabe – auch
+auszugsweise – ist ohne ausdrückliche schriftliche Zustimmung des Autors
+nicht gestattet.
+
+VorratsWahr ist eine eigenständige App der Wahr-Familie (u. a.
+ProduktWahr, MerkWahr, alle Jan Dierlich) und nutzt dieselbe
+Texterkennungs-Technik wie ProduktWahr, ist aber ein rein privates
+Inventar-Werkzeug ohne Zusatzstoff-/INCI-Prüfung, ohne Barcode-Abfrage
+und ohne Anbindung an externe Produktdatenbanken.
+
+Eingebundene Drittkomponenten unterliegen ihren jeweils eigenen Lizenzen:
+- Tesseract.js (Apache-2.0-Lizenz), https://github.com/naptha/tesseract.js
+- jsPDF (MIT-Lizenz), https://github.com/parallax/jsPDF
+
+Diese Drittkomponente wird per CDN (jsDelivr) nachgeladen; ihre
+Lizenzbedingungen bleiben davon unberührt.
+
+Alle Fotos, erkannten Texte und Einträge werden ausschließlich lokal auf
+dem Gerät der nutzenden Person gespeichert und sind nicht Teil dieser
+Lizenz.
