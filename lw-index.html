@@ -10,6 +10,7 @@
 <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
 <meta name="apple-mobile-web-app-title" content="LautstärkeWahr">
 <meta name="theme-color" content="#12766C">
+<script>try{if(localStorage.getItem("lw_theme")==="dark"){document.documentElement.classList.add("theme-dark");}}catch(e){}</script>
 <link rel="apple-touch-icon" sizes="180x180" href="./lw-icon-180.png">
 <link rel="manifest" href="./lw-manifest.json">
 <style>@view-transition{navigation:auto}
@@ -359,11 +360,18 @@
 
 <script>
 (function(){
-  // ---------- Theme (startet immer hell, Umschalten nur für die Sitzung) ----------
+  // ---------- Theme (letzte Wahl wird lokal gemerkt, auch über App-Neustarts hinweg) ----------
   var root=document.documentElement;
   var metaTheme=document.querySelector('meta[name="theme-color"]');
   var themeBtn=document.getElementById("themeToggle");
-  var manual=false;
+  var THEME_KEY = "lw_theme";
+  function ladeTheme(){
+    try { return localStorage.getItem(THEME_KEY) === "dark"; } catch(e){ return false; }
+  }
+  function speichereTheme(dark){
+    try { localStorage.setItem(THEME_KEY, dark ? "dark" : "light"); } catch(e){}
+  }
+  var manual = ladeTheme();
   function applyTheme(){
     var dark = manual === true;
     root.classList.toggle("theme-dark", dark);
@@ -372,6 +380,7 @@
   }
   themeBtn.addEventListener("click", function(){
     manual = manual === true ? false : true;
+    speichereTheme(manual);
     applyTheme();
   });
   applyTheme();

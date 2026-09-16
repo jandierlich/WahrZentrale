@@ -7,6 +7,7 @@
 <link rel="manifest" href="./ow-manifest.json">
 <link rel="apple-touch-icon" sizes="180x180" href="./ow-icon-180.png">
 <meta name="theme-color" content="#12766C" id="owThemeColor">
+<script>try{if(localStorage.getItem("ow_theme")==="dark"){document.documentElement.classList.add("theme-dark");}}catch(e){}</script>
 
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
@@ -625,9 +626,11 @@ document.getElementById('shareFavBtn').onclick=()=>{
 
 const themeBtn=document.getElementById('themeBtn');
 const owThemeColor=document.getElementById('owThemeColor');
+function owLadeTheme(){try{return localStorage.getItem('ow_theme')==='dark';}catch(e){return false;}}
+function owSpeichereTheme(dark){try{localStorage.setItem('ow_theme', dark?'dark':'light');}catch(e){}}
 function applyTheme(dark){document.documentElement.classList.toggle('theme-dark',dark);themeBtn.textContent=dark?'☀️':'🌙'; if(owThemeColor) owThemeColor.setAttribute('content', dark?'#50DDCA':'#12766C');}
-applyTheme(false);
-themeBtn.onclick=()=>{applyTheme(!document.documentElement.classList.contains('theme-dark'));};
+applyTheme(owLadeTheme());
+themeBtn.onclick=()=>{const next=!document.documentElement.classList.contains('theme-dark'); owSpeichereTheme(next); applyTheme(next);};
 
 const fsBtn=document.getElementById('fullscreenBtn'), mapEl=document.getElementById('map');
 const mapWrap=document.getElementById('mapWrap'), fsOverlay=document.getElementById('mapFsOverlay');

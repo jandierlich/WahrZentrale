@@ -1,8 +1,15 @@
 (function(){
   "use strict";
 
-  // ---------- Dark/Light Mode (startet immer hell, Umschalten nur für die Sitzung) ----------
-  var manual = false;
+  // ---------- Dark/Light Mode (letzte Wahl wird lokal gemerkt, auch über App-Neustarts hinweg) ----------
+  var THEME_KEY = "vw_theme";
+  function ladeTheme(){
+    try { return localStorage.getItem(THEME_KEY) === "dark"; } catch(e){ return false; }
+  }
+  function speichereTheme(dark){
+    try { localStorage.setItem(THEME_KEY, dark ? "dark" : "light"); } catch(e){}
+  }
+  var manual = ladeTheme();
   function applyTheme(){
     var dark = manual === true;
     document.documentElement.classList.toggle("theme-dark", dark);
@@ -10,6 +17,7 @@
   }
   document.getElementById("vw-theme-toggle").addEventListener("click", function(){
     manual = manual === true ? false : true;
+    speichereTheme(manual);
     applyTheme();
   });
   applyTheme();

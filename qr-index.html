@@ -10,6 +10,7 @@
 <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
 <meta name="apple-mobile-web-app-title" content="QRWahr">
 <meta name="theme-color" content="#12766C" id="qrThemeColor">
+<script>try{if(localStorage.getItem("qr_theme")==="dark"){document.documentElement.classList.add("theme-dark");}}catch(e){}</script>
 <link rel="apple-touch-icon" sizes="180x180" href="./qr-icon-180.png">
 <link rel="manifest" href="./qr-manifest.json">
 <style>@view-transition{navigation:auto}
@@ -113,11 +114,18 @@
 
 <script>
 (function(){
-  // ---------- Theme (startet immer hell, Umschalten nur für die Sitzung) ----------
+  // ---------- Theme (letzte Wahl wird lokal gemerkt, auch über App-Neustarts hinweg) ----------
   var root=document.documentElement;
   var metaTheme=document.getElementById("qrThemeColor");
   var themeBtn=document.getElementById("themeToggle");
-  var manual=false;
+  var THEME_KEY = "qr_theme";
+  function ladeTheme(){
+    try { return localStorage.getItem(THEME_KEY) === "dark"; } catch(e){ return false; }
+  }
+  function speichereTheme(dark){
+    try { localStorage.setItem(THEME_KEY, dark ? "dark" : "light"); } catch(e){}
+  }
+  var manual = ladeTheme();
   function applyTheme(){
     root.classList.toggle("theme-dark", manual === true);
     metaTheme.setAttribute("content", manual === true ? "#50DDCA" : "#12766C");
@@ -125,6 +133,7 @@
   }
   themeBtn.addEventListener("click", function(){
     manual = manual === true ? false : true;
+    speichereTheme(manual);
     applyTheme();
   });
   applyTheme();

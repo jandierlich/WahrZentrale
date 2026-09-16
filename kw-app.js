@@ -283,13 +283,20 @@ document.addEventListener("DOMContentLoaded", () => {
 });
 
 /* ===================== Theme ===================== */
+function kwLadeTheme(){
+  try { return localStorage.getItem("kw_theme") === "dark" ? "dark" : "light"; } catch(e){ return "light"; }
+}
+function kwSpeichereTheme(mode){
+  try { localStorage.setItem("kw_theme", mode); } catch(e){}
+}
 function kwApplyTheme(){
-  document.documentElement.setAttribute("data-theme", "light");
+  document.documentElement.setAttribute("data-theme", kwLadeTheme());
 }
 function kwToggleTheme(){
   const cur = document.documentElement.getAttribute("data-theme");
   const next = cur === "dark" ? "light" : "dark";
   document.documentElement.setAttribute("data-theme", next);
+  kwSpeichereTheme(next);
 }
 
 /* ===================== Onboarding ===================== */
