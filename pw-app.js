@@ -1,15 +1,25 @@
 (function(){
   "use strict";
 
-  // ---------- Dark/Light Mode (startet immer hell, Umschalten nur für die Sitzung) ----------
-  var manual = false;
+  // ---------- Dark/Light Mode (letzte Wahl wird lokal gemerkt, auch über App-Neustarts hinweg) ----------
+  var THEME_KEY = "pw_theme";
+  function ladeTheme(){
+    try { return localStorage.getItem(THEME_KEY) === "dark"; } catch(e){ return false; }
+  }
+  function speichereTheme(dark){
+    try { localStorage.setItem(THEME_KEY, dark ? "dark" : "light"); } catch(e){}
+  }
+  var manual = ladeTheme();
+  var pwThemeColorEl = document.getElementById("pwThemeColor");
   function applyTheme(){
     var dark = manual === true;
     document.documentElement.classList.toggle("theme-dark", dark);
     document.getElementById("pw-theme-toggle").textContent = dark ? "☀️" : "🌙";
+    if(pwThemeColorEl) pwThemeColorEl.setAttribute("content", dark ? "#50DDCA" : "#12766C");
   }
   document.getElementById("pw-theme-toggle").addEventListener("click", function(){
     manual = manual === true ? false : true;
+    speichereTheme(manual);
     applyTheme();
   });
   applyTheme();
@@ -92,6 +102,7 @@
         '</div>' +
         '<div class="detail">'+escapeHtml(entry.detailtext) +
           (entry.hinweis ? '<br><br><em>'+escapeHtml(entry.hinweis)+'</em>' : '') +
+          (entry.efsanote ? '<br><br><span style="font-size:11px">'+escapeHtml(entry.efsanote)+'</span>' : '') +
           '<br><br><span style="font-size:11px">'+escapeHtml(entry.quellennote)+'</span>' +
           '<div class="share-row"><button class="share-btn" data-share="'+entry.id+'">Teilen</button></div>' +
         '</div>';
@@ -106,6 +117,15 @@
   function renderResults(res){
     var list = document.getElementById("resultList");
     list.innerHTML = "";
+    var profilBox = document.getElementById("resultProfilWarnung");
+    var profilTreffer = pruefeProfilTreffer_Text(res.allergene);
+    if(profilTreffer.length){
+      profilBox.classList.remove("hidden");
+      profilBox.innerHTML = '<div class="legal-box profil-warn-box">⚠ Laut deinem Profil relevant: <strong>' + profilTreffer.map(escapeHtml).join(", ") + '</strong></div>';
+    } else {
+      profilBox.classList.add("hidden");
+      profilBox.innerHTML = "";
+    }
     var allergBox = document.getElementById("resultAllergene");
     if(res.allergene && res.allergene.length){
       allergBox.classList.remove("hidden");
@@ -157,14 +177,16 @@
         id: "e_" + e.code, name: e.name + " (" + e.code + ")", g: e.ampel,
         quelle: "zusatzstoff", quelleLabel: "Zusatzstoff", kategorie: e.klasse,
         kurztext: e.kurztext, detailtext: e.details, hinweis: e.hinweisGruppen,
-        quellennote: e.quellennote, matchKey: SW_normalize(e.name + " " + e.code)
+        efsanote: e.efsanote, quellennote: e.quellennote, matchKey: SW_normalize(e.name + " " + e.code)
       });
     });
     (typeof INCI_DB !== "undefined" ? INCI_DB : []).forEach(function(e){
+      var kontext = (typeof SW_CAT_KONTEXT_INCI !== "undefined") ? SW_CAT_KONTEXT_INCI[e.k] : null;
       items.push({
         id: "i_" + e.n, name: e.n, g: e.g,
         quelle: "kosmetik", quelleLabel: "Kosmetik-Inhaltsstoff",
-        kategorie: SW_CAT_LABELS_INCI[e.k] || e.k, kurztext: e.t, detailtext: e.t, hinweis: null,
+        kategorie: SW_CAT_LABELS_INCI[e.k] || e.k, kurztext: e.t,
+        detailtext: kontext ? (e.t + " " + kontext) : e.t, hinweis: null,
         quellennote: "Quelle: eigene INCI-Einstufung auf Basis öffentlich zugänglicher Datenbanken (z. B. CosIng).",
         matchKey: SW_normalize([e.n].concat(e.a || []).join(" "))
       });
@@ -703,7 +725,6 @@
   function behandleErkennung(code){
     if(code === letzterCode) return;
     letzterCode = code;
-    if(navigator.vibrate) navigator.vibrate(60);
     playBeep(880, 0.09);
     document.getElementById("liveHint").style.display = "none";
 

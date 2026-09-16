@@ -9,7 +9,8 @@
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
 <meta name="apple-mobile-web-app-title" content="ProduktWahr">
-<meta name="theme-color" content="#12766C">
+<meta name="theme-color" content="#12766C" id="pwThemeColor">
+<script>try{if(localStorage.getItem("pw_theme")==="dark"){document.documentElement.classList.add("theme-dark");document.getElementById("pwThemeColor").setAttribute("content","#50DDCA");}}catch(e){}</script>
 <link rel="apple-touch-icon" href="./pw-icon-180.png">
 <link rel="manifest" href="./pw-manifest.json">
 <link rel="stylesheet" href="./pw-style.css">
@@ -41,8 +42,8 @@
         <button class="mode-btn" data-mode="kosmetik">💄 Kosmetik</button>
       </div>
       <p style="font-size:11px;color:var(--sub);margin:8px 2px 0" id="modeHint">Prüft automatisch gegen beide Datenbanken und zeigt die passende Quelle. Bei bekannter Produktart hilft die gezielte Auswahl, Fehltreffer durch Namensüberschneidungen zu vermeiden.</p>
-      <button class="btn btn-white" id="btnLiveTextScan" style="margin-top:14px">Zutaten/ Inhaltsstoffe live scannen</button>
-      <button class="btn btn-white" id="btnBarcodeScan" style="margin-top:10px">Barcode live scannen</button>
+      <button class="btn btn-white btn-live" id="btnLiveTextScan" style="margin-top:14px">Zutaten/ Inhaltsstoffe live scannen</button>
+      <button class="btn btn-white btn-live" id="btnBarcodeScan" style="margin-top:10px">Barcode live scannen</button>
       <button class="btn btn-white" id="btnScan" style="margin-top:10px">Zutaten/ Inhaltsstoffe scannen</button>
       <button class="btn btn-white" id="btnUpload" style="margin-top:10px">Bild oder Datei hochladen</button>
       <input type="file" id="uploadInput" accept="image/*" style="display:none">
@@ -94,7 +95,7 @@
     </div>
     <div class="section-title">Rechtliches</div>
     <div class="card" style="padding:10px 18px">
-      <p style="font-size:12px;color:var(--sub);margin:0">Zusatzstoffe: Verordnung (EG) Nr. 1333/2008, Kurzbewertungen auf Basis öffentlich zugänglicher EFSA-Stellungnahmen. Allergene: Anhang II der Verordnung (EU) Nr. 1169/2011 (LMIV). Kosmetik/INCI: Verordnung (EG) Nr. 1223/2009, Mikroplastik-Einstufung zusätzlich auf Basis REACH-VO (EG) Nr. 1907/2006, Anhang XVII Nr. 78. Barcode-Produktdaten: © Open Food Facts-, Open Beauty Facts- bzw. Open Products Facts-Mitwirkende, Lizenz ODbL. Alle Einstufungen sind eigene, neutrale Zusammenfassungen ohne Gewähr.</p>
+      <p style="font-size:12px;color:var(--sub);margin:0">Zusatzstoffe: Verordnung (EG) Nr. 1333/2008, Kurzbewertungen auf Basis öffentlich zugänglicher EFSA-Stellungnahmen. Allergene: Anhang II der Verordnung (EU) Nr. 1169/2011 (LMIV). Kosmetik/INCI: Verordnung (EG) Nr. 1223/2009, Mikroplastik-Einstufung zusätzlich auf Basis REACH-VO (EG) Nr. 1907/2006, Anhang XVII Nr. 78. Barcode-Produktdaten: © Open Food Facts-, Open Beauty Facts- bzw. Open Products Facts-Mitwirkende, Lizenz ODbL. Nutri-Score, NOVA-Gruppe und Öko-Score werden unverändert aus diesen Datenquellen übernommen. Alle sonstigen Einstufungen sind eigene, neutrale Einschätzungen ohne Gewähr, keine amtliche Bewertung und kein Ersatz für Etikett oder Fachberatung.</p>
     </div>
   </div>
 
@@ -102,6 +103,7 @@
     <button class="btn btn-secondary" id="btnBack" style="margin-top:10px">← Zurück</button>
     <div class="disclaimer" style="margin-top:10px">Nur Information – keine medizinische oder kosmetische Fachberatung.</div>
     <div id="resultSource" class="hidden" style="font-size:11px;color:var(--sub);margin:8px 4px 0"></div>
+    <div id="resultProfilWarnung" class="hidden" style="margin:10px 0"></div>
     <div id="resultAllergene" class="hidden" style="margin:10px 0"></div>
     <div class="section-title">Gefundene Stoffe</div>
     <div id="resultList"></div>

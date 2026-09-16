@@ -39,6 +39,7 @@ html.theme-dark .app-logo-dark{display:block!important}
 html.theme-dark .btn-secondary{border-color:rgba(180,170,220,.2)}
 .btn-white{background:var(--btn-warm);color:var(--text);border:1px solid #E5E7EB;min-height:52px}
 html.theme-dark .btn-white{border-color:rgba(180,170,220,.2)}
+.btn-live{font-weight:700}
 textarea{width:100%;max-width:100%;min-height:110px;border-radius:14px;border:1px solid var(--border);background:var(--card2);color:var(--text);padding:12px;font-size:15px;resize:vertical;font-family:inherit;word-break:break-word;overflow-wrap:break-word}
 textarea::placeholder{color:var(--sub)}
 .search-input{width:100%;max-width:100%;border-radius:14px;border:1px solid var(--border);background:var(--card2);color:var(--text);padding:12px 14px;font-size:15px;font-family:inherit}

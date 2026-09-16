@@ -9,6 +9,18 @@ var SW_CAT_LABELS_INCI = {
   konservierung: "Konservierungsstoff", tierisch: "Tierisch/nicht vegan", silikon: "Silikon/Mineralöl"
 };
 
+// Allgemeine Einordnung je INCI-Kategorie (kein stoffspezifisches Urteil,
+// sondern erklärender Kontext zur jeweiligen Gruppe samt Rechtsgrundlage),
+// wird im Detailtext hinter den stoffspezifischen Satz ergänzt.
+var SW_CAT_KONTEXT_INCI = {
+  hormone: "Stoffe dieser Gruppe stehen im wissenschaftlichen Verdacht, in das Hormonsystem einzugreifen (sogenannte endokrine Disruption). Einzelne Vertreter werden im Rahmen der EU-Kosmetikverordnung (EG) Nr. 1223/2009 sowie ergänzender ECHA-Bewertungen eingeschränkt oder beobachtet – Ausmaß und Nachweislage unterscheiden sich von Stoff zu Stoff.",
+  mikroplastik: "Feste, wasserunlösliche Kunststoffpartikel fallen unter die REACH-Beschränkung (EG) Nr. 1907/2006, Anhang XVII Nr. 78, und werden seit Oktober 2023 in bestimmten Kosmetikprodukten schrittweise eingeschränkt bzw. verboten, weil sie sich in der Umwelt kaum abbauen.",
+  allergen: "Diese Duftstoffe zählen zu den 26 EU-weit deklarationspflichtigen Duftstoff-Allergenen und müssen ab bestimmten Konzentrationen gesondert in der Zutatenliste genannt werden, da sie bekanntermaßen Kontaktallergien auslösen können.",
+  konservierung: "Konservierungsstoffe verhindern mikrobielles Wachstum im Produkt. Einzelne Vertreter sind je nach Konzentration und Anwendungsbereich (Leave-on/Rinse-off) eingeschränkt oder vollständig verboten, siehe EU-Kosmetikverordnung (EG) Nr. 1223/2009, Anhang V.",
+  tierisch: "Hinweis auf tierischen Ursprung bzw. nicht eindeutig pflanzliche Herkunft des Stoffs – relevant für vegane oder vegetarische Lebensweise, unabhängig von einer gesundheitlichen Bewertung.",
+  silikon: "Silikone und Mineralöle legen sich als Film auf Haut oder Haar. Sie gelten gesundheitlich überwiegend als unbedenklich, stehen wegen schwerer biologischer Abbaubarkeit aber unter Umweltbeobachtung."
+};
+
 var SW_ADDITIV_DB = (typeof ENW_baueDatenbank === "function") ? ENW_baueDatenbank() : [];
 
 function SW_normalize(s) {
@@ -67,7 +79,7 @@ function SW_pruefeText(text, modus) {
         id: "e_" + e.code, name: e.name + " (" + e.code + ")", g: e.ampel,
         quelle: "zusatzstoff", quelleLabel: "Zusatzstoff", kategorie: e.klasse,
         kurztext: e.kurztext, detailtext: e.details, hinweis: e.hinweisGruppen,
-        quellennote: e.quellennote
+        efsanote: e.efsanote, quellennote: e.quellennote
       });
     });
   }
@@ -82,10 +94,12 @@ function SW_pruefeText(text, modus) {
       }).map(function(a) { return a.name; });
     }
     inci.forEach(function(e) {
+      var kontext = SW_CAT_KONTEXT_INCI[e.k];
       ergebnisse.push({
         id: "i_" + e.n, name: e.n, g: e.g,
         quelle: "kosmetik", quelleLabel: "Kosmetik-Inhaltsstoff",
-        kategorie: SW_CAT_LABELS_INCI[e.k] || e.k, kurztext: e.t, detailtext: e.t,
+        kategorie: SW_CAT_LABELS_INCI[e.k] || e.k, kurztext: e.t,
+        detailtext: kontext ? (e.t + " " + kontext) : e.t,
         hinweis: null, quellennote: "Quelle: eigene INCI-Einstufung auf Basis öffentlich zugänglicher Datenbanken (z. B. CosIng)."
       });
     });
