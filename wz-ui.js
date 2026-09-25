@@ -34,7 +34,7 @@
     var css =
       ".wzi{display:inline-block;width:1.2em;height:1.2em;vertical-align:-0.22em;fill:currentColor;flex-shrink:0}" +
       ".wzi-red{color:#DC2626}.wzi-green{color:#16A34A}.wzi-yellow{color:#EAB308}" +
-      ".wzi-orange{color:#EA8C1E}.wzi-white{color:#D8D8D8}" +
+      ".wzi-orange{color:#EA8C1E}.wzi-white{color:#9C9CA8}" +
       ".wzi-chev-up{transform:rotate(-90deg)}.wzi-chev-down{transform:rotate(90deg)}" +
       ".wz-modal-backdrop{position:fixed;inset:0;background:rgba(10,20,20,.45);z-index:99998;" +
       "display:flex;align-items:flex-end;justify-content:center;animation:wzFade .15s ease}" +
@@ -51,13 +51,13 @@
       ".wz-modal-btns{display:flex;gap:10px}" +
       ".wz-modal-btns button{flex:1;border:none;border-radius:14px;padding:13px 10px;" +
       "font-size:14.5px;font-weight:700;cursor:pointer;font-family:inherit}" +
-      ".wz-btn-primary{background:var(--cta-bg,var(--violett,#5D3FA3));color:var(--cta-text,#fff)}" +
+      ".wz-btn-primary{background:var(--cta-bg,var(--violett,#5A2FBE));color:var(--cta-text,#fff)}" +
       ".wz-btn-secondary{background:var(--bg,#F1EEFA);color:var(--text,var(--ink,#233B3D));" +
-      "border:1.5px solid var(--border,#E4DAF5) !important}" +
+      "border:1.5px solid var(--border,#DAC7F2) !important}" +
       ".wz-toast{position:fixed;left:50%;bottom:calc(env(safe-area-inset-bottom,0px) + 22px);" +
       "transform:translateX(-50%);background:var(--card,#F8F6FC);color:var(--text,var(--ink,#233B3D));" +
-      "border:1.5px solid var(--border,#E4DAF5);border-radius:14px;padding:12px 18px;" +
-      "font-size:13.5px;font-weight:600;box-shadow:0 8px 24px rgba(0,0,0,.18);z-index:99999;" +
+      "border:1.5px solid var(--border,#DAC7F2);border-radius:14px;padding:12px 18px;" +
+      "font-size: 14.5px;font-weight:600;box-shadow:0 8px 24px rgba(0,0,0,.18);z-index:99999;" +
       "max-width:88vw;text-align:center;animation:wzFade .15s ease}";
     var s = document.createElement("style");
     s.textContent = css;

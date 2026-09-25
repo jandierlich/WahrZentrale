@@ -7,7 +7,7 @@
     toggleBtnId: "pw-theme-toggle",
     themeColorElId: "pwThemeColor",
     darkColor: "#B9A6F5",
-    lightColor: "#5D3FA3"
+    lightColor: "#5A2FBE"
   });
 
   // ---------- Navigation ----------
@@ -84,8 +84,8 @@
         '</div>' +
         '<div class="detail">'+escapeHtml(entry.detailtext) +
           (entry.hinweis ? '<br><br><em>'+escapeHtml(entry.hinweis)+'</em>' : '') +
-          (entry.efsanote ? '<br><br><span style="font-size:11px">'+escapeHtml(entry.efsanote)+'</span>' : '') +
-          '<br><br><span style="font-size:11px">'+escapeHtml(entry.quellennote)+'</span>' +
+          (entry.efsanote ? '<br><br><span style="font-size: 12.5px">'+escapeHtml(entry.efsanote)+'</span>' : '') +
+          '<br><br><span style="font-size: 12.5px">'+escapeHtml(entry.quellennote)+'</span>' +
           '<div class="share-row"><button class="share-btn" data-share="'+entry.id+'">Teilen</button></div>' +
         '</div>';
       div.addEventListener("click", function(e){
@@ -187,7 +187,7 @@
     var box = document.getElementById("lookupResults");
     var q = SW_normalize(query || "");
     if(q.length < 2){
-      box.innerHTML = '<p style="font-size:12px;color:var(--sub);margin:8px 2px 0">Mindestens 2 Zeichen eingeben, um in beiden Datenbanken nachzuschlagen – ganz ohne Foto oder Barcode.</p>';
+      box.innerHTML = '<p style="font-size: 13.5px;color:var(--sub);margin:8px 2px 0">Mindestens 2 Zeichen eingeben, um in beiden Datenbanken nachzuschlagen – ganz ohne Foto oder Barcode.</p>';
       return;
     }
     var treffer = SW_LOOKUP_ITEMS.filter(function(it){ return it.matchKey.indexOf(q) !== -1; }).slice(0, 25);
@@ -240,7 +240,7 @@
     var clearBtn = document.getElementById("btnClearFav");
     clearBtn.style.display = favs.length ? "inline-block" : "none";
     if(favs.length === 0){
-      box.innerHTML = '<p style="font-size:12px;color:var(--sub);margin:0">Noch keine Favoriten. Tippe im Ergebnis auf den Stern <svg class="wzi" aria-hidden="true"><use href="#wzi-star-outline"></use></svg>.</p>';
+      box.innerHTML = '<p style="font-size: 13.5px;color:var(--sub);margin:0">Noch keine Favoriten. Tippe im Ergebnis auf den Stern <svg class="wzi" aria-hidden="true"><use href="#wzi-star-outline"></use></svg>.</p>';
       return;
     }
     box.innerHTML = favs.map(function(f){
@@ -873,7 +873,7 @@
       '</button>' : "";
     return '<h3 style="font-size:14px;margin-top:18px"><svg class="wzi" aria-hidden="true"><use href="#wzi-chart"></use></svg> Nährwerte' + toggle + '</h3>' +
       '<div class="naehr-table">' + rows + '</div>' +
-      '<p style="font-size:11px;color:var(--sub);margin-top:6px">Nährwerte, Nutri-Score, NOVA-Gruppe und Öko-Score stammen aus den bei Open Food Facts hinterlegten Herstellerangaben bzw. deren automatischer Berechnung – ohne Gewähr auf Vollständigkeit oder Aktualität, keine amtliche Kennzeichnung und kein Ersatz für das Etikett auf der Verpackung.</p>';
+      '<p style="font-size: 12.5px;color:var(--sub);margin-top:6px">Nährwerte, Nutri-Score, NOVA-Gruppe und Öko-Score stammen aus den bei Open Food Facts hinterlegten Herstellerangaben bzw. deren automatischer Berechnung – ohne Gewähr auf Vollständigkeit oder Aktualität, keine amtliche Kennzeichnung und kein Ersatz für das Etikett auf der Verpackung.</p>';
   }
 
   function zeigeLadeZustand(){
@@ -901,7 +901,7 @@
       '<h2 style="margin-top:0;margin-bottom:10px">'+escapeHtml(eintrag.name)+'</h2>' +
       (eintrag.gefunden && eintrag.url ?
         '<a class="share-btn" href="'+eintrag.url+'" target="_blank" rel="noopener noreferrer" style="text-decoration:none;display:inline-block;margin-bottom:4px"><svg class="wzi" aria-hidden="true"><use href="#wzi-link"></use></svg> Vollständige Produktseite bei '+quelleName(eintrag.quelle)+' ansehen</a>' +
-        '<p style="font-size:11px;color:var(--sub);margin:6px 2px 14px">Öffnet in neuem Tab und verlässt die App – dort gelten die Datenschutzbestimmungen von '+quelleName(eintrag.quelle)+'.</p>'
+        '<p style="font-size: 12.5px;color:var(--sub);margin:6px 2px 14px">Öffnet in neuem Tab und verlässt die App – dort gelten die Datenschutzbestimmungen von '+quelleName(eintrag.quelle)+'.</p>'
       : '') +
       (eintrag.warnung ? '<p style="color:#DC2626;font-weight:700"><svg class="wzi" aria-hidden="true"><use href="#wzi-warning"></use></svg> '+escapeHtml(eintrag.warnung)+'</p>' : '') +
       '<p style="color:var(--sub)">'+escapeHtml(eintrag.meta||'')+'</p>' +
@@ -910,8 +910,8 @@
       baueNaehrwertTabelle(eintrag) +
       (eintrag.zutaten ? '<p style="margin-top:14px"><strong>Zutaten:</strong><br>'+escapeHtml(eintrag.zutaten)+'</p>' : (eintrag.gefunden ? '<p>Keine Zutatenliste verfügbar.</p>' : '')) +
       (eintrag.gefunden ?
-        '<p style="font-size:12px;color:var(--sub);margin-top:20px">Nur Information – keine medizinische Beratung.<br>Quelle: '+quelleName(eintrag.quelle)+' (ODbL-Lizenz)</p>'
-      : '<p style="font-size:12px;color:var(--sub);margin-top:20px">Nur Information – keine medizinische Beratung.</p>');
+        '<p style="font-size: 13.5px;color:var(--sub);margin-top:20px">Nur Information – keine medizinische Beratung.<br>Quelle: '+quelleName(eintrag.quelle)+' (ODbL-Lizenz)</p>'
+      : '<p style="font-size: 13.5px;color:var(--sub);margin-top:20px">Nur Information – keine medizinische Beratung.</p>');
     // Erkannte Stoffe wie beim Foto-/Textscan als voll aufklappbare Liste mit
     // Detailtext, Hinweis, Quellenangabe, Stern (Favorit) und Teilen-Button –
     // dieselbe Komponente wie renderResults(), statt einer flachen Übersicht.

@@ -185,7 +185,7 @@
     var legend = document.getElementById('chartLegend');
 
     if (labels.length === 0) {
-      wrap.innerHTML = '<p style="color:var(--text-soft);font-size:13px;">Noch keine Einträge</p>';
+      wrap.innerHTML = '<p style="color:var(--text-soft);font-size: 14px;">Noch keine Einträge</p>';
       legend.innerHTML = '';
       return;
     }

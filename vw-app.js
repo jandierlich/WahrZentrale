@@ -237,7 +237,7 @@
     box.innerHTML = kategorien.map(function(k){
       return '<span class="kategorie-chip" style="display:inline-flex;align-items:center;gap:5px;padding:3px 6px 3px 9px">'
         + '<button type="button" data-waehle-kat="' + escapeHtml(k) + '" style="cursor:pointer;border:none;background:none;padding:0;font:inherit;color:inherit">' + escapeHtml(k) + '</button>'
-        + '<button type="button" class="kategorie-chip-del" data-loesche-kat="' + escapeHtml(k) + '" aria-label="Kategorie ' + escapeHtml(k) + ' löschen" style="cursor:pointer;border:none;background:none;padding:0;font:inherit;color:inherit;opacity:.6;font-size:13px;line-height:1"><svg class="wzi" aria-hidden="true"><use href="#wzi-close"></use></svg></button>'
+        + '<button type="button" class="kategorie-chip-del" data-loesche-kat="' + escapeHtml(k) + '" aria-label="Kategorie ' + escapeHtml(k) + ' löschen" style="cursor:pointer;border:none;background:none;padding:0;font:inherit;color:inherit;opacity:.6;font-size: 14px;line-height:1"><svg class="wzi" aria-hidden="true"><use href="#wzi-close"></use></svg></button>'
         + '</span>';
     }).join("");
     box.querySelectorAll("[data-waehle-kat]").forEach(function(btn){

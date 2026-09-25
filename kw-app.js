@@ -294,7 +294,7 @@ function kwApplyTheme(){
   const dark = kwLadeTheme() === "dark";
   document.documentElement.classList.toggle("theme-dark", dark);
   const meta = document.getElementById("kwThemeColor");
-  if (meta) meta.setAttribute("content", dark ? "#B9A6F5" : "#5D3FA3");
+  if (meta) meta.setAttribute("content", dark ? "#B9A6F5" : "#5A2FBE");
 }
 function kwToggleTheme(){
   const next = document.documentElement.classList.contains("theme-dark") ? "light" : "dark";

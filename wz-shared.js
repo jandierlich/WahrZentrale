@@ -60,7 +60,7 @@
     var toggleBtn = document.getElementById(opts.toggleBtnId);
     var themeColorEl = opts.themeColorElId ? document.getElementById(opts.themeColorElId) : null;
     var darkColor = opts.darkColor || "#B9A6F5";
-    var lightColor = opts.lightColor || "#5D3FA3";
+    var lightColor = opts.lightColor || "#5A2FBE";
 
     function ladeTheme() {
       try { return localStorage.getItem(storageKey) === "dark"; } catch (e) { return false; }
