@@ -1,0 +1,17 @@
+Alle Rechte vorbehalten / All Rights Reserved.
+
+Copyright (c) 2026 Jan Dierlich
+
+Dieser Quellcode ist urheberrechtlich geschützt. Eine Nutzung,
+Vervielfältigung, Weiterverbreitung, Veränderung oder Weitergabe – auch
+auszugsweise – ist ohne ausdrückliche schriftliche Zustimmung des Autors
+nicht gestattet.
+
+AlltagWahr ist ein privates, kostenfreies Angebot ohne kommerzielle Absicht
+und Teil der WahrZentrale-App-Sammlung.
+
+Es werden keine externen Bibliotheken, Schriftarten oder CDN-Ressourcen
+eingebunden – keine zusätzlichen Lizenzbedingungen Dritter zu beachten.
+
+Eigener Programmcode, eigene Icons und eigenes Design: alle Rechte bei
+Jan Dierlich.

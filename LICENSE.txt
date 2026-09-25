@@ -1,0 +1,30 @@
+Alle Rechte vorbehalten / All Rights Reserved.
+
+Copyright (c) 2026 Jan Dierlich
+
+Dieses Repository (WahrZentrale) enthält mehrere eigenständige Web-Apps.
+Der Quellcode sowie alle redaktionellen Inhalte sind urheberrechtlich
+geschützt. Eine Nutzung, Vervielfältigung, Weiterverbreitung, Veränderung
+oder Weitergabe – auch auszugsweise – ist ohne ausdrückliche schriftliche
+Zustimmung des Autors nicht gestattet.
+
+Ausgenommen hiervon sind Inhalte, die auf gemeinfreien amtlichen Werken
+beruhen (z. B. Verordnung (EG) Nr. 1333/2008, Verordnung (EU) Nr.
+1169/2011, Verordnung (EG) Nr. 1223/2009, Verordnung (EG) Nr. 1907/2006);
+diese unterliegen keinem Urheberrechtsschutz. Die redaktionelle Auswahl,
+Formulierung, Struktur und Programmierung der Apps sind hiervon nicht
+betroffen und bleiben geschützt.
+
+Diese Datei gilt als übergreifende Lizenz für das gesamte Repository.
+Jede enthaltene App hat zusätzlich eine eigene, ausführlichere Lizenzdatei
+mit app-spezifischen Details (u. a. eingebundene Drittkomponenten):
+
+- pw-LICENSE.txt – ProduktWahr
+- vw-LICENSE.txt – VorratsWahr
+- kw-LICENSE.txt – KompassWahr
+- lw-LICENSE.txt – LautstärkeWahr
+- aw-LICENSE.txt – AlltagWahr
+- qr-LICENSE.txt – QRWahr
+
+Im Konfliktfall gilt die jeweilige app-spezifische Lizenzdatei als
+maßgeblich für diese App.

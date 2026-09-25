@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="de" data-theme="light">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<meta name="robots" content="noindex, nofollow, noarchive">
+<title>Impressum – AlltagWahr</title>
+<link rel="stylesheet" href="aw-style.css">
+<style>
+  .legal { padding: 6px 4px 40px; }
+  .legal h1 { font-size: 20px; margin: 10px 0 20px; }
+  .legal h2 { font-size: 15px; margin: 26px 0 8px; }
+  .legal p, .legal li { font-size: 13.5px; line-height: 1.7; color: var(--text); }
+  .back-link { display: inline-block; margin-bottom: 16px; color: var(--violet); font-size: 13px; text-decoration: none; }
+  .fill-me { background: var(--warn-soft); color: var(--warn); padding: 1px 6px; border-radius: 5px; font-weight: 600; }
+</style>
+</head>
+<body>
+<div class="legal">
+  <a class="back-link" href="aw-index.html">← Zurück zur App</a>
+  <h1>Impressum</h1>
+
+  <h2>Angaben gemäß § 5 DDG (Digitale-Dienste-Gesetz, vormals TMG)</h2>
+  <p>
+    Jan Dierlich<br>
+    Steenacker 33<br>
+    25499 Tangstedt<br>
+    Deutschland
+  </p>
+
+  <h2>Kontakt</h2>
+  <p>E-Mail: jandierlich@googlemail.com</p>
+
+  <h2>Verantwortlich für den Inhalt nach § 18 Abs. 2 MStV</h2>
+  <p>Jan Dierlich</p>
+
+  <h2>Hinweis zum Anwendungsbereich</h2>
+  <p>Diese App wird privat und nicht gewerblich betrieben. Sie wird kostenlos zur Verfügung gestellt, es findet keine geschäftsmäßige Datenverarbeitung Dritter statt. Dieses Impressum wird vorsorglich bereitgestellt.</p>
+
+  <h2>Haftung für Inhalte</h2>
+  <p>Als Diensteanbieter bin ich gemäß § 7 Abs. 1 DDG für eigene Inhalte auf dieser Seite nach den allgemeinen Gesetzen verantwortlich. Eine Verpflichtung zur Überwachung übermittelter oder gespeicherter fremder Informationen besteht nicht (§§ 8–10 DDG).</p>
+
+  <h2>Haftung für Links</h2>
+  <p>Diese App verlinkt – abgesehen vom Verweis auf die Datenschutzerklärung des Hosting-Anbieters GitHub in der eigenen Datenschutzerklärung – nicht auf fremde Inhalte Dritter. Für die Inhalte verlinkter externer Seiten sind ausschließlich deren Betreiber verantwortlich; eine permanente inhaltliche Kontrolle ohne konkrete Anhaltspunkte einer Rechtsverletzung ist nicht zumutbar.</p>
+
+  <h2>Urheberrecht</h2>
+  <p>Die durch den Seitenbetreiber erstellten Inhalte und Werke auf dieser App unterliegen dem deutschen Urheberrecht. Der Quellcode dieser App steht unter der im Projekt-Repository angegebenen Lizenz (siehe <code>LICENSE</code>-Datei).</p>
+
+  <p style="margin-top:30px;color:var(--text-soft);">Stand: <span id="lastUpdated"></span></p>
+</div>
+<script>document.getElementById('lastUpdated').textContent = new Date().toLocaleDateString('de-DE', {year:'numeric', month:'long', day:'numeric'});</script>
+</body>
+</html>

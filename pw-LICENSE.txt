@@ -1,0 +1,39 @@
+Alle Rechte vorbehalten / All Rights Reserved.
+
+Copyright (c) 2026 Jan Dierlich
+
+Dieser Quellcode sowie alle redaktionellen Inhalte (Kurz- und Langtexte zu
+den einzelnen E-Nummern und INCI-Inhaltsstoffen) sind urheberrechtlich
+geschützt. Eine Nutzung, Vervielfältigung, Weiterverbreitung, Veränderung
+oder Weitergabe – auch auszugsweise – ist ohne ausdrückliche schriftliche
+Zustimmung des Autors nicht gestattet.
+
+Ausgenommen hiervon sind Inhalte, die auf gemeinfreien amtlichen Werken
+beruhen (z. B. Verordnung (EG) Nr. 1333/2008, Verordnung (EU) Nr.
+1169/2011, Verordnung (EG) Nr. 1223/2009, Verordnung (EG) Nr. 1907/2006);
+diese unterliegen keinem Urheberrechtsschutz. Die redaktionelle Auswahl,
+Formulierung, Struktur und Programmierung dieser App sind hiervon nicht
+betroffen und bleiben geschützt.
+
+ProduktWahr führt die Zusatzstoff-Prüfung von E-NummernWahr und die
+INCI-Prüfung von KosmetikWahr sowie den Barcode-Live-Scan von BlickWahr
+(alle Jan Dierlich) in einer App zusammen; die jeweiligen Einzel-Apps
+wurden dafür durch ProduktWahr abgelöst.
+
+Eingebundene Drittkomponenten unterliegen ihren jeweils eigenen Lizenzen,
+u. a.:
+- Tesseract.js (Apache-2.0-Lizenz), https://github.com/naptha/tesseract.js
+- ZXing / @zxing/library (Apache-2.0-Lizenz), https://github.com/zxing-js/library
+
+Diese Drittkomponenten werden per CDN (jsDelivr) nachgeladen; ihre
+Lizenzbedingungen bleiben davon unberührt.
+
+Der Barcode-Live-Scanner fragt Produktdaten automatisch bei Open Food
+Facts (world.openfoodfacts.org) und, falls dort kein Treffer vorliegt,
+bei Open Beauty Facts (world.openbeautyfacts.org) ab, und falls auch
+dort kein Treffer vorliegt, bei Open Products Facts
+(world.openproductsfacts.org, für sonstige Produkte wie Haushalt,
+Elektronik oder Spielzeug). Diese Daten stehen unter der Open Database
+License (ODbL) bzw. Database Contents License; Quelle und Lizenz werden
+im jeweiligen Scan-Ergebnis angezeigt. Diese Fremddaten sind nicht Teil
+des in diesem Dokument lizenzierten eigenen Codes/Inhalts.

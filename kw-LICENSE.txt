@@ -1,0 +1,34 @@
+KompassWahr
+© Jan Dierlich
+
+Dieses Projekt ist ein privates, kostenfreies Angebot ohne kommerzielle Absicht.
+
+Verwendete externe Datenquellen und deren Lizenzen:
+
+1. Open-Meteo (https://open-meteo.com)
+   - Wetter-, Luftqualitäts- und Höhendaten
+   - Lizenz: Creative Commons Attribution 4.0 International (CC BY 4.0)
+   - Kostenlos für nicht-kommerzielle Nutzung, kein API-Key erforderlich
+
+2. Nominatim / OpenStreetMap (https://nominatim.openstreetmap.org)
+   - Adresssuche und Reverse-Geocoding
+   - Lizenz: Open Database License (ODbL)
+   - Kartendaten: © OpenStreetMap-Mitwirkende
+
+3. Overpass API / OpenStreetMap (der Reihe nach versucht: https://overpass-api.de, https://overpass.kumi.systems, https://overpass.private.coffee)
+   - Suche nach Orten in der Umgebung, 3 kostenlose OSM-Community-Server als automatischer Fallback
+   - Lizenz: Open Database License (ODbL)
+   - Kartendaten: © OpenStreetMap-Mitwirkende
+
+Es werden keine weiteren externen Bibliotheken, Schriftarten oder CDN-Ressourcen
+eingebunden. Sonnen-/Mondrichtung und Mondphase werden mit eigenen, lokal
+ausgeführten astronomischen Näherungsformeln berechnet (keine externe Quelle,
+keine Übernahme fremden Codes).
+
+Bewusst nicht eingebunden: Regenradar (RainViewer) – hierfür liegt keine
+eindeutig zugesicherte Einzellizenz für diese Nutzung vor.
+
+Hinweis zu Kartendarstellung: KompassWahr zeigt selbst keine Kartenkacheln;
+Orte in der Umgebung werden als Liste dargestellt (siehe Overpass API oben).
+
+Eigener Programmcode, eigene Icons und eigenes Design: alle Rechte bei Jan Dierlich.
