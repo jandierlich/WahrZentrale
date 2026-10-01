@@ -1,0 +1,408 @@
+<!DOCTYPE html>
+<html lang="de" data-wz-app="hw">
+<head>
+<meta name="robots" content="noindex, nofollow">
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no, viewport-fit=cover">
+<script src="./wz-theme.js"></script>
+<script src="./wz-core.js"></script>
+<link rel="manifest" href="./manifest.json">
+<link rel="apple-touch-icon" href="./icon-180.png">
+<meta name="theme-color" content="#4A7FBE">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="apple-mobile-web-app-title" content="WahrZentrale">
+<title>Himmels-Kompass – HimmelsWahr</title>
+<link rel="icon" href="hw-icon-192.png" type="image/png">
+<link rel="stylesheet" href="hw-style.css">
+<link rel="stylesheet" href="./wz-unify.css">
+</head>
+<body>
+<div class="hw-wrap">
+  <div class="hw-header">
+    <h1>Himmels-Kompass</h1>
+    <p class="hw-sub">Wo stehen Sonne, Mond und Planeten gerade?</p>
+  </div>
+
+  <div class="hw-card">
+    <h2>Jetzt am Himmel</h2>
+    <svg class="hw-compass-rose" id="hw-rose" viewBox="-110 -110 220 220" role="img" aria-label="Kompassrose mit Richtung von Sonne, Mond und Planeten"></svg>
+    <div id="hw-now-list" style="margin-top:10px;"></div>
+    <p style="font-size:12px;margin:8px 0 0;">Berechnet auf deinem Gerät aus Datum, Uhrzeit und Standort. Höhe 0° = Horizont.</p>
+  </div>
+
+  <div class="hw-card">
+    <h2>Kamera-Ansicht</h2>
+    <p>Halte dein iPhone hoch: Die Kamera zeigt den Himmel, darüber erscheinen Sonne, Mond, Planeten, helle Sterne und Sternbilder dort, wo sie tatsächlich stehen. Das Kamerabild wird nicht gespeichert und nicht übertragen.</p>
+    <p><strong>Sicherheit:</strong> Blicke niemals direkt in die Sonne – auch nicht durch Ferngläser. Richte dich nach dem Bildschirm, nicht nach dem Himmel.</p>
+    <button class="hw-btn primary" id="hwk-start-btn" style="margin:6px 0 0;">Kamera-Ansicht starten</button>
+    <p id="hwk-error" style="color:var(--red-fg);display:none;margin-top:12px;"></p>
+  </div>
+
+  <div class="hw-footer">
+    <a href="hw-info.html">Einführung</a>·<a href="./impressum.html">Impressum</a>·<a href="./datenschutz.html#hw">Datenschutz</a>·<a href="./lizenzen.html">Lizenzen</a>
+  </div>
+</div>
+
+<div class="hw-ar" id="hw-ar" role="dialog" aria-label="Kamera-Ansicht des Himmels">
+  <video id="hwk-video" autoplay playsinline muted></video>
+  <canvas id="hwk-canvas"></canvas>
+  <div class="hw-ar-top">
+    <button type="button" class="hw-ar-btn" id="hwk-close">Schließen</button>
+    <button type="button" class="hw-ar-btn" id="hwk-cal-btn">Kalibrieren</button>
+  </div>
+  <div class="hw-ar-info" id="hwk-info">Langsam drehen und das Handy neigen.</div>
+</div>
+
+<script src="hw-astro.js"></script>
+<script src="hw-app.js"></script>
+<script src="hw-sky.js"></script>
+<script>
+hwRenderNav('hw-kompass.html');
+
+/* ---------- Statische Übersicht (ohne Sensoren) ---------- */
+function hwRenderRose(objs){
+  var svg = document.getElementById('hw-rose');
+  var s = '<circle cx="0" cy="0" r="78" fill="none" stroke="currentColor" stroke-opacity=".25" stroke-width="1"/><circle cx="0" cy="0" r="46" fill="none" stroke="currentColor" stroke-opacity=".15" stroke-width="1"/>';
+  [['N',0],['O',90],['S',180],['W',270]].forEach(function(d){
+    var a = hwDeg2rad(d[1]);
+    s += '<text x="' + (Math.sin(a) * 96).toFixed(1) + '" y="' + (-Math.cos(a) * 96 + 5).toFixed(1) + '" text-anchor="middle" font-size="15" font-weight="700" fill="currentColor">' + d[0] + '</text>';
+  });
+  objs.forEach(function(o){
+    if(o.altitude < 0) return;
+    var r = 78 * (1 - hwClamp01(o.altitude / 90));
+    var a = hwDeg2rad(o.azimuth), x = Math.sin(a) * r, y = -Math.cos(a) * r;
+    var col = o.type === 'sun' ? '#E0A020' : (o.type === 'moon' ? '#8C84B8' : '#4B3F72');
+    if(document.documentElement.getAttribute('data-theme') === 'dark') col = o.type === 'sun' ? '#F0C871' : (o.type === 'moon' ? '#D8D0FA' : '#B6ABE8');
+    s += '<circle cx="' + x.toFixed(1) + '" cy="' + y.toFixed(1) + '" r="' + (o.type === 'sun' || o.type === 'moon' ? 7 : 4.5) + '" fill="' + col + '"/>';
+    s += '<text x="' + (x + 9).toFixed(1) + '" y="' + (y + 4).toFixed(1) + '" font-size="11" font-weight="600" fill="currentColor">' + o.name + '</text>';
+  });
+  svg.innerHTML = s;
+  svg.style.color = 'var(--text)';
+}
+function hwRenderNowList(){
+  var c = hwSkyCoords();
+  var objs = hwSkyObjects(new Date(), c.lat, c.lon, false, { refract: true }).filter(function(o){ return o.type === 'sun' || o.type === 'moon' || (o.type === 'planet' && o.nakedEye); });
+  hwRenderRose(objs);
+  document.getElementById('hw-now-list').innerHTML = objs.map(function(o){
+    var up = o.altitude > 0;
+    return '<div class="hw-obj"><span><strong>' + o.name + '</strong>' + (up ? '' : '<small>unter dem Horizont</small>') + '</span><span class="r">' +
+      (up ? hwCompassWord(o.azimuth) + ' · ' + Math.round(o.azimuth) + '°<br>Höhe ' + Math.round(o.altitude) + '°' : '–') + '</span></div>';
+  }).join('');
+}
+
+/* ---------- Kamera-Ansicht ---------- */
+var AR = { on: false, stream: null, raf: 0, raw: null, absSeen: false, smQ: null, curHeading: 0, curPitch: 0, objs: [], lastCalc: 0, lat: 51, lon: 10, cal: { yaw: 0, fov: 68 }, lines: null, byName: {}, lastInfo: '' };
+try{ var c0 = JSON.parse(localStorage.getItem('hw-kompass-cal')); if(c0 && typeof c0.yaw === 'number' && typeof c0.fov === 'number') AR.cal = c0; }catch(e){}
+function arSaveCal(){ try{ localStorage.setItem('hw-kompass-cal', JSON.stringify(AR.cal)); }catch(e){} }
+function arErr(msg){ var el = document.getElementById('hwk-error'); el.textContent = msg; el.style.display = 'block'; }
+
+function arStoreOri(e, ok){
+  AR.raw = { alpha: e.alpha, beta: e.beta, gamma: e.gamma, webkit: (e.webkitCompassHeading != null ? e.webkitCompassHeading : null), ok: ok };
+}
+function arOnAbs(e){ if(e.alpha == null) return; AR.absSeen = true; arStoreOri(e, true); }
+function arOnOri(e){
+  if(e.beta == null) return;
+  if(e.webkitCompassHeading != null){ arStoreOri(e, true); return; }
+  if(AR.absSeen) return;
+  arStoreOri(e, e.absolute === true);
+}
+/* ---------- Quaternion-Hilfsfunktionen ---------- */
+function hwQuatFromAngles(alphaDeg, betaDeg, gammaDeg){
+  var _z = hwDeg2rad(alphaDeg || 0), _x = hwDeg2rad(betaDeg || 0), _y = hwDeg2rad(gammaDeg || 0);
+  var cX = Math.cos(_x / 2), cY = Math.cos(_y / 2), cZ = Math.cos(_z / 2);
+  var sX = Math.sin(_x / 2), sY = Math.sin(_y / 2), sZ = Math.sin(_z / 2);
+  return [
+    sX * cY * cZ - cX * sY * sZ,
+    cX * sY * cZ + sX * cY * sZ,
+    cX * cY * sZ + sX * sY * cZ,
+    cX * cY * cZ - sX * sY * sZ
+  ];
+}
+function hwQuatMul(a, b){
+  return [
+    a[3] * b[0] + a[0] * b[3] + a[1] * b[2] - a[2] * b[1],
+    a[3] * b[1] - a[0] * b[2] + a[1] * b[3] + a[2] * b[0],
+    a[3] * b[2] + a[0] * b[1] - a[1] * b[0] + a[2] * b[3],
+    a[3] * b[3] - a[0] * b[0] - a[1] * b[1] - a[2] * b[2]
+  ];
+}
+function hwQuatFromAxisAngle(axis, rad){
+  var s = Math.sin(rad / 2);
+  return [axis[0] * s, axis[1] * s, axis[2] * s, Math.cos(rad / 2)];
+}
+function hwQuatNormalize(q){
+  var n = Math.sqrt(q[0] * q[0] + q[1] * q[1] + q[2] * q[2] + q[3] * q[3]) || 1;
+  return [q[0] / n, q[1] / n, q[2] / n, q[3] / n];
+}
+function hwQuatSlerp(a, b, t){
+  var ax = a[0], ay = a[1], az = a[2], aw = a[3], bx = b[0], by = b[1], bz = b[2], bw = b[3];
+  var dot = ax * bx + ay * by + az * bz + aw * bw;
+  if(dot < 0){ bx = -bx; by = -by; bz = -bz; bw = -bw; dot = -dot; }
+  if(dot > 0.9995) return hwQuatNormalize([ax + (bx - ax) * t, ay + (by - ay) * t, az + (bz - az) * t, aw + (bw - aw) * t]);
+  var theta0 = Math.acos(Math.min(1, dot)), theta = theta0 * t;
+  var sinTheta0 = Math.sin(theta0), sinTheta = Math.sin(theta);
+  var s0 = Math.cos(theta) - dot * sinTheta / sinTheta0, s1 = sinTheta / sinTheta0;
+  return [ax * s0 + bx * s1, ay * s0 + by * s1, az * s0 + bz * s1, aw * s0 + bw * s1];
+}
+function hwQuatRotate(q, v){
+  var qx = q[0], qy = q[1], qz = q[2], qw = q[3];
+  var vx = v[0], vy = v[1], vz = v[2];
+  var tx = 2 * (qy * vz - qz * vy), ty = 2 * (qz * vx - qx * vz), tz = 2 * (qx * vy - qy * vx);
+  return [
+    vx + qw * tx + (qy * tz - qz * ty),
+    vy + qw * ty + (qz * tx - qx * tz),
+    vz + qw * tz + (qx * ty - qy * tx)
+  ];
+}
+
+/* Kamera-Orientierung als Quaternion aus den rohen Sensorwinkeln, statt getrennter Kompass-/Neigungs-/Roll-Winkel.
+   Das vermeidet den Gimbal-Lock der alten Euler-Formel: dort wurde der Kompasskurs genau dann numerisch instabil,
+   wenn die Kamera nahe am Zenit (senkrecht über Kopf) oder Nadir zeigte, und das Bild "kippte" plötzlich weg.
+   Ein Quaternion hat diese Polstelle nicht, die Drehung bleibt beim Überkopf-Schwenk durchgehend glatt. */
+function arAttitude(){
+  var r = AR.raw;
+  if(!r || r.beta == null) return null;
+  var alphaEff = (r.webkit != null) ? hwWrap360(360 - r.webkit) : (r.alpha || 0);
+  var dq = hwQuatFromAngles(alphaEff, r.beta, r.gamma || 0);
+  var ang = (screen.orientation && typeof screen.orientation.angle === 'number') ? screen.orientation.angle : (window.orientation || 0);
+  ang = ((ang % 360) + 360) % 360;
+  var sq = hwQuatFromAxisAngle([0, 0, 1], hwDeg2rad(-ang));
+  return { q: hwQuatNormalize(hwQuatMul(dq, sq)), ok: r.ok };
+}
+function arSmooth(t){
+  if(!AR.smQ){ AR.smQ = t.q; return; }
+  AR.smQ = hwQuatSlerp(AR.smQ, t.q, 0.22);
+}
+function arRecalc(){
+  var now = Date.now();
+  if(now - AR.lastCalc < 5000 && AR.objs.length) return;
+  AR.lastCalc = now;
+  var list = hwSkyObjects(new Date(), AR.lat, AR.lon, false, { refract: true });
+  AR.byName = {};
+  AR.objs = list.filter(function(o){
+    var show = (o.type === 'star' && (o.mag <= 2.2 || o.con)) || o.type !== 'star';
+    if(o.altitude < -3) show = false;
+    return show;
+  });
+  list.forEach(function(o){ AR.byName[o.name] = o; });
+}
+function arVec(az, alt){
+  var A = hwDeg2rad(az), L = hwDeg2rad(alt);
+  return [Math.sin(A) * Math.cos(L), Math.cos(A) * Math.cos(L), Math.sin(L)];
+}
+function arDot(a, b){ return a[0] * b[0] + a[1] * b[1] + a[2] * b[2]; }
+function arDraw(){
+  if(!AR.on) return;
+  AR.raf = requestAnimationFrame(arDraw);
+  var cv = document.getElementById('hwk-canvas'), ctx = cv.getContext('2d');
+  var dpr = window.devicePixelRatio || 1, W = cv.clientWidth, H = cv.clientHeight;
+  if(cv.width !== Math.round(W * dpr) || cv.height !== Math.round(H * dpr)){ cv.width = Math.round(W * dpr); cv.height = Math.round(H * dpr); }
+  ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+  ctx.clearRect(0, 0, W, H);
+  var att = arAttitude();
+  if(!att){ ctx.fillStyle = '#fff'; ctx.font = '600 15px -apple-system,sans-serif'; ctx.textAlign = 'center'; ctx.fillText('Warte auf Bewegungssensor …', W / 2, H / 2); return; }
+  arSmooth(att);
+  arRecalc();
+  var rawFw = hwQuatRotate(AR.smQ, [0, 0, -1]);
+  AR.curHeading = hwWrap360(hwRad2deg(Math.atan2(rawFw[0], rawFw[1])));
+  AR.curPitch = hwRad2deg(Math.asin(Math.max(-1, Math.min(1, rawFw[2]))));
+  var qCal = hwQuatFromAxisAngle([0, 0, 1], hwDeg2rad(-AR.cal.yaw));
+  var qView = hwQuatNormalize(hwQuatMul(qCal, AR.smQ));
+  var fw = hwQuatRotate(qView, [0, 0, -1]);
+  var rt = hwQuatRotate(qView, [1, 0, 0]);
+  var up = hwQuatRotate(qView, [0, 1, 0]);
+  var video = document.getElementById('hwk-video');
+  var vw = video.videoWidth || 0, vh = video.videoHeight || 0;
+  if(vw && ((vw > vh) !== (W > H))){ var tt = vw; vw = vh; vh = tt; }
+  var fpx = vw ? (Math.max(vw, vh) / 2) / Math.tan(hwDeg2rad(AR.cal.fov) / 2) * Math.max(W / vw, H / vh)
+               : (Math.max(W, H) / 2) / Math.tan(hwDeg2rad(AR.cal.fov) / 2);
+  function proj(az, alt){
+    var e = arVec(az, alt), zc = arDot(e, fw);
+    if(zc < 0.05) return null;
+    return { x: W / 2 + fpx * arDot(e, rt) / zc, y: H / 2 - fpx * arDot(e, up) / zc };
+  }
+  function label(txt, x, y, size, color){
+    ctx.font = '600 ' + size + 'px -apple-system,sans-serif';
+    ctx.lineWidth = 4; ctx.strokeStyle = 'rgba(10,8,30,0.75)'; ctx.strokeText(txt, x, y);
+    ctx.fillStyle = color || '#fff'; ctx.fillText(txt, x, y);
+  }
+  ctx.textAlign = 'left';
+
+  /* Horizont und Himmelsrichtungen */
+  ctx.strokeStyle = 'rgba(255,255,255,0.55)'; ctx.lineWidth = 1.5; ctx.beginPath();
+  var first = true;
+  for(var az = 0; az <= 360; az += 3){
+    var q = proj(az, 0);
+    if(!q){ first = true; continue; }
+    if(first){ ctx.moveTo(q.x, q.y); first = false; } else ctx.lineTo(q.x, q.y);
+  }
+  ctx.stroke();
+  ctx.textAlign = 'center';
+  [['N',0],['NO',45],['O',90],['SO',135],['S',180],['SW',225],['W',270],['NW',315]].forEach(function(d){
+    var q = proj(d[1], 0);
+    if(q && q.x > -30 && q.x < W + 30) label(d[0], q.x, q.y - 8, d[0].length === 1 ? 20 : 14, '#FFD98A');
+  });
+
+  /* Sonnenbahn heute (Punkte je Stunde) */
+  var nowD = new Date(), d0 = new Date(nowD.getFullYear(), nowD.getMonth(), nowD.getDate());
+  ctx.textAlign = 'center';
+  for(var hr = 0; hr < 24; hr++){
+    var sp = hwSunPosition(new Date(d0.getTime() + hr * 3600000), AR.lat, AR.lon);
+    if(sp.altitude < 0) continue;
+    var sq = proj(sp.azimuth, sp.altitude);
+    if(!sq) continue;
+    ctx.fillStyle = 'rgba(255,214,120,0.9)'; ctx.beginPath(); ctx.arc(sq.x, sq.y, 3, 0, 6.283); ctx.fill();
+    label(hr + '', sq.x, sq.y - 8, 11, '#FFE7A8');
+  }
+
+  /* Sternbildlinien */
+  ctx.lineWidth = 1.2; ctx.strokeStyle = 'rgba(160,190,255,0.55)';
+  var conVis = {};
+  /* Punkte nahe am Projektionsrand (kleines zc) werden bei der Perspektivteilung riesig/instabil
+     und lassen vor allem große, weit über den Bildschirm reichende Sternbilder "rutschen". Solche
+     Randpunkte fließen daher nicht in die Linien und nicht in die Positionsberechnung des Namens ein. */
+  function projStable(az, alt){
+    var e = arVec(az, alt), zc = arDot(e, fw);
+    if(zc < 0.18) return null;
+    return { x: W / 2 + fpx * arDot(e, rt) / zc, y: H / 2 - fpx * arDot(e, up) / zc };
+  }
+  Object.keys(HW_CONSTELLATION_LINES).forEach(function(k){
+    HW_CONSTELLATION_LINES[k].forEach(function(pr){
+      var A = AR.byName[pr[0]], B = AR.byName[pr[1]];
+      if(!A || !B) return;
+      var pa = projStable(A.azimuth, A.altitude), pb = projStable(B.azimuth, B.altitude);
+      if(!pa || !pb) return;
+      ctx.beginPath(); ctx.moveTo(pa.x, pa.y); ctx.lineTo(pb.x, pb.y); ctx.stroke();
+      (conVis[k] = conVis[k] || []).push(pa, pb);
+    });
+  });
+  ctx.textAlign = 'left';
+  if(!AR.conLbl) AR.conLbl = {};
+  Object.keys(conVis).forEach(function(k){
+    var pts = conVis[k], mx = 0, my = 0;
+    pts.forEach(function(q){ mx += q.x; my += q.y; });
+    mx /= pts.length; my /= pts.length;
+    if(mx < -40 || mx > W + 40 || my < -40 || my > H + 40) return;
+    /* Ziel-Position sanft einregeln statt jeden Frame hart zu übernehmen, damit der Name nicht springt/rutscht */
+    var prev = AR.conLbl[k];
+    if(!prev || Math.hypot(mx - prev.x, my - prev.y) > Math.max(W, H) * 0.5){ prev = { x: mx, y: my }; }
+    else { prev = { x: prev.x + (mx - prev.x) * 0.15, y: prev.y + (my - prev.y) * 0.15 }; }
+    AR.conLbl[k] = prev;
+    if(prev.x > 0 && prev.x < W && prev.y > 0 && prev.y < H) label(HW_CONSTELLATION_NAMES[k] || k, prev.x - 20, prev.y + 22, 12, 'rgba(190,210,255,0.95)');
+  });
+
+  /* Objekte */
+  var best = null, bestD = 1e9;
+  AR.objs.forEach(function(o){
+    var q = proj(o.azimuth, o.altitude);
+    if(!q || q.x < -40 || q.x > W + 40 || q.y < -40 || q.y > H + 40) return;
+    var r, col, size = 13;
+    if(o.type === 'sun'){ r = 13; col = '#FFD24A'; size = 15; }
+    else if(o.type === 'moon'){ r = 12; col = '#F1EDFB'; size = 15; }
+    else if(o.type === 'planet'){ r = 6; col = '#FFB27A'; }
+    else if(o.type === 'deepsky'){ r = 5; col = '#9AE6C8'; }
+    else { r = Math.max(1.8, 4.2 - o.mag * 0.9); col = '#FFFFFF'; }
+    ctx.fillStyle = col;
+    if(o.type === 'deepsky'){ ctx.strokeStyle = col; ctx.lineWidth = 1.5; ctx.beginPath(); ctx.arc(q.x, q.y, r, 0, 6.283); ctx.stroke(); }
+    else { ctx.beginPath(); ctx.arc(q.x, q.y, r, 0, 6.283); ctx.fill(); }
+    if(o.type !== 'star' || o.mag <= 1.5 || o.type === 'planet'){
+      ctx.textAlign = 'left'; label(o.name, q.x + r + 5, q.y + 4, size, o.type === 'sun' ? '#FFE28A' : '#fff');
+    }
+    var dx = q.x - W / 2, dy = q.y - H / 2, dd = Math.sqrt(dx * dx + dy * dy);
+    if(dd < bestD){ bestD = dd; best = o; }
+  });
+
+  /* Fadenkreuz */
+  ctx.strokeStyle = 'rgba(255,255,255,0.8)'; ctx.lineWidth = 1.5;
+  ctx.beginPath(); ctx.arc(W / 2, H / 2, 14, 0, 6.283); ctx.moveTo(W / 2 - 22, H / 2); ctx.lineTo(W / 2 - 8, H / 2); ctx.moveTo(W / 2 + 8, H / 2); ctx.lineTo(W / 2 + 22, H / 2);
+  ctx.moveTo(W / 2, H / 2 - 22); ctx.lineTo(W / 2, H / 2 - 8); ctx.moveTo(W / 2, H / 2 + 8); ctx.lineTo(W / 2, H / 2 + 22); ctx.stroke();
+
+  var hd = hwWrap360(AR.curHeading + AR.cal.yaw), pd = AR.curPitch;
+  var info = 'Blickrichtung ' + hwCompassWord(hd) + ' · ' + Math.round(hd) + '° · Neigung ' + Math.round(pd) + '°';
+  var near = best && bestD < 60 ? '<strong>' + best.name + '</strong> – Höhe ' + Math.round(best.altitude) + '°, Richtung ' + hwCompassWord(best.azimuth) + ' (' + Math.round(best.azimuth) + '°)' : 'Nichts im Fadenkreuz';
+  var html = near + '<small>' + info + (att.ok ? '' : ' · Kompass ungenau (Gerät ohne absoluten Nordbezug)') + '</small>';
+  if(html !== AR.lastInfo && !AR.calOpen){ document.getElementById('hwk-info').innerHTML = html; AR.lastInfo = html; }
+}
+
+/* Kalibrierung: Richtung (Nordabweichung) und Sichtfeld */
+function arOpenCal(){
+  AR.calOpen = true;
+  var el = document.getElementById('hwk-info');
+  el.innerHTML =
+    '<div class="hw-field" style="color:#fff;"><label for="hwk-yaw" style="min-width:76px;">Richtung</label><input type="range" id="hwk-yaw" min="-30" max="30" step="0.5"><output id="hwk-yaw-o"></output></div>' +
+    '<div class="hw-field" style="color:#fff;"><label for="hwk-fov" style="min-width:76px;">Sichtfeld</label><input type="range" id="hwk-fov" min="45" max="95" step="1"><output id="hwk-fov-o"></output></div>' +
+    '<div style="display:flex;gap:8px;flex-wrap:wrap;margin-top:8px;">' +
+      '<button type="button" class="hw-ar-btn" id="hwk-align-sun">Sonne im Fadenkreuz</button><button type="button" class="hw-ar-btn" id="hwk-align-moon">Mond im Fadenkreuz</button>' +
+      '<button type="button" class="hw-ar-btn" id="hwk-reset">Zurücksetzen</button><button type="button" class="hw-ar-btn" id="hwk-done">Fertig</button></div>' +
+    '<small>Tipp: Ziele mit dem Fadenkreuz auf Sonne oder Mond (Sonne nur über den Bildschirm, nie mit dem Auge) und tippe den Knopf – das gleicht die Nordabweichung aus.</small>';
+  var yaw = document.getElementById('hwk-yaw'), fov = document.getElementById('hwk-fov');
+  function sync(){ document.getElementById('hwk-yaw-o').textContent = AR.cal.yaw.toFixed(1) + '°'; document.getElementById('hwk-fov-o').textContent = Math.round(AR.cal.fov) + '°'; yaw.value = AR.cal.yaw; fov.value = AR.cal.fov; }
+  sync();
+  yaw.oninput = function(){ AR.cal.yaw = parseFloat(yaw.value); sync(); arSaveCal(); };
+  fov.oninput = function(){ AR.cal.fov = parseFloat(fov.value); sync(); arSaveCal(); };
+  function align(name){
+    if(!AR.smQ) return;
+    var o = AR.byName[name];
+    if(!o || o.altitude < 0){ alert(name + ' steht gerade unter dem Horizont.'); return; }
+    AR.cal.yaw = Math.max(-45, Math.min(45, hwWrap180(o.azimuth - AR.curHeading)));
+    sync(); arSaveCal();
+  }
+  document.getElementById('hwk-align-sun').onclick = function(){ align('Sonne'); };
+  document.getElementById('hwk-align-moon').onclick = function(){ align('Mond'); };
+  document.getElementById('hwk-reset').onclick = function(){ AR.cal = { yaw: 0, fov: 68 }; sync(); arSaveCal(); };
+  document.getElementById('hwk-done').onclick = function(){ AR.calOpen = false; AR.lastInfo = ''; };
+}
+
+function arStop(){
+  AR.on = false;
+  cancelAnimationFrame(AR.raf);
+  window.removeEventListener('deviceorientation', arOnOri, true);
+  window.removeEventListener('deviceorientationabsolute', arOnAbs, true);
+  if(AR.stream){ AR.stream.getTracks().forEach(function(t){ t.stop(); }); AR.stream = null; }
+  var v = document.getElementById('hwk-video'); v.srcObject = null;
+  document.getElementById('hw-ar').classList.remove('on');
+  document.getElementById('hw-nav').style.display = '';
+  AR.smQ = null; AR.raw = null; AR.absSeen = false; AR.calOpen = false;
+}
+function arStart(){
+  document.getElementById('hwk-error').style.display = 'none';
+  var perm = (typeof DeviceOrientationEvent !== 'undefined' && typeof DeviceOrientationEvent.requestPermission === 'function')
+    ? DeviceOrientationEvent.requestPermission() : Promise.resolve('granted');
+  perm.then(function(st){
+    if(st !== 'granted') throw new Error('Der Zugriff auf die Bewegungssensoren wurde nicht erlaubt. Erlaube ihn in den Safari-/App-Einstellungen.');
+    return hwGetActiveLocation();
+  }).then(function(pos){
+    AR.lat = pos.lat; AR.lon = pos.lon; AR.lastCalc = 0; AR.objs = []; AR.conLbl = {};
+    window.addEventListener('deviceorientationabsolute', arOnAbs, true);
+    window.addEventListener('deviceorientation', arOnOri, true);
+    document.getElementById('hw-ar').classList.add('on');
+    document.getElementById('hw-nav').style.display = 'none';
+    AR.on = true;
+    var cam = (navigator.mediaDevices && navigator.mediaDevices.getUserMedia)
+      ? navigator.mediaDevices.getUserMedia({ video: { facingMode: { ideal: 'environment' } }, audio: false }) : Promise.reject(new Error('Kamera nicht verfügbar'));
+    return cam.then(function(stream){
+      AR.stream = stream;
+      var v = document.getElementById('hwk-video'); v.srcObject = stream; v.play().catch(function(){});
+    }).catch(function(){
+      document.getElementById('hwk-info').textContent = 'Kamera nicht verfügbar – es wird nur die Überlagerung auf dunklem Hintergrund gezeigt.';
+    }).then(function(){ AR.raf = requestAnimationFrame(arDraw); });
+  }).catch(function(err){
+    arStop();
+    arErr((err && err.message) ? err.message : 'Start nicht möglich.');
+  });
+}
+document.addEventListener('DOMContentLoaded', function(){
+  window.hwPageReload = hwRenderNowList;
+  hwRenderNowList();
+  setInterval(hwRenderNowList, 60000);
+  document.getElementById('hwk-start-btn').onclick = arStart;
+  document.getElementById('hwk-close').onclick = arStop;
+  document.getElementById('hwk-cal-btn').onclick = arOpenCal;
+});
+document.addEventListener('visibilitychange', function(){ if(document.hidden && AR.on) arStop(); });
+
+</script>
+</body>
+</html>

@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html lang="de" data-wz-app="bp">
+<head>
+    <meta name="robots" content="noindex, nofollow">
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no, viewport-fit=cover">
+<script src="./wz-theme.js"></script>
+<script src="./wz-core.js"></script>
+<link rel="manifest" href="./manifest.json">
+<link rel="apple-touch-icon" href="./icon-180.png">
+<link rel="icon" href="./bp-icon-192.png" type="image/png">
+<title>BelegParkWahr</title>
+<meta name="description" content="Parkscheine und Nebenkosten erfassen, verwalten und als PDF exportieren.">
+
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="apple-mobile-web-app-title" content="WahrZentrale">
+<meta name="theme-color" content="#5A2FBE">
+
+<link rel="stylesheet" href="bp-style.css">
+<link rel="stylesheet" href="./wz-unify.css">
+</head>
+<body>
+<div id="app"></div>
+
+<!-- Bibliotheken werden erst bei Bedarf geladen: Karte (lokal), PDF (lokal), Excel (lokal),
+     Texterkennung (wz-ocr.js, lokal, nur beim Fotografieren eines Belegs) -->
+<script src="./wz-shared.js"></script>
+<script src="bp-db.js"></script>
+<script src="bp-crop.js"></script>
+<script src="bp-voice.js"></script>
+<script src="bp-app.js"></script>
+</body>
+</html>
