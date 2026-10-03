@@ -23,7 +23,7 @@
    BUILD ändert sich dabei, damit Geräte die neue Liste übernehmen.
    ============================================================ */
 
-const BUILD = 'b00eabf022';
+const BUILD = 'd39fe51a58';
 const CACHE = 'wahrzentrale-' + BUILD;
 const LIBS_CACHE = 'wahrzentrale-libs-v4';
 // Große Geodaten von WowarWahr: eigener Speicher, der Updates der App überdauert

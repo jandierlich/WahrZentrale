@@ -8,7 +8,7 @@ Werbung, ohne Tracking.
 
 | Bereich | Apps |
 |---|---|
-| Himmel | HimmelsWahr (`hw-`), Sternenhimmel/ZeitHimmel (`sternewahr-`), AstroWahr (`as-`), KompassWahr (`kw-`) |
+| Himmel | HimmelsWahr (`hw-`), Sternenhimmel (ZeitHimmel; `sternewahr-`, Symbol `zh-`), AstroWahr (`as-`), KompassWahr (`kw-`) |
 | Unterwegs | NaviWahr (`wk-`), Keysglade (`kg-`), WowarWahr (`wow-`), BelegParkWahr (`bp-`) |
 | Alltag | AlltagWahr (`aw-`), ProduktWahr (`pw-`), VorratsWahr (`vw-`), LosDenkWahr (`ld-`), QRWahr (`qr-`), LautstärkeWahr (`lw-`) |
 | Spiel & Klang | ZahlenturmWahr (`zw-`), Korvanthiel (`kv-`), HerzKaroDrei (`hk-`), PartikelWahr (`pk-`), StrömungsWahr (`st-`), BeatWahr (`bw-`) |
@@ -31,6 +31,7 @@ Einträge sowie den vier Bereichen.
 | `sw.js` | **ein** Service Worker für alles (offline); angemeldet nur in `wz-core.js` |
 | `wz-onboarding.js` | eine einheitliche Einführung für alle Apps |
 | `404.html` | Hinweisseite für unbekannte Adressen (GitHub Pages) |
+| Sperre für fremde Server | Jede Seite trägt im Kopf dieselbe `Content-Security-Policy`: Der Browser lässt nur die eigene Adresse und die in `datenschutz.html` genannten Dienste zu. Kommt ein neuer Dienst hinzu, muss er in dieser Zeile **aller** HTML-Seiten ergänzt werden – sonst blockt der Browser ihn. |
 | `impressum.html`, `datenschutz.html`, `lizenzen.html` | Rechtliches für alle Apps |
 
 Alle Bibliotheken liegen lokal bei (`lib-*`): Leaflet, jsPDF, die Texterkennung

@@ -3,6 +3,7 @@
 <head>
 <meta name="robots" content="noindex, nofollow">
 <meta charset="UTF-8">
+<meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'unsafe-inline' 'unsafe-eval' 'wasm-unsafe-eval' blob:; style-src 'self' 'unsafe-inline'; img-src 'self' data: blob: https://tile.openstreetmap.de; media-src 'self' data: blob: mediastream:; font-src 'self' data:; connect-src 'self' data: blob: https://api.open-meteo.com https://air-quality-api.open-meteo.com https://geocoding-api.open-meteo.com https://routing.openstreetmap.de https://photon.komoot.io https://overpass-api.de https://overpass.kumi.systems https://overpass.private.coffee https://world.openfoodfacts.org https://world.openbeautyfacts.org https://world.openproductsfacts.org; worker-src 'self' blob:; frame-src 'self' blob:; object-src 'self' blob:; base-uri 'self'; form-action 'self'">
 <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no, viewport-fit=cover">
 <script src="./wz-theme.js"></script>
 <script src="./wz-core.js"></script>
@@ -499,10 +500,10 @@
 <!-- TEXT ENTRY (neu, Sprach-Bestätigung, Bearbeiten) -->
 <div id="textEntry" class="screen">
   <div class="text-wrap">
-    <p class="entry-label" id="entryLabel">Was beschäftigt Dich?</p>
+    <p class="entry-label" id="entryLabel">Was beschäftigt dich?</p>
     <label for="thoughtInput" class="sr-only">Gedanke</label>
     <textarea id="thoughtInput" placeholder="Schreib es einfach hin&hellip;" autocomplete="off" autocapitalize="sentences"></textarea>
-    <p class="dictation-hint" id="dictationHint">Tipp: Mit dem Mikrofon unten rechts auf der iPhone-Tastatur kannst Du auch hier diktieren.</p>
+    <p class="dictation-hint" id="dictationHint">Tipp: Mit dem Mikrofon unten rechts auf der iPhone-Tastatur kannst du auch hier diktieren.</p>
     <div class="entry-actions">
       <button class="ghost-btn" id="cancelText">Abbrechen</button>
       <div class="right">
@@ -528,7 +529,7 @@
     <h2>Heute <span class="script-accent">Abend</span></h2>
     <button class="close-x" id="closeReview" aria-label="Schließen">&times;</button>
   </div>
-  <p class="review-sub">Was Du losgedacht hast. In aller Ruhe.</p>
+  <p class="review-sub">Was du losgedacht hast. In aller Ruhe.</p>
   <div class="thought-list" id="thoughtList"></div>
 </div>
 
@@ -585,7 +586,7 @@
     <p class="set-title">Abend</p>
     <div class="set-group">
       <div class="set-row">
-        <label class="txt" for="setReminder"><strong>Abend-Hinweis</strong><span>Ab dieser Uhrzeit zeigt der Startbildschirm, wie viele Gedanken auf Dich warten.</span></label>
+        <label class="txt" for="setReminder"><strong>Abend-Hinweis</strong><span>Ab dieser Uhrzeit zeigt der Startbildschirm, wie viele Gedanken auf dich warten.</span></label>
         <input type="checkbox" switch id="setReminder">
       </div>
       <div class="set-row">
@@ -597,14 +598,14 @@
     <p class="set-title">Privatsphäre</p>
     <div class="set-group">
       <div class="set-row">
-        <label class="txt" for="setDiscreet"><strong>Diskret-Modus</strong><span>Gedanken in der Liste sind verschwommen, bis Du sie antippst &ndash; falls jemand mit aufs Display schaut.</span></label>
+        <label class="txt" for="setDiscreet"><strong>Diskret-Modus</strong><span>Gedanken in der Liste sind verschwommen, bis du sie antippst &ndash; falls jemand mit aufs Display schaut.</span></label>
         <input type="checkbox" switch id="setDiscreet">
       </div>
     </div>
 
     <p class="set-title">Sicherung</p>
     <div class="set-group">
-      <button class="set-btn" id="exportText"><span>Als Text teilen<span class="sub">Lesbar, z.&nbsp;B. für Notizen oder als Nachricht an Dich selbst</span></span><span class="arrow" aria-hidden="true">›</span></button>
+      <button class="set-btn" id="exportText"><span>Als Text teilen<span class="sub">Lesbar, z.&nbsp;B. für Notizen oder als Nachricht an dich selbst</span></span><span class="arrow" aria-hidden="true">›</span></button>
       <button class="set-btn" id="exportBackup"><span>Sicherung exportieren<span class="sub" id="lastBackupInfo">Noch nie gesichert</span></span><span class="arrow" aria-hidden="true">›</span></button>
       <button class="set-btn" id="importBackup"><span>Sicherung importieren<span class="sub">Bestehende Gedanken bleiben erhalten</span></span><span class="arrow" aria-hidden="true">›</span></button>
     </div>
@@ -837,7 +838,7 @@
     badge.classList.toggle('show', open > 0);
     micBtn.setAttribute('aria-label', 'Gedanken aufnehmen' + (open ? ` (${open} warten auf heute Abend)` : ''));
     const showCta = settings.reminder && open > 0 && isEveningNow() && !micBtn.classList.contains('listening');
-    $('eveningCtaText').textContent = open === 1 ? '1 Gedanke wartet auf Dich' : `${open} Gedanken warten auf Dich`;
+    $('eveningCtaText').textContent = open === 1 ? '1 Gedanke wartet auf dich' : `${open} Gedanken warten auf dich`;
     $('eveningCta').classList.toggle('show', showCta);
   }
 
@@ -965,7 +966,7 @@
     entryMode = mode;
     input.value = text || '';
     const labels = {
-      new: 'Was beschäftigt Dich?',
+      new: 'Was beschäftigt dich?',
       voice: 'Stimmt so? Du kannst noch korrigieren.',
       edit: 'Gedanken bearbeiten'
     };
@@ -1128,7 +1129,7 @@
     container.classList.toggle('discreet', !!settings.discreet);
 
     if(list.length === 0){
-      container.innerHTML = '<div class="empty-state"><div class="display">Noch ist es still hier.</div><div>Und das ist auch gut so. Alles, was Du loswirst, taucht hier auf.</div></div>';
+      container.innerHTML = '<div class="empty-state"><div class="display">Noch ist es still hier.</div><div>Und das ist auch gut so. Alles, was du loswirst, taucht hier auf.</div></div>';
       return;
     }
 
@@ -1177,7 +1178,7 @@
     if(!open.length && !snoozed.length && !kept.length){
       const calm = document.createElement('div');
       calm.className = 'empty-state compact';
-      calm.innerHTML = '<div class="display">Alles losgelassen.</div><div>Gerade wartet nichts auf Dich.</div>';
+      calm.innerHTML = '<div class="display">Alles losgelassen.</div><div>Gerade wartet nichts auf dich.</div>';
       container.appendChild(calm);
     }
 
@@ -1205,7 +1206,7 @@
       const nudge = document.createElement('div');
       nudge.className = 'backup-nudge';
       const s = document.createElement('span');
-      s.textContent = settings.lastBackup ? `Letzte Sicherung vor ${Math.floor(days)} Tagen.` : 'Noch keine Sicherung Deiner Gedanken.';
+      s.textContent = settings.lastBackup ? `Letzte Sicherung vor ${Math.floor(days)} Tagen.` : 'Noch keine Sicherung deiner Gedanken.';
       const b = document.createElement('button');
       b.textContent = 'Jetzt sichern';
       b.addEventListener('click', exportBackup);
@@ -1546,7 +1547,7 @@
       iconHtml: '<img src="ld-icon-192.png" alt="" style="width:100%;height:100%;border-radius:inherit;display:block">',
       title: 'Willkommen bei LosDenkWahr',
       html: '<p>Tippe auf den Mond und sprich einen Gedanken. Er wird weggeparkt – ohne Antwort, ohne Bewertung.</p>'
-          + '<p style="margin-top:10px">Abends gehst Du Deine Gedanken einzeln durch: nach oben wischen lässt los, zur Seite behältst Du sie oder schiebst sie auf morgen.</p>'
+          + '<p style="margin-top:10px">Abends gehst du deine Gedanken einzeln durch: nach oben wischen lässt los, zur Seite behältst du sie oder schiebst sie auf morgen.</p>'
     }]
   }) : null;
 

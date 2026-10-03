@@ -2,6 +2,7 @@
 <html lang="de" data-theme="dark" data-wz-app="bw">
 <head>
 <meta charset="UTF-8">
+<meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'unsafe-inline' 'unsafe-eval' 'wasm-unsafe-eval' blob:; style-src 'self' 'unsafe-inline'; img-src 'self' data: blob: https://tile.openstreetmap.de; media-src 'self' data: blob: mediastream:; font-src 'self' data:; connect-src 'self' data: blob: https://api.open-meteo.com https://air-quality-api.open-meteo.com https://geocoding-api.open-meteo.com https://routing.openstreetmap.de https://photon.komoot.io https://overpass-api.de https://overpass.kumi.systems https://overpass.private.coffee https://world.openfoodfacts.org https://world.openbeautyfacts.org https://world.openproductsfacts.org; worker-src 'self' blob:; frame-src 'self' blob:; object-src 'self' blob:; base-uri 'self'; form-action 'self'">
 <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no, viewport-fit=cover">
 <script src="./wz-theme.js"></script>
 <script src="./wz-core.js"></script>
@@ -390,12 +391,12 @@ html[data-theme="light"] .fw-s-ghost{background:#ffffff!important;border-color:#
 <!-- ============ APP SHELL ============ -->
 <div class="app-shell" id="appShell">
   <header>
-    <button id="homeBtn" data-icon="home"></button>
+    <button id="homeBtn" data-icon="home" aria-label="Zur Startansicht"></button>
     <div class="header-title">
       <span class="name">BeatWahr</span>
       <span class="sub" id="projLabel">Unbenanntes Projekt</span>
     </div>
-    <button id="playBtn" data-icon="play"></button>
+    <button id="playBtn" data-icon="play" aria-label="Wiedergabe starten oder anhalten"></button>
     <div class="bpm-mini">
       <button id="bpmDown">–</button>
       <span class="bpm-val num" id="bpmVal">100</span>
@@ -548,7 +549,7 @@ html[data-theme="light"] .fw-s-ghost{background:#ffffff!important;border-color:#
 <!-- PROJECTS MODAL -->
 <div class="modal-overlay" id="projModal">
   <div class="modal">
-    <button class="modal-close" data-close="projModal" data-icon="close"></button>
+    <button class="modal-close" data-close="projModal" data-icon="close" aria-label="Schließen"></button>
     <h2>Projekte</h2>
     <div id="projList"></div>
     <div class="new-proj-row">
@@ -566,7 +567,7 @@ html[data-theme="light"] .fw-s-ghost{background:#ffffff!important;border-color:#
 
 <div class="modal-overlay" id="infoModal">
   <div class="modal">
-    <button class="modal-close" data-close="infoModal" data-icon="close"></button>
+    <button class="modal-close" data-close="infoModal" data-icon="close" aria-label="Schließen"></button>
     <h2>Über BeatWahr</h2>
     <div class="legal-text">
       <p>BeatWahr ist eine kostenlose Musikmaschine: Step-Sequencer für Rhythmen kombiniert mit einer spielbaren Melodie-Tastatur, Pattern-Ketten und Swing. Es gibt zwei umschaltbare Klangwelten ("Beat" und "Sanft") mit jeweils eigenem Klangcharakter und Farbschema. Alle Klänge werden direkt im Gerät per Web Audio Synthese erzeugt — es kommen keine fremden Samples, Loops oder Presets zum Einsatz.</p>
@@ -582,7 +583,7 @@ html[data-theme="light"] .fw-s-ghost{background:#ffffff!important;border-color:#
 <!-- GUIDE / ANLEITUNG MODAL -->
 <div class="modal-overlay" id="guideModal">
   <div class="modal">
-    <button class="modal-close" data-close="guideModal" data-icon="close"></button>
+    <button class="modal-close" data-close="guideModal" data-icon="close" aria-label="Schließen"></button>
     <h2>Anleitung</h2>
     <div class="legal-text">
 
@@ -659,7 +660,7 @@ html[data-theme="light"] .fw-s-ghost{background:#ffffff!important;border-color:#
 <!-- SOUND-EDITOR PRO SPUR -->
 <div class="modal-overlay" id="soundModal">
   <div class="modal">
-    <button class="modal-close" data-close="soundModal" data-icon="close"></button>
+    <button class="modal-close" data-close="soundModal" data-icon="close" aria-label="Schließen"></button>
     <h2 id="soundModalTitle">Sound bearbeiten</h2>
     <div id="soundModalBody"></div>
   </div>

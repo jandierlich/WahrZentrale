@@ -549,7 +549,7 @@ nav.bottom-nav button.active { color: var(--accent); background: rgba(var(--wzq-
 .info-btn {
   display: inline-flex; align-items: center; justify-content: center; width: 18px; height: 18px;
   border-radius: 50%; background: var(--card-2); border: 1px solid var(--border); color: var(--text-dim);
-  font-size: .68rem; font-style: italic; font-family: Georgia, serif; margin-left: 4px; flex-shrink: 0; vertical-align: middle;
+  font-size: .68rem; font-style: italic; font-weight: 600; margin-left: 4px; flex-shrink: 0; vertical-align: middle;
 }
 .gloss-link { border-bottom: 1px dotted var(--accent); cursor: pointer; }
 .tarot-card-art.zoomable { cursor: zoom-in; position: relative; }
